@@ -1,0 +1,11 @@
+BasedOnStyle: Google
+UseTab: Never
+IndentWidth: 2
+TabWidth: 2
+ColumnLimit: 0
+InsertBraces: true
+IndentGotoLabels: true
+AllowShortBlocksOnASingleLine: Never
+AllowShortFunctionsOnASingleLine: None
+SpaceAfterCStyleCast: true
+SpaceBeforeRangeBasedForLoopColon: false

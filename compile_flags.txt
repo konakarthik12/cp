@@ -1,0 +1,9 @@
+/opt/homebrew/opt/llvm/bin/clang++
+-std=c++20
+-include-pch
+/opt/homebrew/opt/llvm/include/c++/v1/bits/stdc++.h.gch
+-DLOCAL
+-Wall
+-Wextra
+-Wshadow
+-Wno-sign-conversion

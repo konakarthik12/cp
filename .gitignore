@@ -1,0 +1,3 @@
+# Project exclude paths
+/merger/cmake-build-debug/
+/merger/cmake-build-release/

@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+target="main"
+if [ $# -ge 1 ]; then
+    target="$1"
+fi
+
+tail -n +2 < compile_flags.txt | xargs /opt/homebrew/opt/llvm/bin/clang++ "$target.cpp" -o "build/$target" || exit
+"build/$target" < input.in

@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set -e
+tail -n +2 < compile_flags.txt | xargs /opt/homebrew/opt/llvm/bin/clang++ main.cpp -o build/main
+tail -n +2 < compile_flags.txt | xargs /opt/homebrew/opt/llvm/bin/clang++ brute.cpp -o build/brute
+tail -n +2 < compile_flags.txt | xargs /opt/homebrew/opt/llvm/bin/clang++ gen.cpp -o build/gen
+
+echo "Running tests..."
+echo ""
+for((i = 1; ; ++i)); do
+    build/gen $i > input_file
+    build/main < input_file > myAnswer 2> /dev/null
+    build/brute < input_file > correctAnswer 2> /dev/null
+    diff -Z myAnswer correctAnswer > /dev/null || break
+    echo -e "\e[1APassed test: "  $i
+done
+echo "WA on the following test:"
+cat input_file
+echo "Your answer is:"
+cat myAnswer
+echo "Correct answer is:"
+cat correctAnswer
