@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
-tail -n +2 < compile_flags.txt | xargs /opt/homebrew/opt/llvm/bin/clang++ -o build/main -g main.cpp || exit
-build/main < input.in
+tail -n +2 < compile_flags_deb.txt | xargs /opt/homebrew/opt/llvm/bin/clang++ -o build/main  main.cpp || exit
+MallocNanoZone=0 build/main < input.in

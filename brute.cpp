@@ -1,47 +1,55 @@
-#include "template/template.cpp"
-int n;
-vi people;
-vi used;
-// vi open;
-using state = bitset<200>;
-map<int, map<string, int>> dp;
-int recurse(int cur, state open) {
-  if (cur == sz(people)) {
-    return 0;
-  }
-  if (dp[cur][open.to_string()]) {
-    return dp[cur][open.to_string()];
-  }
-  deb(cur);
-  int low = 1e9;
-  for (int i = 0; i < n; i++) {
-    if (!open[i]) {
-      continue;
+#include "template.cpp"
+vi primes = sieve(12);
+vi factors(long long n, bool print = false) {
+  mii factorization;
+  for (int d: primes) {
+    if (d * d > n) {
+      break;
     }
-    open[i] = false;
-    low = min(low, recurse(cur + 1, open) + abs(people[cur] - i));
-    open[i] = true;
+    while (n % d == 0) {
+      factorization[d]++;
+      n /= d;
+    }
   }
-  deb(cur, open, low);
-  dp[cur][open.to_string()] = low;
-  return low;
+  if (n > 1) {
+    factorization[n]++;
+  }
+  if (print) {
+    deb(factorization);
+  }
+  vi nums;
+  for (auto [x, c]: factorization) {
+    nums.pb(x);
+    nums.pb(c);
+  }
+  sort(nums);
+  return nums;
 }
 void solve() {
+  int n;
   read(n);
-  used.reserve(n);
-  read(used, n);
-  for (int i = 0; i < n; i++) {
-    if (used[i]) {
-      people.push_back(i);
+  n *= 2;
+  vi arr;
+  read(arr, n);
+  // mii cur;
+  // for (int x: arr) {
+  //   cur[x]++;
+  // }
+  // deb(cur);
+  // vi ans;
+  // for (auto [x, c]: cur) {
+  //   ans.pb(x);
+  //   ans.pb(c);
+  // }
+  sort(arr);
+  int count = 0;
+  deb(factors(210), arr);
+  deb(factors(6006129981862500) == arr);
+  for (ll i = 2; i <= 7000000000000000000; i++) {
+    if (factors(i) == arr) {
+      deb(i, factors(i, true));
+      count++;
     }
   }
-  deb(people);
-  state open;
-  // open.reserve(n);
-  for (int i = 0; i < n; i++) {
-    open[i] = !used[i];
-  }
-  deb(n, used);
-  int ans = recurse(0, open);
-  println(ans);
+  println(count);
 }

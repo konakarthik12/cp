@@ -1,3 +1,5 @@
 # Project exclude paths
 /merger/cmake-build-debug/
 /merger/cmake-build-release/
+main.cpp
+input.in

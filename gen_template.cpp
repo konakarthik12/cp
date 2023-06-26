@@ -4,7 +4,7 @@ int seed;
 
 int rnd(int a, int b) {
   assert(a <= b);
-  b = min(b, a + seed);
+  b = min(b, a + seed / 5);
   if (a == b) {
     return a;
   }

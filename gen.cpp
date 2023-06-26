@@ -1,14 +1,37 @@
-#include "template/gen_template.cpp"
+#include "gen_template.cpp"
+int dist(int a, int b, int x, int y) {
+  int x_dist = abs(a - x);
+  int y_dist = abs(b - y);
 
+  return max(x_dist, y_dist);
+}
 void generate() {
-  int n = rnd(2, 200);
-  cout << n << "\n";
-  int m = rnd(1, n / 2);
-  vi nums;
-  nums.insert(nums.end(), n - m, 0);
-  nums.insert(nums.end(), m, 1);
-  for (int num: nums) {
-    cout << num << " ";
+  int q = rnd(1, 1);
+  println(q);
+  for (int i = 0; i < q; i++) {
+    println();
+    int n = rnd(1, 30);
+    println(n);
+    flush();
+    for (int j = 0; j < 15; j++) {
+      char t;
+      read(t);
+      assert(t == '?' || t == '!');
+      int a, b;
+      read(a, b);
+
+      assert(1 <= a && a <= r);
+      assert(1 <= b && b <= c);
+      if (t == '?') {
+        println(dist(x, y, a, b));
+        flush();
+      } else {
+        assert(a == x);
+        assert(b == y);
+        goto done;
+      }
+    }
+    assert(false);
+  done:;
   }
-  cout << "\n";
 }

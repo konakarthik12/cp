@@ -2,8 +2,20 @@
 using namespace std;
 using std::numbers::pi;
 using ll = long long;
-using pii = pair<int, int>;
-using pdd = pair<double, double>;
+using uint = unsigned int;
+template <class T1, class T2>
+struct Pair {
+  T1 f;
+  T2 s;
+};
+template <class T1, class T2>
+bool operator<(const Pair<T1, T2>& x, const Pair<T1, T2>& y) {
+  return std::tie(x.f, x.s) < std::tie(y.f, y.s);
+}
+template <class T1, class T2>
+using pr = Pair<T1, T2>;
+using pii = pr<int, int>;
+using pdd = pr<double, double>;
 using pll = pair<ll, ll>;
 using mii = map<int, int>;
 template <class T, class Compare = less<T>>
@@ -11,11 +23,19 @@ using pqueue = priority_queue<T, vector<T>, Compare>;
 template <class T>
 using vec = vector<T>;
 using vi = vec<int>;
+using vd = vec<double>;
+using vll = vec<ll>;
 template <class T>
 using vv = vec<vec<T>>;
 using vvi = vv<int>;
 using vpii = vec<pii>;
 using vvpii = vv<pii>;
+using vc = vec<char>;
+using str = string;
+template <class T>
+using mset = multiset<T>;
+template <class T>
+using uset = unordered_set<T>;
 class Bool {
  public:
   Bool()
@@ -42,14 +62,11 @@ class Bool {
 };
 
 using vb = vector<Bool>;
-using vc = vec<char>;
-using str = string;
-template <class T>
-using mset = multiset<T>;
-template <class T>
-using uset = unordered_set<T>;
-template <class T>
-using umset = unordered_multiset<T>;
+
+std::ostream& operator<<(std::ostream& os, const Bool& b) {
+  os << (bool) b;
+  return os;
+}
 
 #define sz(x) (int) size(x)
 #define pb(x) push_back(x);
@@ -71,11 +88,19 @@ template <typename T>
 T ceil_div(T a, T b) {
   return (a + b - 1) / b;
 }
-
 template <typename T, typename V>
 ostream& operator<<(ostream& out, pair<T, V> const& p) {
   out << '(' << p.first << ", " << p.second << ')';
   return out;
+}
+template <typename T, typename V>
+ostream& operator<<(ostream& out, Pair<T, V> const& p) {
+  out << '(' << p.f << ", " << p.s << ')';
+  return out;
+}
+template <typename Ostream, typename T>
+typename enable_if<is_same<Ostream, ostream>::value, Ostream&>::type operator<<(Ostream& os, const T* v) {
+  os << *v;
 }
 
 template <typename Ostream, typename T>
@@ -88,6 +113,31 @@ typename enable_if<is_same<Ostream, ostream>::value, Ostream&>::type operator<<(
     os << *it;
   }
   return os << ']';
+}
+template <typename A, typename B, typename C>
+ostream& operator<<(ostream& os, priority_queue<A, B, C>& v) {
+  vec<A> items;
+  while (!v.empty()) {
+    items.pb(v.top());
+    v.pop();
+  }
+  for (auto item: items) {
+    v.push(item);
+  }
+  return os << items;
+}
+template <typename T>
+ostream& operator<<(ostream& os, stack<T>& v) {
+  vec<T> items;
+  while (!v.empty()) {
+    items.pb(v.top());
+    v.pop();
+  }
+  for (auto item: items) {
+    v.push(item);
+  }
+  reverse(all(items));
+  return os << items;
 }
 template <size_t I = 0, typename... Tp>
 ostream& operator<<(ostream& out, tuple<Tp...> const& t) {
@@ -128,11 +178,18 @@ void logger(ostream& out, int line, bool nest, string vars, Args&&... values) {
   out << "\033[0m\n";
 }
 #else
-#define deb(...) (void) 0
+#define deb(...) (void) 0;
 #endif
 template <typename T, typename V>
-istream& operator>>(istream& in, pair<T, V>& p) {
-  in >> p.first >> p.second;
+istream& operator>>(istream& in, Pair<T, V>& p) {
+  in >> p.f >> p.s;
+  return in;
+}
+template <size_t N>
+istream& operator>>(istream& in, bitset<N>& b) {
+  ll num;
+  in >> num;
+  b = num;
   return in;
 }
 template <class... Args>
@@ -185,6 +242,9 @@ void println(Args... args) {
   print(args...);
   cout << "\n";
 }
+void flush() {
+  cout.flush();
+}
 double to_rad(double degrees) {
   return degrees * (pi / 180);
 }
@@ -193,12 +253,33 @@ void dedupe(Container& vec) {
   vec.erase(unique(all(vec)), vec.end());
 }
 template <class Container>
+void sort(Container& vec) {
+  sort(all(vec));
+}
+template <class Container, class Comp>
+void sort(Container& vec, Comp comp) {
+  sort(all(vec), comp);
+}
+template <class T>
+void swapsort(T& a, T& b) {
+  if (a > b) {
+    swap(a, b);
+  }
+}
+template <class Container>
 void erase_all(Container& vec, char c) {
-  // vec.erase(remove(all(vec), c), prefix.end());
   vec.erase(remove(all(vec), c), vec.end());
 }
-
-void prefix_sum(int* start, int* end, ll* result) {
+template <typename T>
+ll sum(T* start, T* end) {
+  ll total = 0;
+  for (int* i = start; i < end; i++) {
+    total += *i;
+  }
+  return total;
+}
+template <typename T, typename V>
+void prefix_sum(T* start, T* end, V* result) {
   ll cur = 0;
   *result++ = 0;
   for (int* i = start; i < end; i++) {
@@ -206,44 +287,52 @@ void prefix_sum(int* start, int* end, ll* result) {
     *result++ = cur;
   }
 }
+template <class ForwardIt>
+constexpr std::pair<typename std::iterator_traits<ForwardIt>::value_type,
+                    typename std::iterator_traits<ForwardIt>::value_type>
+lowhigh(ForwardIt first, ForwardIt last) {
+  auto [low, high] = std::minmax_element(first, last);
+  return {*low, *high};
+}
+
 template <int MOD>
-struct Modular {
+struct ModInt {
   int value;
   static const int MOD_value = MOD;
 
-  Modular(long long v = 0) {
+  ModInt(long long v = 0) {
     value = v % MOD;
     if (value < 0) {
       value += MOD;
     }
   }
-  Modular(long long a, long long b)
+  ModInt(long long a, long long b)
       : value(0) {
     *this += a;
     *this /= b;
   }
 
-  Modular& operator+=(Modular const& b) {
+  ModInt& operator+=(ModInt const& b) {
     value += b.value;
     if (value >= MOD) {
       value -= MOD;
     }
     return *this;
   }
-  Modular& operator-=(Modular const& b) {
+  ModInt& operator-=(ModInt const& b) {
     value -= b.value;
     if (value < 0) {
       value += MOD;
     }
     return *this;
   }
-  Modular& operator*=(Modular const& b) {
+  ModInt& operator*=(ModInt const& b) {
     value = (long long) value * b.value % MOD;
     return *this;
   }
 
-  static Modular mexp(Modular a, long long e) {
-    Modular res = 1;
+  static ModInt mexp(ModInt a, long long e) {
+    ModInt res = 1;
     while (e) {
       if (e & 1) {
         res *= a;
@@ -253,36 +342,36 @@ struct Modular {
     }
     return res;
   }
-  friend Modular inverse(Modular a) {
+  friend ModInt inverse(ModInt a) {
     return mexp(a, MOD - 2);
   }
 
-  Modular& operator/=(Modular const& b) {
+  ModInt& operator/=(ModInt const& b) {
     return *this *= inverse(b);
   }
-  friend Modular operator+(Modular a, Modular const b) {
+  friend ModInt operator+(ModInt a, ModInt const b) {
     return a += b;
   }
-  friend Modular operator-(Modular a, Modular const b) {
+  friend ModInt operator-(ModInt a, ModInt const b) {
     return a -= b;
   }
-  friend Modular operator-(Modular const a) {
+  friend ModInt operator-(ModInt const a) {
     return 0 - a;
   }
-  friend Modular operator*(Modular a, Modular const b) {
+  friend ModInt operator*(ModInt a, ModInt const b) {
     return a *= b;
   }
-  friend Modular operator/(Modular a, Modular const b) {
+  friend ModInt operator/(ModInt a, ModInt const b) {
     return a /= b;
   }
-  friend std::ostream& operator<<(std::ostream& os, Modular const& a) {
+  friend std::ostream& operator<<(std::ostream& os, ModInt const& a) {
     return os << a.value;
   }
 
-  friend bool operator==(Modular const& a, Modular const& b) {
+  friend bool operator==(ModInt const& a, ModInt const& b) {
     return a.value == b.value;
   }
-  friend bool operator!=(Modular const& a, Modular const& b) {
+  friend bool operator!=(ModInt const& a, ModInt const& b) {
     return a.value != b.value;
   }
 };

@@ -20,7 +20,7 @@ int main() {
                                 "/opt/homebrew/opt/llvm/lib/clang/16/include/",
                                 "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/"};
 
-  inliner.clangCompilationOptions = {"-std=c++20", "-I", ".", "-target", "arm64-apple-darwin22.4.0", "-include-pch", "wrapper.h.gch"};
+  inliner.clangCompilationOptions = {"-std=c++20", "-I", ".", "-target", "arm64-apple-darwin22.4.0", "-include-pch", "build/wrapper.h.gch"};
 
   for (const auto& item: isystemDirs) {
     inliner.clangCompilationOptions.emplace_back("-isystem");
