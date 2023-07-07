@@ -1,12 +1,22 @@
 #include "wrapper.h"
 using namespace std;
-using std::numbers::pi;
 using ll = long long;
 using uint = unsigned int;
 template <class T1, class T2>
 struct Pair {
   T1 f;
   T2 s;
+  // cpp 17 needs constructor
+  Pair(T1 f, T2 s) {
+    this->f = f;
+    this->s = s;
+  }
+  Pair(T1 x)
+      : Pair(x, x) {
+  }
+  Pair()
+      : Pair(T1(), T2()) {
+  }
 };
 template <class T1, class T2>
 bool operator<(const Pair<T1, T2>& x, const Pair<T1, T2>& y) {
@@ -28,8 +38,11 @@ using vll = vec<ll>;
 template <class T>
 using vv = vec<vec<T>>;
 using vvi = vv<int>;
+using vvc = vv<char>;
 using vpii = vec<pii>;
 using vvpii = vv<pii>;
+using vpll = vec<pll>;
+using vvpll = vv<pll>;
 using vc = vec<char>;
 using str = string;
 template <class T>
@@ -56,25 +69,29 @@ class Bool {
   const bool* operator&() const {
     return &m_value;
   }
+  friend istream& operator>>(istream& in, Bool& b) {
+    in >> b.m_value;
+    return in;
+  }
+  friend std::ostream& operator<<(std::ostream& os, const Bool& b) {
+    os << b.m_value;
+    return os;
+  }
 
  private:
   bool m_value;
 };
 
-using vb = vector<Bool>;
-
-std::ostream& operator<<(std::ostream& os, const Bool& b) {
-  os << (bool) b;
-  return os;
-}
+using vb = vec<Bool>;
+using vvb = vv<Bool>;
 
 #define sz(x) (int) size(x)
+#define pb(x) push_back(x);
 #define pb(x) push_back(x);
 #define eb(...) emplace_back(__VA_ARGS__);
 #define all(x) begin(x), end(x)
 #define rall(x) rbegin(x), rend(x)
 
-#define filla(x, v) memset(x, v, sizeof x);
 #define fir first
 #define sec second
 
@@ -213,8 +230,21 @@ void read(vec<T>& v, int n) {
   }
 }
 template <class T>
+void read(set<T>& v, int n) {
+  for (int i = 0; i < n; i++) {
+    T temp;
+    read(temp);
+    v.insert(temp);
+  }
+}
+template <class T>
+void read1(vec<T>& v, int n) {
+  v.pb(0);
+  read(v, n);
+}
+template <class T>
 void read(vv<T>& arr, int n, int m) {
-  arr.reserve(n);
+  arr.reserve(arr.size() + n);
   for (int i = 0; i < n; i++) {
     arr.emplace_back();
     arr[i].reserve(m);
@@ -222,6 +252,21 @@ void read(vv<T>& arr, int n, int m) {
       T x;
       read(x);
       arr[i].push_back(x);
+    }
+  }
+}
+template <class T>
+void read1(vv<T>& arr, int n, int m) {
+  arr.reserve(arr.size() + n + 1);
+  arr.emplace_back(m + 1);
+  for (int i = 0; i < n; i++) {
+    arr.emplace_back();
+    arr.back().reserve(m + 1);
+    arr.back().pb(0);
+    for (int j = 0; j < m; j++) {
+      T x;
+      read(x);
+      arr.back().push_back(x);
     }
   }
 }
@@ -237,6 +282,16 @@ void printsp(Args... args) {
   print(args...);
   cout << " ";
 }
+template <typename ForwardIt>
+void printsp(ForwardIt first, ForwardIt last) {
+  for (auto it = first; it != last; it++) {
+    printsp(*it);
+  }
+}
+template <typename Container>
+void printsp(Container c) {
+  printsp(all(c));
+}
 template <class... Args>
 void println(Args... args) {
   print(args...);
@@ -245,6 +300,10 @@ void println(Args... args) {
 void flush() {
   cout.flush();
 }
+// c++ 20
+// using std::numbers::pi;
+const double pi = acos(-1);
+
 double to_rad(double degrees) {
   return degrees * (pi / 180);
 }
@@ -271,12 +330,20 @@ void erase_all(Container& vec, char c) {
   vec.erase(remove(all(vec), c), vec.end());
 }
 template <typename T>
-ll sum(T* start, T* end) {
+ll sum(T start, T end) {
   ll total = 0;
-  for (int* i = start; i < end; i++) {
+  for (auto i = start; i < end; i++) {
     total += *i;
   }
   return total;
+}
+
+ll asum(ll a) {
+  return (a + 1) * a / 2;
+}
+template <class Container>
+ll sum(Container& vec) {
+  return sum(all(vec));
 }
 template <typename T, typename V>
 void prefix_sum(T* start, T* end, V* result) {
@@ -295,7 +362,7 @@ lowhigh(ForwardIt first, ForwardIt last) {
   return {*low, *high};
 }
 
-template <int MOD>
+template <int MOD = 998244353>
 struct ModInt {
   int value;
   static const int MOD_value = MOD;
@@ -331,17 +398,6 @@ struct ModInt {
     return *this;
   }
 
-  static ModInt mexp(ModInt a, long long e) {
-    ModInt res = 1;
-    while (e) {
-      if (e & 1) {
-        res *= a;
-      }
-      a *= a;
-      e >>= 1;
-    }
-    return res;
-  }
   friend ModInt inverse(ModInt a) {
     return mexp(a, MOD - 2);
   }
@@ -364,10 +420,12 @@ struct ModInt {
   friend ModInt operator/(ModInt a, ModInt const b) {
     return a /= b;
   }
+  friend istream& operator>>(istream& in, ModInt& a) {
+    return in >> a.value;
+  }
   friend std::ostream& operator<<(std::ostream& os, ModInt const& a) {
     return os << a.value;
   }
-
   friend bool operator==(ModInt const& a, ModInt const& b) {
     return a.value == b.value;
   }
@@ -375,6 +433,19 @@ struct ModInt {
     return a.value != b.value;
   }
 };
+
+template <int MOD>
+ModInt<MOD> mexp(ModInt<MOD> a, long long e) {
+  ModInt<MOD> res = 1;
+  while (e) {
+    if (e & 1) {
+      res *= a;
+    }
+    a *= a;
+    e >>= 1;
+  }
+  return res;
+}
 
 vi sieve(int max_n) {
   vi primes;
@@ -416,6 +487,9 @@ struct Combo {
 };
 str yes(bool ans, str yes = "YES", str no = "NO") {
   return ans ? yes : no;
+}
+void exit() {
+  exit(0);
 }
 void solve();
 #ifndef NO_MAIN
