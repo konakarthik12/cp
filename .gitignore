@@ -1,7 +1,7 @@
 # Project exclude paths
 /merger/cmake-build-debug/
 /merger/cmake-build-release/
-main.cpp
+/main.cpp
 brute.cpp
 gen.cpp
 input.in
