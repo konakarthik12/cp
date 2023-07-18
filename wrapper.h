@@ -1,3 +1,3 @@
 // konakarthik12
-// cpp20
+// cpp17
 #include <bits/stdc++.h>

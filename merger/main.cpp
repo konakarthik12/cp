@@ -5,11 +5,18 @@
 
 using namespace std;
 
+void try_remove(const std::filesystem::path& p) {
+  try {
+    std::filesystem::remove(p);
 
+  } catch (const std::filesystem::filesystem_error& err) {
+    std::cout << "filesystem error: " << err.what() << '\n';
+  }
+}
 int main() {
   string outputFile = "output/merged.cpp";
-  std::filesystem::remove(outputFile);
-  string tmpDirectory = ".caide-tmp";
+  try_remove(outputFile);
+  string tmpDirectory = "build/.caide-tmp";
 
   caide::CppInliner inliner(tmpDirectory);
 

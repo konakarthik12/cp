@@ -178,9 +178,13 @@ ostream& operator<<(ostream& out, tuple<Tp...> const& t) {
 }
 #ifdef LOCAL
 #include "execinfo.h"
-#define deb(...) logger(cerr, __LINE__, false, #__VA_ARGS__, __VA_ARGS__);
+#define deb(...) logger(cerr, __LINE__, false, #__VA_ARGS__, ##__VA_ARGS__);
 template <typename... Args>
 void logger(ostream& out, int line, bool nest, string vars, Args&&... values) {
+  if (sz(vars) == 0) {
+    out << "\n";
+    return;
+  }
   if (nest) {
     void* callstack[20];
     int frames = backtrace(callstack, 20);
@@ -212,6 +216,11 @@ istream& operator>>(istream& in, bitset<N>& b) {
 template <class... Args>
 void read(Args&... args) {
   (..., (cin >> args));
+}
+int readInt() {
+  int x;
+  read(x);
+  return x;
 }
 template <class T>
 void read(T arr[], int n) {
@@ -288,10 +297,7 @@ void printsp(ForwardIt first, ForwardIt last) {
     printsp(*it);
   }
 }
-template <typename Container>
-void printsp(Container c) {
-  printsp(all(c));
-}
+
 template <class... Args>
 void println(Args... args) {
   print(args...);
@@ -300,8 +306,7 @@ void println(Args... args) {
 void flush() {
   cout.flush();
 }
-// c++ 20
-// using std::numbers::pi;
+
 const double pi = acos(-1);
 
 double to_rad(double degrees) {
@@ -484,8 +489,21 @@ struct Combo {
     }
     return fact[n] * (inv_fact[k] * inv_fact[n - k]);
   }
+  T permute(int n) {
+    if (n < 0) {
+      return 0;
+    }
+    return fact[n];
+  }
+
+  T permute(int n, int k) {
+    if (n < k) {
+      return 0;
+    }
+    return fact[n] * inv_fact[n - k];
+  }
 };
-str yes(bool ans, str yes = "YES", str no = "NO") {
+str yes(bool ans, str yes = "Yes", str no = "No") {
   return ans ? yes : no;
 }
 void exit() {
