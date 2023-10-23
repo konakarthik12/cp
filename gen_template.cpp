@@ -2,13 +2,19 @@
 #include "template.cpp"
 int seed;
 
-int rnd(int a, int b) {
+ll rnd_internal(ll a, ll b) {
   assert(a <= b);
-  b = min(b, a + seed / 5);
   if (a == b) {
     return a;
   }
-  return a + rand() % (b - a + 1);
+  uniform_int_distribution<ll> dis(a, b);
+  return dis(rng);
+}
+ll rnd(ll a, ll b) {
+  if (seed < 1000) {
+    b = min(b, a + seed / 5);
+  }
+  return rnd_internal(a, b);
 }
 int rnd_not(int a, int b, int exclude) {
   int n = exclude;
@@ -55,9 +61,11 @@ vector<int> rnd_list(int n, int a, int b) {
 }
 
 vector<int> rnd_list_distinct(int n, int a, int b) {
+  b = min(b, a + seed / 5);
+  b = max(b, a + n - 1);
   set<int> s;
   while ((int) s.size() < n) {
-    s.insert(rnd(a, b));
+    s.insert(rnd_internal(a, b));
   }
   return vector<int>(s.begin(), s.end());
 }
@@ -71,6 +79,6 @@ int main(int argc, char* argv[]) {
   assert(argc == 2);
   seed = atoi(argv[1]);
   assert(seed >= 0);
-  srand(seed);
+  rng = mt19937(seed);
   generate();
 }

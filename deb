@@ -1,3 +1,10 @@
 #!/usr/bin/env bash
-tail -n +2 < compile_flags_deb.txt | xargs /opt/homebrew/opt/llvm/bin/clang++ -o build/main  main.cpp || exit
-MallocNanoZone=0 build/main < input.in
+
+target="main"
+if [ $# -ge 1 ]; then
+    target="$1"
+fi
+
+tail -n +2 < compile_flags_deb.txt | xargs /opt/homebrew/opt/llvm/bin/clang++ "$target.cpp" -o "build/$target" || exit
+MallocNanoZone=0 "build/$target" < input.in
+

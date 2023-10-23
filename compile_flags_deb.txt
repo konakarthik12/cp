@@ -1,10 +1,13 @@
 /opt/homebrew/opt/llvm/bin/clang++
--std=c++17
+-std=c++20
 -g 
 -fsanitize=address 
 -fsanitize=undefined
+-fno-sanitize-recover=undefined,address
 -DLOCAL
+-D_LIBCPP_ENABLE_ASSERTIONS
 -Wall
 -Wextra
 -Wshadow
 -Wno-sign-conversion
+/opt/homebrew/opt/llvm/include/c++/v1/bits/stdc++.h.deb.gch
