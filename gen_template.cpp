@@ -11,10 +11,13 @@ ll rnd_internal(ll a, ll b) {
   return dis(rng);
 }
 ll rnd(ll a, ll b) {
-  if (seed < 1000) {
-    b = min(b, a + seed / 5);
-  }
+   if (seed < 1000) {
+     b = min(b, a + seed / 5);
+   }
   return rnd_internal(a, b);
+}
+char rnd_char() {
+  return 'a' + rnd(0, 25);
 }
 int rnd_not(int a, int b, int exclude) {
   int n = exclude;
@@ -52,8 +55,10 @@ vector<pair<int, int>> pruefer_decode(vector<int> const& code) {
   edges.emplace_back(leaf, n - 1);
   return edges;
 }
-vector<int> rnd_list(int n, int a, int b) {
-  vector<int> arr;
+
+template <typename T>
+vector<T> rnd_list(int n, T a, T b) {
+  vector<T> arr;
   for (int i = 0; i < n; i++) {
     arr.push_back(rnd(a, b));
   }
@@ -61,13 +66,22 @@ vector<int> rnd_list(int n, int a, int b) {
 }
 
 vector<int> rnd_list_distinct(int n, int a, int b) {
-  b = min(b, a + seed / 5);
-  b = max(b, a + n - 1);
+  assert((b - a + 1) >= n);
+  if (seed < 1000) {
+    b = min(b, max(a + seed / 5, (a + n - 1)));
+  }
   set<int> s;
   while ((int) s.size() < n) {
     s.insert(rnd_internal(a, b));
   }
-  return vector<int>(s.begin(), s.end());
+  return {all(s)};
+}
+
+vi permute(int n) {
+  vi arr(n);
+  iota(all(arr), 1);
+  shuffle(all(arr), rng);
+  return arr;
 }
 
 bool rnd_bool() {
@@ -76,9 +90,10 @@ bool rnd_bool() {
 void generate();
 
 int main(int argc, char* argv[]) {
-  assert(argc == 2);
-  seed = atoi(argv[1]);
-  assert(seed >= 0);
-  rng = mt19937(seed);
+  if (argc == 2) {
+    seed = atoi(argv[1]);
+    assert(seed >= 0);
+    rng = mt19937(seed);
+  }
   generate();
 }

@@ -2,8 +2,9 @@
 /merger/cmake-build-debug/
 /merger/cmake-build-release/
 /main.cpp
-brute.cpp
+/brute.cpp
+/validate.cpp
 gen.cpp
 input.in
 build
-output.out
+output/

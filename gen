@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -e
-tail -n +2 < compile_flags.txt | xargs /opt/homebrew/opt/llvm/bin/clang++ main.cpp -o build/main
-tail -n +2 < compile_flags.txt | xargs /opt/homebrew/opt/llvm/bin/clang++ brute.cpp -o build/brute
-tail -n +2 < compile_flags.txt | xargs /opt/homebrew/opt/llvm/bin/clang++ gen.cpp -o build/gen
+tail -n +2 < compile_flags_prod.txt | xargs /opt/homebrew/opt/llvm/bin/clang++ template.cpp -DENTRY=main -o build/main
+tail -n +2 < compile_flags_prod.txt | xargs /opt/homebrew/opt/llvm/bin/clang++ template.cpp -DENTRY=main -o build/brute
+tail -n +2 < compile_flags_prod.txt | xargs /opt/homebrew/opt/llvm/bin/clang++ template.cpp -DENTRY=gen -o build/gen
 
 echo "Running tests..."
 echo ""

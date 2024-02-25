@@ -5,6 +5,6 @@ if [ $# -ge 1 ]; then
     target="$1"
 fi
 
-tail -n +2 < compile_flags_deb.txt | xargs /opt/homebrew/opt/llvm/bin/clang++ "$target.cpp" -o "build/$target" || exit
-MallocNanoZone=0 "build/$target" < input.in
+tail -n +2 < compile_flags_deb.txt | xargs /opt/homebrew/opt/llvm/bin/clang++ "template.cpp" -o "build/$target" -DENTRY=$target || exit
+MallocNanoZone=0 "build/$target" < input.in 
 

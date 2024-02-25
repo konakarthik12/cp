@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set -e
+tail -n +2 < compile_flags_prod.txt | xargs /opt/homebrew/opt/llvm/bin/clang++ main.cpp -o build/main
+tail -n +2 < compile_flags_prod.txt | xargs /opt/homebrew/opt/llvm/bin/clang++ gen.cpp -o build/gen
+tail -n +2 < compile_flags_prod.txt | xargs /opt/homebrew/opt/llvm/bin/clang++ validate.cpp -o build/validate
+
+echo "Running tests..."
+echo ""
+for((i = 1; ; ++i)); do
+    build/gen $i > build/input_file
+    build/main < build/input_file > build/myAnswer 2> /dev/null
+    cat build/input_file build/myAnswer > build/val_check
+    build/validate <build/val_check 2> build/val_error || break
+    echo -e "\e[1APassed test: "  $i
+done
+echo "WA on the following test:"
+cat build/input_file
+echo "Your answer is:"
+cat build/myAnswer
+echo "Validation assertion"
+cat build/val_error

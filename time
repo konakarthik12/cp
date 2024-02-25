@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -e
+tail -n +2 < compile_flags_prod.txt | xargs /opt/homebrew/opt/llvm/bin/clang++ gen.cpp -o build/gen
+tail -n +2 < compile_flags_prod.txt | xargs /opt/homebrew/opt/llvm/bin/clang++ main.cpp -o build/main
+
+echo "Running generator..."
+echo ""
+for((i = 1; ; ++i)); do
+    build/gen $i > input_file
+    TIMEFORMAT=%R /usr/bin/time -o /tmp/time_log build/main < input_file > /dev/null 
+    cat /tmp/time_log
+# echo -e "\e[Ran test: "  $i
+done

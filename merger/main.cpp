@@ -2,14 +2,13 @@
 #include <filesystem>
 #include <iostream>
 #include <string>
+#include <vector>
 
 using namespace std;
 
-// replaces text file with empty file
 void try_erase(const std::filesystem::path &p) {
     try {
-        std::filesystem::resize_file(p, 0);
-
+        std::filesystem::remove(p);
     } catch (const std::filesystem::filesystem_error &err) {
         std::cout << "filesystem error: " << err.what() << '\n';
     }
@@ -22,7 +21,7 @@ int main() {
 
     caide::CppInliner inliner(tmpDirectory);
 
-    vector<string> sourceFiles = {"main.cpp"};
+    vector<string> sourceFiles = {"template.cpp"};
 
     int maxConsecutiveEmptyLines = 1;
     vector<string> isystemDirs = {"/opt/homebrew/opt/llvm/include/c++/v1/",
@@ -35,6 +34,10 @@ int main() {
         inliner.clangCompilationOptions.emplace_back("-isystem");
         inliner.clangCompilationOptions.emplace_back(item);
     }
+
+    inliner.clangCompilationOptions.emplace_back("-DINLINER");
+
+    inliner.clangCompilationOptions.emplace_back("-fparse-all-comments");
     inliner.maxConsequentEmptyLines = maxConsecutiveEmptyLines;
     auto t1 = std::chrono::high_resolution_clock::now();
     try {
