@@ -11,9 +11,9 @@ ll rnd_internal(ll a, ll b) {
   return dis(rng);
 }
 ll rnd(ll a, ll b) {
-   if (seed < 1000) {
-     b = min(b, a + seed / 5);
-   }
+  if (seed < 1000) {
+    b = min(b, a + seed / 5);
+  }
   return rnd_internal(a, b);
 }
 char rnd_char() {

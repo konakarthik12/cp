@@ -13,3 +13,5 @@ SpaceAfterCStyleCast: true
 SpaceBeforeRangeBasedForLoopColon: false
 AllowShortLambdasOnASingleLine: All
 PackConstructorInitializers: CurrentLine
+DerivePointerAlignment: false
+PointerAlignment: Left
