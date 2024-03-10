@@ -1,4 +1,8 @@
 #include "DocTestExtension.h"
+#include "iostream"
+#include "filesystem"
+#include "fstream"
+#include "cassert"
 
 #ifndef _WIN32
 #include <unistd.h>
@@ -13,6 +17,8 @@ namespace quill
 {
 namespace testing
 {
+
+
 
 // The ctor redirects the stream to a temporary file.
 CapturedStream::CapturedStream(int fd) : fd_(fd), uncaptured_fd_(dup(fd))
@@ -171,6 +177,14 @@ void CaptureStderr() { CaptureStream(kStdErrFileno, "stderr", &g_captured_stderr
 std::string GetCapturedStdout() { return GetCapturedStream(&g_captured_stdout); }
 
 std::string GetCapturedStderr() { return GetCapturedStream(&g_captured_stderr); }
+void redirectInput(std::string filename) {
+  namespace fs = std::filesystem;
+  std::string abs_path = fs::path(__FILE__).parent_path() / filename;
+  std::cout << abs_path << '\n';
+  std::ifstream* test_cin = new std::ifstream(abs_path);
+  assert(!test_cin->fail());
+  std::cin.rdbuf(test_cin->rdbuf());
 
+}
 } // namespace testing
 } // namespace quill

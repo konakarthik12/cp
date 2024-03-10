@@ -30,6 +30,10 @@ template <typename T>
 T asum(T a) {
   return (a + 1) * a / 2;
 }
+template <typename T>
+T asum(T a, T b) {
+  return (b + a) * (b - a + 1) / 2;
+}
 
 vi sieve(int max_n) {
   vi primes;
@@ -44,9 +48,7 @@ vi sieve(int max_n) {
     }
   }
   for (int i = 2; i <= max_n; i++) {
-    if (is_prime[i]) {
-      primes.push_back(i);
-    }
+    if (is_prime[i]) primes.pb(i);
   }
   return primes;
 }
@@ -57,7 +59,7 @@ vi linsieve(int n) {
   for (int i = 2; i <= n; ++i) {
     if (lp[i] == 0) {
       lp[i] = i;
-      pr.push_back(i);
+      pr.pb(i);
     }
     for (int j = 0; i * pr[j] <= n; ++j) {
       lp[i * pr[j]] = pr[j];
@@ -88,8 +90,8 @@ struct Combo {
     facts.pb(1);
     inv_facts.pb(1);
     for (int i = 1; i <= max_n; i++) {
-      facts.push_back(facts.back() * i);
-      inv_facts.push_back(1 / facts.back());
+      facts.pb(facts.back() * i);
+      inv_facts.pb(1 / facts.back());
     }
   }
   T fact(int x) {

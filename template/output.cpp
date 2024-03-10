@@ -1,6 +1,6 @@
 #pragma once
 #include "base.cpp"
-#include "wec.cpp"
+#include "concepts.cpp"
 
 void __print(char c) {
   cout << c;
@@ -23,24 +23,22 @@ void __print(const char* s) {
 void __print(string& s) {
   cout << s;
 }
+
 void println() {
   __print('\n');
-}
-
-void print() {
 }
 
 template <typename Arg, typename... Args>
 void print(Arg&& arg, Args&&... args) {
   __print(arg);
-  if (sizeof...(args) > 0) {
+  if cexp (sizeof...(args) > 0) {
     __print(' ');
+    print(args...);
   }
-  print(args...);
 }
 
 template <typename Container>
-  requires HasValueType<Container>
+  requires HasIter<Container>
 void printsp(Container v) {
   for (auto iter = v.begin(); iter != v.end(); iter++) {
     __print(*iter);

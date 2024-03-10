@@ -35,7 +35,7 @@ struct custom_adjacent_pairwise_view : public ranges::view_base {
   }
 
   iterator end() {
-    return iterator(data.end() - 1);  // stop one element before the end
+    return iterator(data.end() - 1);
   }
 };
 

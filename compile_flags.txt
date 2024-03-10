@@ -7,3 +7,5 @@
 -DLOCAL
 -DEDITOR
 -DENTRY=main
+-include-pch
+/usr/local/include/bits/stdc++.h.pch

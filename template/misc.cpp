@@ -40,7 +40,20 @@ str YES(bool ans, str yes = "YES", str no = "NO") {
 void exit() {
   exit(0);
 }
+template <typename T>
+constexpr auto yes(T&& opt) {
+  return optional(opt);
+}
 
+constexpr auto no() {
+  return std::nullopt;
+}
+
+mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
+template <typename Con>
+void iota(Con& v, const typename Con::value_type start = Con::value_type(0)) {
+  iota(all(v), start);
+}
 vpii dirs4 = vpii{{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
 
 #ifndef LOCAL

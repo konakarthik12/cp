@@ -88,5 +88,8 @@ std::string GetCapturedStdout();
 
 // Stops capturing stderr and returns the captured string.
 std::string GetCapturedStderr();
+
+void redirectInput();
+
 } // namespace testing
 } // namespace quill

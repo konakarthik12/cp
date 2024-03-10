@@ -5,4 +5,4 @@ if [ $# -ge 1 ]; then
 fi
 
 tail -n +2 < compile_flags_prod.txt | xargs /opt/homebrew/opt/llvm/bin/clang++ "template.cpp" -o "build/$target" -DENTRY=$target || exit
-"build/$target" < input.in
+"build/$target" < input.txt

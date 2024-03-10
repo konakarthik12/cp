@@ -1,5 +1,5 @@
 local function merge()
-  io.popen("merger/cmake-build-release/merger 2>/dev/null", "r")
+  io.popen("merger/merger.sh 2> /dev/null", "r")
 end
 
 vim.api.nvim_create_autocmd("BufWritePost", {

@@ -1,10 +1,21 @@
-#define pragma once
+#pragma once
 
-#include "base.cpp"
 #include "concepts.cpp"
 #include "input.cpp"
 #include "output.cpp"
-
+template <typename Res>
+void handle_print(optional<Res>& res) {
+  if (res) {
+    println("YES");
+    println(*res);
+  } else {
+    println("NO");
+  }
+}
+template <typename Res>
+void handle_print(Res& res) {
+  println(res);
+}
 template <typename Func>
   requires requires(Func func) {
     { std::invoke_result_t<Func>() } -> std::same_as<void>;
@@ -19,7 +30,7 @@ template <typename Func>
   }
 void call_print(Func func) {
   auto result = std::invoke(func);
-  println(result);
+  handle_print(result);
 }
 
 template <typename Func>
@@ -36,7 +47,7 @@ template <typename Func>
   }
 void call_print(Func func, int t) {
   auto result = std::invoke(func, t);
-  println(result);
+  handle_print(result);
 }
 
 template <class F>

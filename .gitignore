@@ -4,7 +4,7 @@
 /main.cpp
 /brute.cpp
 /validate.cpp
-gen.cpp
-input.in
+/gen.cpp
+input.txt
 build
 output/

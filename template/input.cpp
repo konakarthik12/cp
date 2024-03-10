@@ -1,8 +1,8 @@
 #pragma once
 
 #include "base.cpp"
+#include "basic/wec.cpp"
 #include "concepts.cpp"
-#include "wec.cpp"
 
 void __read(bool& b) {
   char x;
@@ -49,21 +49,33 @@ void __read(pr<T1, T2>& p) {
 }
 
 template <typename T>
-concept HasReserve = requires(T& container, size_t s) {
-  { container.reserve(s) } -> std::same_as<void>;
-};
+void reserve(T& v, size_t s) {
+  constexpr bool HasReserve = requires {
+    { v.reserve(s) };
+  };
 
-template <typename T>
-  requires HasReserve<T>
-void reserve(T& container, size_t s) {
-  container.reserve(s);
+  if constexpr (HasReserve) {
+    v.reserve(s);
+  }
 }
 
-template <typename T>
-  requires(!HasReserve<T>)
-void reserve(T&, size_t) {
-}
+template <typename V>
+void append(V& v, const typename V::value_type& x) {
+  constexpr bool HasPB = requires {
+    { v.pb(x) };
+  };
+  constexpr bool HasPushBack = requires {
+    { v.push_back(x) };
+  };
 
+  if constexpr (HasPB) {
+    v.pb(x);
+  } else if constexpr (HasPushBack) {
+    v.push_back(x);
+  } else {
+    v.insert(x);
+  }
+}
 template <typename Container>
   requires HasValueType<Container>
 void __read(Container& v, int n) {
@@ -72,19 +84,44 @@ void __read(Container& v, int n) {
   for (int i = 0; i < n; i++) {
     T x;
     __read(x);
-    v.push_back(x);
+    append(v, x);
   }
 }
 
-template <typename Container>
-  requires HasValueType2D<Container>
-void __read(Container& v, int r, int c) {
-  using T = Container::value_type;
-  reserve(v, r);
+template <class V2>
+concept HasEB = requires(V2 v2) {
+  { v2.emplace_back() } -> same_as<typename V2::value_type>;
+};
+
+template <typename V2>
+concept HasEmplaceBack = requires(V2 v2) {
+  { v2.emplace_back() } -> same_as<typename V2::value_type>;
+};
+
+template <typename V2>
+V2::value_type& emplace_empty(V2& v2) {
+  if cexp (HasEB<V2>) {
+    return v2.eb();
+  } else if cexp (HasEmplaceBack<V2>) {
+    return v2.emplace_back();
+  }
+}
+
+template <typename V2>
+  requires HasValueType2D<V2>
+void __read(V2& v2, int r, int c) {
+  using V = V2::value_type;
+  reserve(v2, r);
   for (int i = 0; i < r; i++) {
-    T& col = v.emplace_back();
-    reserve(col, c);
-    __read(col, c);
+    cexp bool EB = HasEB<V2> || HasEmplaceBack<V2>;
+    if cexp (EB) {
+      V& col = emplace_empty(v2);
+      __read(col, c);
+    } else {
+      V col;
+      __read(col, c);
+      append(v2, col);
+    }
   }
 }
 

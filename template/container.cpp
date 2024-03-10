@@ -77,11 +77,13 @@ pr<T, T> minmax(vec<T>& arr, F comb) {
 }
 
 template <typename T>
-T min(vec<T>& arr) {
+  requires HasIter<T>
+auto min(T& arr) {
   return *min_element(all(arr));
 }
 
 template <typename T>
-T max(vec<T>& arr) {
+  requires HasIter<T>
+auto max(T& arr) {
   return *max_element(all(arr));
 }

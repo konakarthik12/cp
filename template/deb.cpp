@@ -1,7 +1,6 @@
 #pragma once
 #include "base.cpp"
 #include "pr.cpp"
-#include "wec.cpp"
 template <const unsigned long N>
 void debug(ostream& out, typename bitset<N>::reference v) {
   out << (bool) v;
@@ -74,18 +73,6 @@ void debug(ostream& out, Container v) {
     debug(out, *it);
   }
   out << ']';
-}
-
-template <typename C, typename T>
-void debug(ostream& os, wec<T> v) {
-  os << '[';
-  for (auto it = v.begin(); it != v.end(); ++it) {
-    if (it != v.begin()) {
-      os << ", ";
-    }
-    debug(os, *it);
-  }
-  os << ']';
 }
 
 void debug_all(ostream&) {

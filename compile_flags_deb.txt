@@ -10,4 +10,4 @@
 -Wextra
 -Wshadow
 -Wno-sign-conversion
-/opt/homebrew/opt/llvm/include/c++/v1/bits/stdc++.h.deb.gch
+/usr/local/include/bits/stdc++.h.pch

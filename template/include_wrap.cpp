@@ -1,5 +1,4 @@
 #pragma once
-
 #ifdef INLINER
 #include "../main.cpp"
 #else
@@ -9,9 +8,7 @@
 #ifndef ENTRY
 #define ENTRY main
 #endif
-// clang-format off
 #define ENTRY_FILE STR(../ENTRY.cpp)
 #include ENTRY_FILE
-// clang-format on
 #endif
 #endif
