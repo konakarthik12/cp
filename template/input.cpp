@@ -4,36 +4,11 @@
 #include "basic/wec.cpp"
 #include "concepts.cpp"
 
-void __read(bool& b) {
-  char x;
-  cin >> x;
-  b = (x == '1');
+template <typename T>
+  requires Readable<T>
+void __read(T& arr) {
+  cin >> arr;
 }
-
-void __read(int& x) {
-  cin >> x;
-}
-
-void __read(uint& x) {
-  cin >> x;
-}
-
-void __read(char& x) {
-  cin >> x;
-}
-
-void __read(ll& x) {
-  cin >> x;
-}
-
-void __read(ull& x) {
-  cin >> x;
-}
-
-void __read(string& s) {
-  cin >> s;
-}
-
 template <const size_t N>
 void __read(bitset<N>& b) {
   using Type = typename std::conditional_t<(N <= sizeof(int) * 8), int, ll>;
