@@ -1,5 +1,5 @@
 /opt/homebrew/opt/llvm/bin/clang++
--std=c++20
+-std=c++17
 -Wall
 -Wextra
 -Wshadow

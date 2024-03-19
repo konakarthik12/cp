@@ -3,8 +3,7 @@
 #include "concepts.cpp"
 
 template <typename T>
-  requires Printable<T>
-void __print(T x) {
+  enable_if_t<Printable<T>::value> __print(T x) {
   cout << x;
 }
 void println() {
@@ -21,8 +20,7 @@ void print(Arg&& arg, Args&&... args) {
 }
 
 template <typename Container>
-  requires HasIter<Container>
-void printsp(Container v) {
+enable_if_t<HasIter<Container>::value> printsp(Container v) {
   for (auto iter = v.begin(); iter != v.end(); iter++) {
     __print(*iter);
     __print(' ');
@@ -30,8 +28,7 @@ void printsp(Container v) {
 }
 
 template <typename Container>
-  requires(HasIter<Container> && !Printable<Container>)
-void println(Container v) {
+enable_if_t<(!Printable<Container>::value && HasIter<Container>::value)> println(Container v) {
   for (auto iter = v.begin(); iter != v.end(); iter++) {
     __print(*iter);
     if (next(iter) != v.end()) __print(' ');

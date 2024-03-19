@@ -28,22 +28,31 @@ T mode(map<T, V> items) {
 
 template <typename T, typename F>
 T min_false(T l, T h, F comp) {
-  auto iter = ranges::partition_point(views::iota(l, h + 1), comp);
-  return *iter;
+  while (l <= h) {
+    T mid = l + (h - l) / 2;
+
+    if (!comp(mid)) {
+      h = mid - 1;
+    } else {
+      l = mid + 1;
+    }
+  }
+
+  return h + 1;
 }
 
-template <typename T, typename F>
-T max_true(T l, T h, F comp) {
+ template <typename T, typename F>
+ T max_true(T l, T h, F comp) {
   return min_false(l, h, comp) - 1;
 }
 
-template <typename T, typename F>
-T min_true(T l, T h, F comp) {
+ template <typename T, typename F>
+ T min_true(T l, T h, F comp) {
   return min_false(l, h, not_fn(comp));
 }
 
-template <typename T, typename F>
-T max_false(T l, T h, F comp) {
+ template <typename T, typename F>
+ T max_false(T l, T h, F comp) {
   return max_true(l, h, not_fn(comp));
 }
 

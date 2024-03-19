@@ -1,7 +1,5 @@
 /opt/homebrew/opt/llvm/bin/clang++
--std=c++20
--include-pch
-/opt/homebrew/opt/llvm/bin/../include/c++/v1/bits/stdc++.h.pch
+-std=c++17
 -O3
 -Wall
 -Wextra

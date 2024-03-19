@@ -1,44 +1,107 @@
 #pragma once
-#include "scaffold.cpp"
+#include "wrapper.h"
 
 template <typename T>
-concept HasValueType = requires { typename T::value_type; };
-template <typename T>
-concept HasValueType2D = requires { typename T::value_type::value_type; };
+struct HasValueType{
+  template <typename U>
+  static std::true_type test(typename U::value_type*);
 
-template <typename T>
-concept HasValueType1D = requires {
-  requires HasValueType<T>;
-  requires !HasValueType2D<T>;
-};
-template <typename T>
-concept HasIter = requires(T& container) {
-  { container.begin() } -> same_as<decltype(container.end())>;
-  { container.end() } -> same_as<decltype(container.begin())>;
-};
-template <typename T>
-concept Printable = requires(ostream& os, const T& val) {
-  { os << val } -> same_as<ostream&>;
+  template <typename>
+  static std::false_type test(...);
+
+  static constexpr bool value = decltype(test<T>(nullptr))::value;
 };
 
 template <typename T>
-concept Readable = requires(istream& is, T& val) {
-  { is >> val } -> same_as<istream&>;
+struct HasValueType2D {
+  template <typename U>
+  static std::true_type test(typename U::value_type::value_type*);
+
+  template <typename>
+  static std::false_type test(...);
+
+  static constexpr bool value = decltype(test<T>(nullptr))::value;
 };
+
+template <typename T>
+struct HasValueType1D {
+  static constexpr bool value = HasValueType<T>::value && !HasValueType2D<T>::value;
+};
+
+
+template <typename T>
+struct HasIter {
+  template <typename U>
+  static auto test(U& container) -> decltype(container.begin(), container.end(), std::true_type{});
+
+  template <typename>
+  static auto test(...) -> std::false_type;
+
+  static constexpr bool value = decltype(test<T>(std::declval<T&>()))::value;
+};
+
+template <typename T>
+struct Printable {
+  template <typename U>
+  static auto test(std::ostream& os, const U& val) -> decltype(os << val, std::true_type{});
+
+  template <typename>
+  static auto test(...) -> std::false_type;
+
+  static constexpr bool value = decltype(test<T>(std::cout, std::declval<const T&>()))::value;
+};
+
+
+template <typename T>
+struct is_readable {
+  template <typename U>
+  static auto test(U* ptr) -> decltype(std::declval<std::istream&>() >> *ptr, std::true_type{});
+
+  template <typename>
+  static auto test(...) -> std::false_type;
+
+  static constexpr bool value = decltype(test<T>(nullptr))::value;
+};
+
+template<typename T1>
+constexpr bool Readable = is_readable<T1>::value;
 
 template <typename T1>
-concept Readable1D = requires(istream& is, const T1&) {
-  { Readable<typename remove_reference_t<T1>::value_type> };
+struct is_readable_1d {
+  template <typename U>
+  static constexpr bool test(...) {
+    return false;
+  }
+
+  template <typename U>
+  static constexpr auto test(int)
+      -> decltype(is_readable<typename std::remove_reference_t<U>::value_type>::value, bool{}) {
+    return true;
+  }
+
+  static constexpr bool value = test<T1>(0);
 };
+
+template<typename T1>
+constexpr bool Readable1D = is_readable_1d<T1>::value;
+
 
 template <typename T1>
-concept Readable2D = requires(istream& is, const T1&) {
-  { Readable<typename remove_reference_t<T1>::value_type::value_type> };
+struct is_readable_2d {
+  template <typename U>
+  static constexpr bool test(...) {
+    return false;
+  }
+
+  template <typename U>
+  static constexpr auto test(int) -> decltype(is_readable<typename std::remove_reference_t<
+                                                  typename std::remove_reference_t<U>::value_type>::value_type>::value,
+                                              bool{}) {
+    return true;
+  }
+
+  static constexpr bool value = test<T1>(0);
 };
 
-template <typename T, typename Predicate>
-concept SortPredicate = requires(T t1, T t2, Predicate p) {
-  { p(t1, t2) } -> same_as<bool>;
-};
-template <typename T>
-concept Numeric = std::integral<T> || std::floating_point<T>;
+template<typename T1>
+constexpr bool Readable2D = is_readable_2d<T1>::value;

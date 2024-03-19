@@ -16,56 +16,50 @@ template <typename Res>
 void handle_print(Res& res) {
   println(res);
 }
+
+
 template <typename Func>
-  requires requires(Func func) {
-    { invoke_result_t<Func>() } -> same_as<void>;
-  }
-void call_print(Func func) {
-  invoke(func);
+enable_if_t<is_same_v<invoke_result_t<Func>, void>> call_print(Func func) {
+  std::invoke(func);
 }
 
 template <typename Func>
-  requires requires(Func func) {
-    { invoke_result_t<Func>() } -> movable;
-  }
-void call_print(Func func) {
-  auto result = invoke(func);
+enable_if_t<!is_same_v<invoke_result_t<Func>, void>> call_print(Func func) {
+  auto result = std::invoke(func);
   handle_print(result);
 }
 
 template <typename Func>
-  requires requires(Func func, int t) {
-    { invoke_result_t<Func, int>() } -> same_as<void>;
-  }
-void call_print(Func func, int t) {
-  invoke(func, t);
+enable_if_t<is_same_v<invoke_result_t<Func, int>, void>> call_print(Func func, int t) {
+  std::invoke(func, t);
 }
 
 template <typename Func>
-  requires requires(Func func, int t) {
-    { invoke_result_t<Func, int>() } -> movable;
-  }
-void call_print(Func func, int t) {
-  auto result = invoke(func, t);
+enable_if_t<!is_same_v<invoke_result_t<Func, int>, void>> call_print(Func func, int t) {
+  auto result = std::invoke(func, t);
   handle_print(result);
 }
 
-template <typename Func>
-  requires requires(Func func) {
-    { invoke_result_t<Func>() };
+template <class F>
+struct y_comb {
+  F f;
+
+  template <class... Args>
+  decltype(auto) operator()(Args&&... args) const {
+    return f(*this, std::forward<Args>(args)...);
   }
-void handle_solve(Func func) {
+};
+template <typename Func>
+enable_if_t<is_invocable_v<Func>, void> handle_solve(Func func) {
   call_print(func);
 }
 
-template <typename Func, typename... Args>
-  requires requires(Func func) {
-    { invoke_result_t<Func, int>() };
-  }
-void handle_solve(Func func) {
+// Second handle_solve function
+template <typename Func, typename = void>
+enable_if_t<is_invocable_v<Func, int>> handle_solve(Func func) {
   int qrs;
   read(qrs);
-  for (int i = 1; i <= qrs; i++) {
+  for (int i = 0; i < qrs; i++) {
     call_print(func, i);
   }
 }
@@ -87,6 +81,7 @@ int main() {
 #ifndef EDITOR
   handle_solve(solve);
 #endif
+  cout.flush();
   return 0;
 }
 

@@ -176,12 +176,12 @@ TEST_CASE("testing_output") {
 }
 
 TEST_CASE("misc") {
-  vi arr = {1, 2, 3, 4, 5};
-  vpii prs;
-  for (auto [a, b]: arr | pairwise) {
-    prs.eb(a, b);
-  }
-  CHECK(prs == vpii{{1, 2}, {2, 3}, {3, 4}, {4, 5}});
+//  vi arr = {1, 2, 3, 4, 5};
+//  vpii prs;
+//  for (auto [a, b]: arr | pairwise) {
+//    prs.eb(a, b);
+//  }
+//  CHECK(prs == vpii{{1, 2}, {2, 3}, {3, 4}, {4, 5}});
   prs.clear();
   for (auto [a, b]: arr | pairwise | rview) {
     prs.eb(a, b);

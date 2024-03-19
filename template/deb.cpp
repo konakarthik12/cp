@@ -18,8 +18,7 @@ void debug(bitset<N> b) {
   *dout << b;
 }
 template <typename T>
-  requires Printable<T>
-void debug(T x) {
+enable_if_t<Printable<T>::value> debug(T x) {
   *dout << x;
 }
 
@@ -77,9 +76,8 @@ void debug(pqueue<T, V, U> p) {
 }
 
 template <typename Container>
-  requires(HasValueType1D<Container> && !Printable<Container>)
-void debug(Container v) {
-  *dout << '[';
+enable_if_t<HasValueType1D<Container>::value> debug(ostream& os, Container v) {
+  os << '[';
   for (auto it = v.begin(); it != v.end(); ++it) {
     if (it != v.begin()) {
       *dout << ", ";
@@ -90,8 +88,7 @@ void debug(Container v) {
 }
 
 template <typename Container>
-  requires HasValueType2D<Container>
-void debug(Container v) {
+  enable_if_t<HasValueType2D<Container>::value> debug(Container v) {
   *dout << "\n[";
   for (auto it = v.begin(); it != v.end(); ++it) {
     if (it != v.begin()) {

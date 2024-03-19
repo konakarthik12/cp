@@ -193,8 +193,8 @@ struct Combo {
   }
 };
 
-template <typename T>
-concept Number = is_integral_v<T>;
+// template <typename T>
+// concept Number = is_integral_v<T>;
 
 struct Frac {
   ll p, q;
@@ -252,7 +252,7 @@ struct Frac {
     return a.p == b.p && a.q == b.q;
   }
 
-  friend bool operator==(Frac const& a, Number auto const& b) {
+  friend bool operator==(Frac const& a, ll const& b) {
     Frac const& x = a.simplify();
     return x.q == 1 && x.p == b;
   }

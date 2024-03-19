@@ -13,13 +13,13 @@ void rsort(Cont& vec) {
 
 template <class Con, class Comp>
 void sort_by(Con& vec, Comp key) {
-  using T = Con::value_type;
+  using T = typename Con::value_type;
   sort(all(vec), [&](T a, T b) { return key(a) < key(b); });
 }
 
 template <class Con, class Comp>
 void rsort_by(Con& vec, Comp key) {
-  using T = Con::value_type;
+  using T = typename Con::value_type;
   sort(all(vec), [&](T a, T b) { return key(a) > key(b); });
 }
 
@@ -86,14 +86,14 @@ pr<T, T> minmax(vec<T>& arr, F comb) {
   return {*l, *r};
 }
 
-template <typename T>
-  requires HasIter<T>
-auto min(T& arr) {
-  return *min_element(all(arr));
-}
-
-template <typename T>
-  requires HasIter<T>
-auto max(T& arr) {
-  return *max_element(all(arr));
-}
+//template <typename T>
+//  requires HasIter<T>
+//auto min(T& arr) {
+//  return *min_element(all(arr));
+//}
+//
+//template <typename T>
+//  requires HasIter<T>
+//auto max(T& arr) {
+//  return *max_element(all(arr));
+//}
