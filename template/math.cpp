@@ -143,3 +143,68 @@ struct Combo {
     }
   }
 };
+
+template <typename T>
+concept Number = std::is_integral_v<T>;
+
+struct Frac {
+  ll p, q;
+  Frac(ll p = 0, ll q = 1) : p(p), q(q) {
+  }
+  Frac simplify() const {
+    ll g = gcd(p, q);
+    return Frac(p / g, q / g);
+  }
+  Frac& simplify() {
+    ll g = gcd(p, q);
+    p /= g;
+    q /= g;
+    return *this;
+  }
+  Frac operator+=(const Frac& other) {
+    int num = q * other.p + other.q * p;
+    int denom = q * other.q;
+    return Frac(num, denom);
+  }
+  Frac operator-=(const Frac& other) {
+    int num = q * other.p - other.q * p;
+    int denom = q * other.q;
+    return Frac(num, denom);
+  }
+
+  Frac operator*=(Frac const& other) {
+    p *= other.p;
+    q *= other.q;
+    return *this;
+  }
+  Frac operator/=(Frac const& other) {
+    p *= other.q;
+    q *= other.p;
+    return *this;
+  }
+
+  friend Frac operator+(Frac a, Frac const b) {
+    return a += b;
+  }
+  friend Frac operator-(Frac a, Frac const b) {
+    return a -= b;
+  }
+  friend Frac operator-(Frac const a) {
+    return 0 - a;
+  }
+  friend Frac operator*(Frac a, Frac const b) {
+    return a *= b;
+  }
+  friend Frac operator/(Frac a, Frac const b) {
+    return a /= b;
+  }
+
+  friend bool operator==(Frac const& a, Frac const& b) {
+    return a.p == b.p && a.q == b.q;
+  }
+
+  friend bool operator==(Frac const& a, Number auto const& b) {
+    Frac const& x = a.simplify();
+    return x.q == 1 && x.p == b;
+  }
+};

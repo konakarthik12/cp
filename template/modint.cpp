@@ -77,6 +77,9 @@ struct ModInt {
   explicit operator int() {
     return value;
   }
+  ostream& operator<<(ostream& os) {
+    return os << value;
+  }
 };
 template <int MOD>
 void __read(ModInt<MOD>& x) {

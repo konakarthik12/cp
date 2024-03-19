@@ -26,9 +26,9 @@ int rnd_not(int a, int b, int exclude) {
   }
   return n;
 }
-vector<pair<int, int>> pruefer_decode(vector<int> const& code) {
+vpii pruefer_decode(vec<int> const& code) {
   int n = code.size() + 2;
-  vector<int> degree(n, 1);
+  vec<int> degree(n, 1);
   for (int i: code) {
     degree[i]++;
   }
@@ -39,9 +39,9 @@ vector<pair<int, int>> pruefer_decode(vector<int> const& code) {
   }
   int leaf = ptr;
 
-  vector<pair<int, int>> edges;
+  vpii edges;
   for (int v: code) {
-    edges.emplace_back(leaf, v);
+    edges.eb(leaf, v);
     if (--degree[v] == 1 && v < ptr) {
       leaf = v;
     } else {
@@ -52,20 +52,20 @@ vector<pair<int, int>> pruefer_decode(vector<int> const& code) {
       leaf = ptr;
     }
   }
-  edges.emplace_back(leaf, n - 1);
+  edges.eb(leaf, n - 1);
   return edges;
 }
 
 template <typename T>
-vector<T> rnd_list(int n, T a, T b) {
-  vector<T> arr;
+vec<T> rnd_list(int n, T a, T b) {
+  vec<T> arr;
   for (int i = 0; i < n; i++) {
-    arr.push_back(rnd(a, b));
+    arr.pb(rnd(a, b));
   }
   return arr;
 }
 
-vector<int> rnd_list_distinct(int n, int a, int b) {
+vi rnd_list_distinct(int n, int a, int b) {
   assert((b - a + 1) >= n);
   if (seed < 1000) {
     b = min(b, max(a + seed / 5, (a + n - 1)));
@@ -74,7 +74,7 @@ vector<int> rnd_list_distinct(int n, int a, int b) {
   while ((int) s.size() < n) {
     s.insert(rnd_internal(a, b));
   }
-  return {all(s)};
+  return vi{s};
 }
 
 vi permute(int n) {

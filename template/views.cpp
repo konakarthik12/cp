@@ -1,15 +1,19 @@
 #pragma once
+#include "concepts.cpp"
 #include "wrapper.h"
-template <typename T>
-struct custom_adjacent_pairwise_view : public ranges::view_base {
-  vector<T>& data;
 
-  custom_adjacent_pairwise_view(vector<T>& input_data) : data(input_data) {
+template <typename V>
+  requires HasIter<V>
+struct custom_adjacent_pairwise_view : public ranges::view_base {
+  using T = V::value_type;
+  V& data;
+
+  custom_adjacent_pairwise_view(V& input_data) : data(input_data) {
   }
 
   class iterator {
    private:
-    using base_iterator = decltype(begin(declval<vector<T>&>()));
+    using base_iterator = decltype(begin(declval<V&>()));
     base_iterator iter;
 
    public:
@@ -35,18 +39,20 @@ struct custom_adjacent_pairwise_view : public ranges::view_base {
   }
 
   iterator end() {
-    return iterator(data.end() - 1);
+    return iterator(prev(data.end()));
   }
 };
 
 template <typename T>
-auto custom_adjacent_pairwise(vector<T>& data) {
+  requires HasIter<T>
+auto custom_adjacent_pairwise(T& data) {
   return custom_adjacent_pairwise_view<T>(data);
 }
 struct pairwise_tag {};
 inline constexpr pairwise_tag pairwise{};
 
 template <typename T>
-auto operator|(vector<T>& data, pairwise_tag) {
+  requires HasIter<T>
+auto operator|(T& data, pairwise_tag) {
   return custom_adjacent_pairwise_view<T>(data);
 }

@@ -10,23 +10,10 @@ template <const unsigned long N>
 void debug(ostream& out, bitset<N> b) {
   out << b;
 }
-void debug(ostream& out, char i) {
-  out << i;
-}
-void debug(ostream& out, int i) {
-  out << i;
-}
-void debug(ostream& out, uint i) {
-  out << i;
-}
-void debug(ostream& out, ll i) {
-  out << i;
-}
-void debug(ostream& out, ull i) {
-  out << i;
-}
-void debug(ostream& out, string s) {
-  out << s;
+template <typename T>
+  requires Printable<T>
+void debug(ostream& out, T x) {
+  out << x;
 }
 
 template <typename T, typename V>

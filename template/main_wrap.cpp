@@ -80,13 +80,18 @@ void handle_solve(Func func) {
   }
 }
 
+void init_main() {
+  cin.tie(0)->sync_with_stdio(0);
+  cout << fixed << setprecision(15);
+}
+
+// ********************************************** ACTUAL CODE STARTS HERE **********************************************
 #include "include_wrap.cpp"
+// **********************************************  ACTUAL CODE ENDS HERE  **********************************************
 
 #ifndef NO_MAIN
 
 int main() {
-  cin.tie(0)->sync_with_stdio(0);
-  cout << fixed << setprecision(15);
 #ifndef EDITOR
   handle_solve(solve);
 #endif

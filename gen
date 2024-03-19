@@ -1,15 +1,14 @@
 #!/usr/bin/env bash
-set -e
-tail -n +2 < compile_flags_prod.txt | xargs /opt/homebrew/opt/llvm/bin/clang++ template.cpp -DENTRY=main -o build/main
-tail -n +2 < compile_flags_prod.txt | xargs /opt/homebrew/opt/llvm/bin/clang++ template.cpp -DENTRY=main -o build/brute
-tail -n +2 < compile_flags_prod.txt | xargs /opt/homebrew/opt/llvm/bin/clang++ template.cpp -DENTRY=gen -o build/gen
+tail -n +2 < compile_flags_prod.txt | xargs /opt/homebrew/opt/llvm/bin/clang++ template.cpp -DENTRY=main -o build/main || exit
+tail -n +2 < compile_flags_prod.txt | xargs /opt/homebrew/opt/llvm/bin/clang++ template.cpp -DENTRY=brute -o build/brute || exit
+tail -n +2 < compile_flags_prod.txt | xargs /opt/homebrew/opt/llvm/bin/clang++ template.cpp -DENTRY=gen -o build/gen || exit
 
 echo "Running tests..."
 echo ""
 for((i = 1; ; ++i)); do
     build/gen $i > input_file
-    build/main < input_file > myAnswer 2> /dev/null
-    build/brute < input_file > correctAnswer 2> /dev/null
+    build/main < input_file > myAnswer 2> /dev/null || break
+    build/brute < input_file > correctAnswer 2> /dev/null || break
     diff -Z myAnswer correctAnswer > /dev/null || break
     echo -e "\e[1APassed test: "  $i
 done

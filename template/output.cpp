@@ -2,28 +2,11 @@
 #include "base.cpp"
 #include "concepts.cpp"
 
-void __print(char c) {
-  cout << c;
-}
-void __print(uint x) {
+template <typename T>
+requires Printable<T>
+void __print(T x) {
   cout << x;
 }
-void __print(int x) {
-  cout << x;
-}
-void __print(ll x) {
-  cout << x;
-}
-void __print(ull x) {
-  cout << x;
-}
-void __print(const char* s) {
-  cout << s;
-}
-void __print(string& s) {
-  cout << s;
-}
-
 void println() {
   __print('\n');
 }

@@ -23,7 +23,7 @@ int main() {
                                        "-iquote", ".",
                                        "-iquote", "template/",
                                        "-iquote", "build/preprocess/",
-                                       "-include-pch", "build/template.h.pch"
+                                       "-include-pch", "build/wrapper.h.pch"
     };
 
     for (const auto &item: isystemDirs) {
@@ -43,8 +43,8 @@ int main() {
         std::chrono::duration<double, std::milli> ms_double = t2 - t1;
         std::cout << "Merged in " << ms_double.count() << " ms" << endl;
     } catch (...) {
-      std::cout << "Failed to merge" << endl;
-      return -1;
+        std::cout << "Failed to merge" << endl;
+        return -1;
     }
 
     return 0;

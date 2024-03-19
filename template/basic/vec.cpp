@@ -1,4 +1,5 @@
 #pragma once
+#include "../concepts.cpp"
 #include "bool.cpp"
 
 template <typename V>
@@ -12,15 +13,15 @@ struct vec {
   }
   explicit vec(int size, T init) : v(size, init) {
   }
+  template <typename Container>
+    requires HasIter<Container>
+  explicit vec(Container cnt) : v(cnt.begin(), cnt.end()) {
+  }
   vec(initializer_list<V> initList) : v(initList.size()) {
     auto it = v.begin();
     for (const auto& value: initList) {
       *it++ = value;
     }
-  }
-
-  template <typename... Args>
-  vec(Args... args) : v{args...} {
   }
 
   T& operator[](size_t index) {
@@ -55,7 +56,7 @@ struct vec {
   void resize(int size) {
     v.resize(size);
   }
-  void assign(int size, int x = T()) {
+  void assign(int size, T x = T()) {
     v.assign(size, x);
   }
 

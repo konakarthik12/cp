@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-cd "$(dirname "$(dirname "$0")")" || exit
-
-merger/merger.sh
-clang++ -std=c++20 output/merged.cpp -o build/merged && build/merged < input.txt
+cd "$(dirname "$0")" && cd .. || exit
+merger/merge.sh
+clang++ -std=c++20 output/merged.cpp -O3 -o build/merged "$@" && build/merged < input.txt
