@@ -1,6 +1,97 @@
-#include "DocTestExtension.h"
-#include "iostream"
-#include "filesystem"
+
+
+
+#include <string>
+#include <cstring>
+#include <memory>
+
+#define REQUIRE_STREQ(str1, str2)                                                                  \
+  do                                                                                               \
+  {                                                                                                \
+    if (strcmp(str1, str2) != 0)                                                                   \
+    {                                                                                              \
+      MESSAGE("Expected equality of these values: \n\t str1: " << str1 << "\n\t str2: " << str2);  \
+      REQUIRE_UNARY(false);                                                                        \
+    };                                                                                             \
+  } while (0)
+
+#define REQUIRE_WSTREQ(str1, str2)                                                                 \
+  do                                                                                               \
+  {                                                                                                \
+    if (wcscmp(str1, str2) != 0)                                                                   \
+    {                                                                                              \
+      MESSAGE("Expected equality of these values: \n\t str1: " << str1 << "\n\t str2: " << str2);  \
+      REQUIRE_UNARY(false);                                                                        \
+    };                                                                                             \
+  } while (0)
+
+#define REQUIRE_STRNEQ(str1, str2)                                                                    \
+  do                                                                                                  \
+  {                                                                                                   \
+    if (strcmp(str1, str2) == 0)                                                                      \
+    {                                                                                                 \
+      MESSAGE("Expected non-equality of these values: \n\t str1: " << str1 << "\n\t str2: " << str2); \
+      REQUIRE_UNARY(false);                                                                           \
+    };                                                                                                \
+  } while (0)
+
+namespace quill
+{
+namespace testing
+{
+/**
+ * Object that captures an output stream (stdout/stderr).
+ */
+class CapturedStream
+{
+ public:
+  // The ctor redirects the stream to a temporary file.
+  explicit CapturedStream(int fd);
+
+  ~CapturedStream();
+
+  std::string GetCapturedString();
+
+ private:
+  static std::string _read_entire_file(FILE* file);
+
+  static size_t _get_file_size(FILE* file);
+
+  static FILE* _fopen(char const* path, char const* mode);
+
+  static int _fclose(FILE* fp);
+
+ private:
+  int fd_; // A stream to capture.
+  int uncaptured_fd_;
+  std::string filename_; // Name of the temporary file holding the stderr output.
+};
+
+static CapturedStream* g_captured_stderr = nullptr;
+static CapturedStream* g_captured_stdout = nullptr;
+
+// Starts capturing an output stream (stdout/stderr).
+void CaptureStream(int fd, const char* stream_name, CapturedStream** stream);
+
+// Stops capturing the output stream and returns the captured string.
+std::string GetCapturedStream(CapturedStream** captured_stream);
+
+// Starts capturing stdout.
+void CaptureStdout();
+
+// Starts capturing stderr.
+void CaptureStderr();
+
+// Stops capturing stdout and returns the captured string.
+std::string GetCapturedStdout();
+
+// Stops capturing stderr and returns the captured string.
+std::string GetCapturedStderr();
+
+void redirectInput();
+
+} // namespace testing
+} // namespace quill#include "iostream"
 #include "fstream"
 #include "cassert"
 
@@ -177,14 +268,22 @@ void CaptureStderr() { CaptureStream(kStdErrFileno, "stderr", &g_captured_stderr
 std::string GetCapturedStdout() { return GetCapturedStream(&g_captured_stdout); }
 
 std::string GetCapturedStderr() { return GetCapturedStream(&g_captured_stderr); }
-void redirectInput(std::string filename) {
-  namespace fs = std::filesystem;
-  std::string abs_path = fs::path(__FILE__).parent_path() / filename;
-  std::cout << abs_path << '\n';
-  std::ifstream* test_cin = new std::ifstream(abs_path);
-  assert(!test_cin->fail());
-  std::cin.rdbuf(test_cin->rdbuf());
-
-}
+//void redirectInput(std::string filename) {
+//  namespace fs = std::filesystem;
+//  std::string abs_path = fs::path(__FILE__).parent_path() / filename;
+//  std::cout << abs_path << '\n';
+//  std::ifstream* test_cin = new std::ifstream(abs_path);
+//  assert(!test_cin->fail());
+//  std::cin.rdbuf(test_cin->rdbuf());
+//
+//}
 } // namespace testing
 } // namespace quill
+using namespace quill::testing;
+
+
+void operator ""_cin_set(const char *str, size_t size) {
+  static std::stringstream ss;
+  ss << std::string(str, size); // Append the contents of the current string literal
+  std::cin.rdbuf(ss.rdbuf()); // Redirect cin to the stringstream
+}
