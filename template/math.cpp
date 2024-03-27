@@ -26,13 +26,16 @@ double to_rad(double degrees) {
   return degrees * (pi / 180);
 }
 
-template <typename T>
-T asum(T a) {
+ll asum(ll a) {
   return (a + 1) * a / 2;
 }
-template <typename T>
-T asum(T a, T b) {
+ll asum(ll a, ll b) {
   return (b + a) * (b - a + 1) / 2;
+}
+ll asum(ll a, ll b, ll c) {
+  ll n = (b - a) / c + 1;
+  ll sum = (n * (2 * a + (n - 1) * c)) / 2;
+  return sum;
 }
 
 vi sieve(int max_n) {

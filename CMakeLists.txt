@@ -5,7 +5,8 @@ include(ExternalProject)
 set(CMAKE_CXX_STANDARD 20)
 add_executable(cp template.cpp)
 
-add_executable(internal main.cpp testing/tests.cpp)
+add_executable(internal_main main.cpp)
+add_executable(internal_testing testing/tests.cpp)
 
 target_compile_definitions(cp PUBLIC ENTRY=main)
 

@@ -1,5 +1,4 @@
-#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
-#define NO_MAIN
+#define DOCTEST_CONFIG_IMPLEMENT
 #include "../template.cpp"
 #include "doctest.h"
 #include "test_utils.cpp"
@@ -18,8 +17,8 @@ TEST_CASE("testing combinatorics") {
   CHECK(combo.choose(12, 5) == 792);
   CHECK(combo.choose(20, 4) == 4845);
 
-//  stars and bars
-  CHECK(combo.sum(10, 4) == 286); // zero not allowed
+  //  stars and bars
+  CHECK(combo.sum(10, 4) == 286);        // zero not allowed
   CHECK(combo.sum(10, 4, false) == 84);  // zero not allowed
 
   Combo<ModInt<17>> combo2(3);
@@ -47,7 +46,12 @@ TEST_CASE("vectors") {
 }
 
 TEST_SUITE("input") {
-  TEST_CASE("") {
+   TEST_CASE("fastio") {
+     CHECK(cin.tie() == nullptr);
+     CHECK(ios_base::sync_with_stdio() == false);
+     ios_base::sync_with_stdio(false);
+   }
+   TEST_CASE("") {
     R"(
        4
        1 2 3 4 5 6 7 8
@@ -117,9 +121,7 @@ TEST_CASE("testing_output") {
   println(arr[3], arr1[3]);
   string output = GetCapturedStdout();
   CHECK(output == "5\n1 2 3 4 5\n4 3\n");
-
 }
-
 
 TEST_CASE("misc") {
   vi arr = {1, 2, 3, 4, 5};
@@ -128,4 +130,11 @@ TEST_CASE("misc") {
     prs.eb(a, b);
   }
   CHECK(prs == vpii{{1, 2}, {2, 3}, {3, 4}, {4, 5}});
+}
+
+void solve() {
+  doctest::Context context;
+  context.setOption("no-intro", true);
+  int res = context.run();
+  if (res != 0) exit(res);
 }

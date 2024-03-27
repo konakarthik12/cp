@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 set -e
-tail -n +2 < compile_flags_prod.txt | xargs /opt/homebrew/opt/llvm/bin/clang++ gen.cpp -o build/gen
-tail -n +2 < compile_flags_prod.txt | xargs /opt/homebrew/opt/llvm/bin/clang++ main.cpp -o build/main
+tail -n +2 < compile_flags_prod.txt | xargs /opt/homebrew/opt/llvm/bin/clang++ template.cpp -DENTRY=main -o build/main || exit
+tail -n +2 < compile_flags_prod.txt | xargs /opt/homebrew/opt/llvm/bin/clang++ template.cpp -DENTRY=gen -o build/gen || exit
 
 echo "Running generator..."
 echo ""
-for((i = 1; ; ++i)); do
+for((i = 1000; ; ++i)); do
     build/gen $i > input_file
     TIMEFORMAT=%R /usr/bin/time -o /tmp/time_log build/main < input_file > /dev/null 
     cat /tmp/time_log

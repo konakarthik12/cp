@@ -92,6 +92,7 @@ void init_main() {
 #ifndef NO_MAIN
 
 int main() {
+  init_main();
 #ifndef EDITOR
   handle_solve(solve);
 #endif
