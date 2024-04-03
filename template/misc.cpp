@@ -41,18 +41,18 @@ T min_false(T l, T h, F comp) {
   return h + 1;
 }
 
- template <typename T, typename F>
- T max_true(T l, T h, F comp) {
+template <typename T, typename F>
+T max_true(T l, T h, F comp) {
   return min_false(l, h, comp) - 1;
 }
 
- template <typename T, typename F>
- T min_true(T l, T h, F comp) {
+template <typename T, typename F>
+T min_true(T l, T h, F comp) {
   return min_false(l, h, not_fn(comp));
 }
 
- template <typename T, typename F>
- T max_false(T l, T h, F comp) {
+template <typename T, typename F>
+T max_false(T l, T h, F comp) {
   return max_true(l, h, not_fn(comp));
 }
 
@@ -114,7 +114,11 @@ wi invperm(const wi& arr) {
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 
 vpii dirs4 = vpii{{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
-
+ll dist2(pii a, pii b) {
+  ll dx = a.f - b.f;
+  ll dy = a.s - b.s;
+  return (ll) dx * dx + (ll) dy * dy;
+}
 template <class F>
 struct y_comb {
   F f;
