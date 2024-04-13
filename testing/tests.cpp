@@ -43,15 +43,18 @@ TEST_CASE("vectors") {
   wec<bool> data2 = {0, 0, 1, 1};
   CHECK(data[1] == 1);
   CHECK(data2[2] == 0);
+  wec<int> data3 = {5};
+  CHECK(sz(data3) == 1);
+  CHECK(data3[1] == 5);
 }
 
 TEST_SUITE("input") {
-   TEST_CASE("fastio") {
-     CHECK(cin.tie() == nullptr);
-     CHECK(ios_base::sync_with_stdio() == false);
-     ios_base::sync_with_stdio(false);
-   }
-   TEST_CASE("") {
+  TEST_CASE("fastio") {
+    CHECK(cin.tie() == nullptr);
+    CHECK(ios_base::sync_with_stdio() == false);
+    ios_base::sync_with_stdio(false);
+  }
+  TEST_CASE("") {
     R"(
        4
        1 2 3 4 5 6 7 8
