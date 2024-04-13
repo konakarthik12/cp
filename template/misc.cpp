@@ -48,12 +48,26 @@ constexpr auto yes(T&& opt) {
 constexpr auto no() {
   return std::nullopt;
 }
+wi invperm(const wi& arr) {
+  wi ans(sz(arr));
+  for (int i = 1; i <= sz(arr); i++) {
+    ans[arr[i]] = i;
+  }
+  return ans;
+}
 
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
+
 template <typename Con>
-void iota(Con& v, const typename Con::value_type start = Con::value_type(0)) {
+void iota(Con& v, const typename Con::value_type start = typename Con::value_type(0)) {
   iota(all(v), start);
 }
+template <typename Con>
+void iota(Con& v, const typename Con::value_type start, const typename Con::value_type end) {
+  v.resize(end - start + 1);
+  iota(v, start);
+}
+
 vpii dirs4 = vpii{{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
 
 template <size_t N>

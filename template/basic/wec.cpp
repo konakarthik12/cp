@@ -45,6 +45,9 @@ struct wec {
   void assign(int size, int x = T()) {
     v.assign(size + 1, x);
   }
+  auto begin() {
+    return v.begin() + 1;
+  }
 
   auto begin() const {
     return v.begin() + 1;
@@ -68,6 +71,10 @@ struct wec {
   auto eb(Args&&... args) {
     return v.emplace_back(std::forward<Args>(args)...);
   }
+  template <typename... Args>
+  auto insert(Args&&... args) {
+    return v.insert(std::forward<Args>(args)...);
+  }
 
   void pop_back() {
     v.pop_back();
@@ -77,6 +84,12 @@ struct wec {
     v.resize(1);
   }
   auto operator<=>(const wec&) const = default;
+
+  wec operator+(const wec& other) const {
+    wec result = *this;
+    result.insert(result.end(), other.begin(), other.end());
+    return result;
+  }
 
   using value_type = T;
 };

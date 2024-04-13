@@ -76,6 +76,10 @@ struct vec {
   auto eb(Args&&... args) {
     return v.emplace_back(std::forward<Args>(args)...);
   }
+  template <typename... Args>
+  auto insert(Args&&... args) {
+    return v.insert(std::forward<Args>(args)...);
+  }
 
   void pop_back() {
     v.pop_back();

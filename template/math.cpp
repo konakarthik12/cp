@@ -100,8 +100,12 @@ struct Combo {
   T fact(int x) {
     return facts[x];
   }
+  T inv_fact(int x) {
+    return facts[x];
+  }
 
   T choose(int n, int k) {
+    if (n == k || n == 0 || k == 0) return 1;
     if (n < k) {
       return 0;
     }
@@ -127,7 +131,7 @@ struct Combo {
     return ans;
   }
 
-  T permute(int n, int k) {
+  T perm(int n, int k) {
     if (n < k) {
       return 0;
     }
