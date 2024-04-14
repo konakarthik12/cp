@@ -77,7 +77,7 @@ vi rnd_list_distinct(int n, int a, int b) {
   return vi{s};
 }
 
-vi permute(int n) {
+vi rnd_permute(int n) {
   vi arr(n);
   iota(all(arr), 1);
   shuffle(all(arr), rng);
