@@ -1,0 +1,13 @@
+/opt/homebrew/opt/llvm/bin/clang++
+-std=c++20
+-iquote
+/Users/konak/Projects/cp/build/cmake-build-release/doctest/src/doctest/doctest/
+-Wall
+-Wextra
+-Wshadow
+-Wno-sign-conversion
+-DLOCAL
+-DEDITOR
+-DENTRY=main
+-include-pch
+/usr/local/include/bits/stdc++.h.pch

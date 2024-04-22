@@ -133,6 +133,10 @@ TEST_CASE("misc") {
     prs.eb(a, b);
   }
   CHECK(prs == vpii{{1, 2}, {2, 3}, {3, 4}, {4, 5}});
+  CHECK(blen(15) == 4);
+  CHECK(blen(16) == 5);
+
+  assert(sum(vi(3, 1e9)) == 3e9);
 }
 
 void solve() {
