@@ -47,9 +47,10 @@ template <class Cont>
 void erase_all(Cont& vec, char c) {
   vec.erase(remove(all(vec), c), vec.end());
 }
-template <typename Cont>
-ll sum(Cont& c) {
-  return reduce(all(c), 0LL);
+template <typename Con>
+ll sum(const Con& c) {
+  if cexp (is_arithmetic_v<typename Con::value_type>) return reduce(all(c), 0LL);
+  else return reduce(all(c), typename Con::value_type(0));
 }
 
 template <class Cont, typename T>

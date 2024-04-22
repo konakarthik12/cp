@@ -41,11 +41,11 @@ void exit() {
   exit(0);
 }
 template <typename T>
-constexpr auto yes(T&& opt) {
+cexp auto yes(T&& opt) {
   return optional(opt);
 }
 
-constexpr auto no() {
+cexp auto no() {
   return std::nullopt;
 }
 wi invperm(const wi& arr) {
@@ -55,7 +55,6 @@ wi invperm(const wi& arr) {
   }
   return ans;
 }
-
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 
 template <typename Con>

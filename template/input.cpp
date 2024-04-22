@@ -25,27 +25,27 @@ void __read(pr<T1, T2>& p) {
 
 template <typename T>
 void reserve(T& v, size_t s) {
-  constexpr bool HasReserve = requires {
+  cexp bool HasReserve = requires {
     { v.reserve(s) };
   };
 
-  if constexpr (HasReserve) {
+  if cexp (HasReserve) {
     v.reserve(s);
   }
 }
 
 template <typename V>
 void append(V& v, const typename V::value_type& x) {
-  constexpr bool HasPB = requires {
+  cexp bool HasPB = requires {
     { v.pb(x) };
   };
-  constexpr bool HasPushBack = requires {
+  cexp bool HasPushBack = requires {
     { v.push_back(x) };
   };
 
-  if constexpr (HasPB) {
+  if cexp (HasPB) {
     v.pb(x);
-  } else if constexpr (HasPushBack) {
+  } else if cexp (HasPushBack) {
     v.push_back(x);
   } else {
     v.insert(x);

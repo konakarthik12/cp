@@ -49,7 +49,7 @@ auto custom_adjacent_pairwise(T& data) {
   return custom_adjacent_pairwise_view<T>(data);
 }
 struct pairwise_tag {};
-inline constexpr pairwise_tag pairwise{};
+inline cexp pairwise_tag pairwise{};
 
 template <typename T>
   requires HasIter<T>
