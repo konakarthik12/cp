@@ -4,6 +4,8 @@
 template <typename V>
 struct wec {
   using T = NotBool<V>::type;
+  using value_type = T;
+
   vector<T> v;
 
   wec() : v(1) {
@@ -83,13 +85,17 @@ struct wec {
   void clear() {
     v.resize(1);
   }
-  auto operator<=>(const wec&) const = default;
+  bool operator==(const wec& other) const {
+    return this->v == other.v;
+  }
+
+  auto operator<=>(const wec& other) const {
+    return this->v <=> other.v;
+  }
 
   wec operator+(const wec& other) const {
     wec result = *this;
     result.insert(result.end(), other.begin(), other.end());
     return result;
   }
-
-  using value_type = T;
 };

@@ -5,9 +5,11 @@
 template <typename V>
 struct vec {
   using T = NotBool<V>::type;
+  using value_type = T;
+
   vector<T> v;
 
-  vec() : v() {
+  vec() {
   }
   explicit vec(int size) : v(size) {
   }
@@ -89,7 +91,10 @@ struct vec {
     v.clear();
   }
 
-  auto operator<=>(const vec&) const = default;
-
-  using value_type = T;
+  bool operator==(const vec& other) const {
+    return this->v == other.v;
+  }
+  auto operator<=>(const vec& other) const {
+    return this->v <=> other.v;
+  }
 };
