@@ -77,10 +77,62 @@ struct ModInt {
   explicit operator int() {
     return value;
   }
-  ostream& operator<<(ostream& os) {
-    return os << value;
+};
+
+struct ModDouble {
+  ld value;
+
+  ModDouble(ll v = 0) : value(v) {
+  }
+  ModDouble(ll a, ld e) : value(powl(a, e)) {
+  }
+
+  ModDouble& operator+=(ModDouble const& b) {
+    value += b.value;
+    return *this;
+  }
+  ModDouble& operator-=(ModDouble const& b) {
+    value -= b.value;
+    return *this;
+  }
+  ModDouble& operator*=(ModDouble const& b) {
+    value = (ll) value * b.value;
+    return *this;
+  }
+
+  ModDouble& operator/=(ModDouble const& b) {
+    value = (ll) value / b.value;
+    return *this;
+  }
+  friend ModDouble operator+(ModDouble a, ModDouble const b) {
+    return a += b;
+  }
+  friend ModDouble operator-(ModDouble a, ModDouble const b) {
+    return a -= b;
+  }
+  friend ModDouble operator-(ModDouble const a) {
+    return 0 - a;
+  }
+  friend ModDouble operator*(ModDouble a, ModDouble const b) {
+    return a *= b;
+  }
+  friend ModDouble operator/(ModDouble a, ModDouble const b) {
+    return a /= b;
+  }
+  friend ostream& operator<<(ostream& os, ModDouble const& a) {
+    return os << a.value;
+  }
+  friend bool operator==(ModDouble const& a, ModDouble const& b) {
+    return a.value == b.value;
+  }
+  friend bool operator!=(ModDouble const& a, ModDouble const& b) {
+    return a.value != b.value;
+  }
+  explicit operator ld() {
+    return value;
   }
 };
+
 template <int MOD>
 void __read(ModInt<MOD>& x) {
   cin >> x.value;
