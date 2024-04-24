@@ -1,8 +1,23 @@
 #define DOCTEST_CONFIG_IMPLEMENT
+#define NO_MAIN
+#include "doctest.h"
+
 #include "../template.cpp"
 #include "doctest.h"
 #include "test_utils.cpp"
 using namespace doctest;
+
+int main(int argc, char** argv) {
+  Context context;
+  context.setOption("no-intro", true);
+  context.applyCommandLine(argc, argv);
+  init_main();
+  int res = context.run();
+
+  if (context.shouldExit()) return res;
+
+  return res;
+}
 TEST_CASE("testing modint") {
   using Mi = ModInt<17>;
   Mi x = 11;
@@ -46,6 +61,20 @@ TEST_CASE("vectors") {
   wec<int> data3 = {5};
   CHECK(sz(data3) == 1);
   CHECK(data3[1] == 5);
+  wec<int> data4;
+  CHECK(data3);
+  CHECK(!data4);
+}
+
+TEST_CASE("containers") {
+  vi arr = {1, 2, 3};
+  CHECK(sum(arr) == 6);
+
+  vd arr2 = {1.0, 2.0, 3.0};
+  CHECK(sum(arr) == Approx(6));
+  CHECK(sum(arr) == Approx(6));
+  CHECK(is_same_v<decltype(sum(arr)), ll>);
+  CHECK(is_same_v<decltype(sum(arr2)), double>);
 }
 
 TEST_SUITE("input") {
@@ -137,6 +166,9 @@ TEST_CASE("misc") {
   CHECK(blen(16) == 5);
 
   assert(sum(vi(3, 1e9)) == 3e9);
+  assert(asum(4) == 10);
+  assert(asum(0) == 0);
+  assert(asum(0, 0) == 0);
 }
 
 void solve() {

@@ -21,8 +21,8 @@ concept Printable = requires(ostream& os, const T& val) {
 };
 
 template <typename T>
-concept Readable = requires(std::istream& is, T& val) {
-  { is >> val } -> std::same_as<std::istream&>;
+concept Readable = requires(istream& is, T& val) {
+  { is >> val } -> same_as<istream&>;
 };
 
 template <typename T1>

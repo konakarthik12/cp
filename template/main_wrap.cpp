@@ -18,35 +18,35 @@ void handle_print(Res& res) {
 }
 template <typename Func>
   requires requires(Func func) {
-    { std::invoke_result_t<Func>() } -> std::same_as<void>;
+    { invoke_result_t<Func>() } -> same_as<void>;
   }
 void call_print(Func func) {
-  std::invoke(func);
+  invoke(func);
 }
 
 template <typename Func>
   requires requires(Func func) {
-    { std::invoke_result_t<Func>() } -> std::movable;
+    { invoke_result_t<Func>() } -> movable;
   }
 void call_print(Func func) {
-  auto result = std::invoke(func);
+  auto result = invoke(func);
   handle_print(result);
 }
 
 template <typename Func>
   requires requires(Func func, int t) {
-    { std::invoke_result_t<Func, int>() } -> std::same_as<void>;
+    { invoke_result_t<Func, int>() } -> same_as<void>;
   }
 void call_print(Func func, int t) {
-  std::invoke(func, t);
+  invoke(func, t);
 }
 
 template <typename Func>
   requires requires(Func func, int t) {
-    { std::invoke_result_t<Func, int>() } -> std::movable;
+    { invoke_result_t<Func, int>() } -> movable;
   }
 void call_print(Func func, int t) {
-  auto result = std::invoke(func, t);
+  auto result = invoke(func, t);
   handle_print(result);
 }
 
@@ -62,7 +62,7 @@ struct y_comb {
 
 template <typename Func>
   requires requires(Func func) {
-    { std::invoke_result_t<Func>() };
+    { invoke_result_t<Func>() };
   }
 void handle_solve(Func func) {
   call_print(func);
@@ -70,7 +70,7 @@ void handle_solve(Func func) {
 
 template <typename Func, typename... Args>
   requires requires(Func func) {
-    { std::invoke_result_t<Func, int>() };
+    { invoke_result_t<Func, int>() };
   }
 void handle_solve(Func func) {
   int qrs;
@@ -96,7 +96,6 @@ int main() {
 #ifndef EDITOR
   handle_solve(solve);
 #endif
-  cout.flush();
   return 0;
 }
 

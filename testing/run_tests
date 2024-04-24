@@ -3,4 +3,4 @@ cd "$(dirname "$0")" && cd .. || exit
 
 tail -n +2 < compile_flags_deb.txt | xargs /opt/homebrew/opt/llvm/bin/clang++ template.cpp -o build/tests -DENTRY=testing/tests -iquote "/Users/konak/Projects/cp/build/cmake-build-release/doctest/src/doctest/doctest" || exit
 
-build/tests --no-intro=true < testing/test_input.txt
+build/tests < testing/test_input.txt

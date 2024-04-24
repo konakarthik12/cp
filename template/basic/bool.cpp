@@ -24,7 +24,7 @@ struct Bool {
     b.m = c == '1';
     return in;
   }
-  friend std::ostream& operator<<(std::ostream& os, const Bool& b) {
+  friend ostream& operator<<(ostream& os, const Bool& b) {
     os << b.m;
     return os;
   }

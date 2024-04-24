@@ -1,7 +1,6 @@
 #pragma once
 
 #include "base.cpp"
-#include "basic/wec.cpp"
 #include "concepts.cpp"
 
 template <typename T>
@@ -65,7 +64,7 @@ void __read(Container& v, int n) {
 
 template <class V2>
 concept HasEB = requires(V2 v2) {
-  { v2.emplace_back() } -> same_as<typename V2::value_type>;
+  { v2.eb() } -> same_as<typename V2::value_type>;
 };
 
 template <typename V2>
@@ -74,7 +73,7 @@ concept HasEmplaceBack = requires(V2 v2) {
 };
 
 template <typename V2>
-V2::value_type& emplace_empty(V2& v2) {
+V2::value_type emplace_empty(V2& v2) {
   if cexp (HasEB<V2>) {
     return v2.eb();
   } else if cexp (HasEmplaceBack<V2>) {

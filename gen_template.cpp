@@ -11,8 +11,12 @@ ll rnd_internal(ll a, ll b) {
   return dis(rng);
 }
 ll rnd(ll a, ll b) {
+  assert(a <= b);
   if (seed < 1000) {
-    b = min(b, a + seed / 5);
+    ld progress = seed / 1000.0L;
+    ld new_b = (ld) a + (b - a) * progress;
+    assert(new_b >= a && new_b <= b);
+    b = new_b;
   }
   return rnd_internal(a, b);
 }

@@ -2,8 +2,7 @@
 #ifdef PREPROCESS
 #include "alias.pre.cpp"
 #else
-#include "basic/vec.cpp"
-#include "basic/wec.cpp"
+#include "basic/all.cpp"
 #include "pr.cpp"
 #include "wrapper.h"
 
@@ -38,7 +37,8 @@ using wwi = ww<int>;
 #define GENERATE_SINGLE(LEFT, RIGHT) \
   using v##LEFT = vec<RIGHT>;        \
   using vv##LEFT = vv<RIGHT>;        \
-  using w##LEFT = wec<RIGHT>;
+  using w##LEFT = wec<RIGHT>;        \
+  using ww##LEFT = ww<RIGHT>;
 
 GENERATE_SINGLE(i, int)
 GENERATE_SINGLE(ll, ll)
@@ -69,10 +69,7 @@ using vpill = vec<pill>;
 using vipll = vec<pill>;
 using vvpll = vv<pll>;
 
-using vpii = vec<pii>;
 using vpcc = vec<pcc>;
 
-using vvpii = vv<pii>;
-using wpii = wec<pii>;
-using wwpii = ww<pii>;
+GENERATE_SINGLE(pii, pii)
 #endif

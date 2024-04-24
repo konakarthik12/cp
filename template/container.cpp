@@ -5,6 +5,7 @@ template <class Iter>
 int idist(Iter a, Iter b) {
   return distance(a, b);
 }
+
 template <class Cont>
 void dedupe(Cont& vec) {
   vec.erase(unique(all(vec)), vec.end());
@@ -13,6 +14,7 @@ template <class Cont, class Predicate>
 void dedupe(Cont& vec, Predicate p) {
   vec.erase(unique(all(vec), p), vec.end());
 }
+
 template <class Cont>
 void sort(Cont& vec) {
   sort(all(vec));
@@ -26,6 +28,7 @@ template <class Cont>
 void rsort(Cont& vec) {
   sort(vec, greater());
 }
+
 
 template <class Con, class Comp>
 void sort_by(Con& vec, Comp key) {
@@ -47,14 +50,15 @@ template <class Cont>
 void erase_all(Cont& vec, char c) {
   vec.erase(remove(all(vec), c), vec.end());
 }
-template <typename Con>
-ll sum(const Con& c) {
-  if cexp (is_arithmetic_v<typename Con::value_type>) return reduce(all(c), 0LL);
-  else return reduce(all(c), typename Con::value_type(0));
+
+template <typename C>
+auto sum(const C& c) {
+  if cexp (is_integral_v<typename C::value_type>) return reduce(all(c), 0LL);
+  else return reduce(all(c), typename C::value_type(0));
 }
 
-template <class Cont, typename T>
-void fill(Cont& vec, T value) {
+template <class C, typename T>
+void fill(C& vec, T value) {
   fill(all(vec), value);
 }
 

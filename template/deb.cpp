@@ -16,10 +16,16 @@ void debug(ostream& out, T x) {
   out << x;
 }
 
+template <typename Container>
+  requires HasValueType1D<Container>
+void debug(ostream& os, Container v);
 template <typename T, typename V>
 void debug(ostream& out, pair<T, V> const& p) {
-
-  out << '(' << p.first << ", " << p.second << ')';
+  out << '(';
+  debug(out, p.first);
+  out << ", ";
+  debug(out, p.second);
+  out << ')';
 }
 
 template <typename T, typename V>
@@ -36,6 +42,7 @@ void debug(ostream& out, priority_queue<T, V, U> p) {
   }
   debug(out, v);
 }
+
 template <typename Container>
   requires HasValueType1D<Container>
 void debug(ostream& os, Container v) {

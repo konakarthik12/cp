@@ -1,5 +1,6 @@
 #pragma once
 #include "base.cpp"
+#include "deb.cpp"
 const double pi = acos(-1);
 template <typename T>
 int sgn(T val) {
@@ -27,20 +28,21 @@ double to_rad(double degrees) {
 }
 
 ll asum(ll a) {
+  dssert(a >= 0);
   return (a + 1) * a / 2;
 }
 ll asum(ll a, ll b) {
+  dssert(a >= 0 && b >= a);
   return (b + a) * (b - a + 1) / 2;
 }
 ll asum(ll a, ll b, ll c) {
+  dssert(a >= 0 && b >= a && c >= 1);
   ll n = (b - a) / c + 1;
   ll sum = (n * (2 * a + (n - 1) * c)) / 2;
   return sum;
 }
-
-vi sieve(int max_n) {
-  vi primes;
-  vec<bool> is_prime(max_n + 1, true);
+vb sieve_raw(int max_n) {
+  vb is_prime(max_n + 1, true);
   is_prime[0] = false;
   is_prime[1] = false;
   for (int i = 2; i <= max_n; i++) {
@@ -50,6 +52,11 @@ vi sieve(int max_n) {
       }
     }
   }
+  return is_prime;
+}
+vi sieve(int max_n) {
+  vi primes;
+  vb is_prime = sieve_raw(max_n);
   for (int i = 2; i <= max_n; i++) {
     if (is_prime[i]) primes.pb(i);
   }
@@ -152,7 +159,7 @@ struct Combo {
 };
 
 template <typename T>
-concept Number = std::is_integral_v<T>;
+concept Number = is_integral_v<T>;
 
 struct Frac {
   ll p, q;

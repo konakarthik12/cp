@@ -21,10 +21,10 @@ tail -n +2 < compile_flags_prod.txt | xargs /opt/homebrew/opt/llvm/bin/clang++ t
 echo "Running tests..."
 echo ""
 for((i = 1; ; ++i)); do
-    rm -f pipe1 pipe2
-    mkfifo pipe1 pipe2
-    build/main < pipe2 | tee pipe1_output.txt > pipe1 &
-    build/gen $i < pipe1 | tee pipe2_output.txt > pipe2 || break
+    rm -f build/pipe1 build/pipe2
+    mkfifo build/pipe1 build/pipe2
+    build/main < pipe2 | tee pipe1_output.txt > build/pipe1 &
+    build/gen $i < pipe1 | tee pipe2_output.txt > build/pipe2 || break
     echo -e "\e[1APassed test: "  $i 
 done
 

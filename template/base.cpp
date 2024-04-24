@@ -1,8 +1,6 @@
 #pragma once
 #include "alias.cpp"
-#include "basic/bool.cpp"
-#include "basic/vec.cpp"
-#include "basic/wec.cpp"
+#include "basic/all.cpp"
 #include "wrapper.h"
 
 #define sz(x) (int) size(x)

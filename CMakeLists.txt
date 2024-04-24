@@ -27,6 +27,7 @@ ExternalProject_Get_Property(doctest source_dir)
 set(DOCTEST_INCLUDE_DIR ${source_dir}/doctest CACHE INTERNAL "Path to include folder for doctest")
 
 add_dependencies(tests doctest)
-include_directories(${DOCTEST_INCLUDE_DIR})
+target_include_directories(tests PUBLIC ${DOCTEST_INCLUDE_DIR})
+target_include_directories(internal_testing PUBLIC ${DOCTEST_INCLUDE_DIR})
 
 add_subdirectory(merger build/cmake/merger/)

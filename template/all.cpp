@@ -2,8 +2,6 @@
 
 #include "alias.cpp"
 #include "base.cpp"
-#include "basic/vec.cpp"
-#include "basic/wec.cpp"
 #include "concepts.cpp"
 #include "container.cpp"
 #include "deb.cpp"

@@ -7,7 +7,7 @@ void swapsort(T1& a, T2& b) {
 
 template <typename T>
 int blen(T x) {
-  return bit_width(static_cast<std::make_unsigned_t<decltype(x)>>(x));
+  return bit_width(static_cast<make_unsigned_t<decltype(x)>>(x));
 }
 
 template <typename T, typename F>
@@ -46,7 +46,7 @@ cexp auto yes(T&& opt) {
 }
 
 cexp auto no() {
-  return std::nullopt;
+  return nullopt;
 }
 wi invperm(const wi& arr) {
   wi ans(sz(arr));
