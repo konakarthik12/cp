@@ -15,7 +15,9 @@ struct deq : public Con<deque<T>> {
     return this->v.emplace_back(std::forward<Args>(args)...);
   }
 
-  void rf() {
+  auto rf() {
+    T x = this->v.front();
     this->v.pop_front();
+    return x;
   }
 };

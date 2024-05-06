@@ -16,19 +16,9 @@ void dedupe(Cont& vec, Predicate p) {
 }
 
 template <class Cont>
-void sort(Cont& vec) {
-  sort(all(vec));
-}
-template <class Cont, class Comp>
-void sort(Cont& vec, Comp comp) {
-  sort(all(vec), comp);
-}
-
-template <class Cont>
 void rsort(Cont& vec) {
   sort(vec, greater());
 }
-
 
 template <class Con, class Comp>
 void sort_by(Con& vec, Comp key) {
@@ -41,10 +31,10 @@ void rsort_by(Con& vec, Comp key) {
   using T = Con::value_type;
   sort(all(vec), [&](T a, T b) { return key(a) > key(b); });
 }
-template <class Cont>
-void reverse(Cont& vec) {
-  reverse(all(vec));
-}
+ template <class Cont>
+ void reverse(Cont& vec) {
+   reverse(all(vec));
+ }
 
 template <class Cont>
 void erase_all(Cont& vec, char c) {
@@ -67,6 +57,20 @@ vll prefix_sum(Cont& arr) {
   vll prefixs(sz(arr) + 1);
   inclusive_scan(all(arr), prefixs.begin() + 1, plus(), 0LL);
   return prefixs;
+}
+
+template <typename Cont>
+Cont pre_arr(Cont& arr) {
+  Cont prefixs(sz(arr));
+  inclusive_scan(all(arr), prefixs.begin(), plus(), 0LL);
+  return prefixs;
+}
+
+template <typename Cont>
+Cont diff_arr(Cont& arr) {
+  Cont diff(sz(arr));
+  adjacent_difference(all(arr), diff.begin());
+  return diff;
 }
 
 template <typename Cont, typename T>
