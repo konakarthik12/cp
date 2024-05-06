@@ -50,16 +50,6 @@ void call_print(Func func, int t) {
   handle_print(result);
 }
 
-template <class F>
-struct y_comb {
-  F f;
-
-  template <class... Args>
-  decltype(auto) operator()(Args&&... args) const {
-    return f(*this, std::forward<Args>(args)...);
-  }
-};
-
 template <typename Func>
   requires requires(Func func) {
     { invoke_result_t<Func>() };

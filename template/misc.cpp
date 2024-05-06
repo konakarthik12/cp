@@ -79,6 +79,16 @@ class bits : public bitset<N> {
   }
 };
 
+template <class F>
+struct y_comb {
+  F f;
+
+  template <class... Args>
+  decltype(auto) operator()(Args&&... args) const {
+    return f(*this, std::forward<Args>(args)...);
+  }
+};
+
 #ifndef LOCAL
 #define assume(cond)                      \
   do {                                    \
