@@ -1,9 +1,18 @@
 #pragma once
-#include "wrapper.h"
+#include "../wrapper.h"
+
 template <typename T1, typename T2>
 struct pr {
   T1 f;
   T2 s;
+  pr() {
+  }
+
+  pr(T1 f, T2 s) : f(f), s(s) {
+  }
+  pr(pair<T1, T2> spair) : f(spair.first), s(spair.second) {
+  }
+
   void sort() {
     swapsort(f, s);
   }

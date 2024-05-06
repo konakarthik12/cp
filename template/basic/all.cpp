@@ -1,4 +1,5 @@
 #include "bool.cpp"
 #include "deq.cpp"
+#include "pr.cpp"
 #include "vec.cpp"
 #include "wec.cpp"
