@@ -8,7 +8,7 @@ add_executable(cp template.cpp)
 add_executable(internal_main main.cpp)
 add_executable(internal_testing testing/tests.cpp)
 
-target_compile_definitions(cp PUBLIC ENTRY=main)
+target_compile_definitions(cp PUBLIC ENTRY=main LOCAL)
 
 add_executable(tests template.cpp)
 target_compile_definitions(tests PUBLIC ENTRY=testing/tests)

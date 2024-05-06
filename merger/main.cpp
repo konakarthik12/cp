@@ -16,7 +16,7 @@ int main() {
     int maxConsecutiveEmptyLines = 1;
     vector<string> isystemDirs = {
             "/opt/homebrew/opt/llvm/include/c++/v1/",
-            "/opt/homebrew/opt/llvm/lib/clang/17/include/",
+            "/opt/homebrew/opt/llvm/lib/clang/18/include/",
             "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/"};
 
     inliner.clangCompilationOptions = {"-std=c++20",
