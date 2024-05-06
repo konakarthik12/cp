@@ -1,6 +1,13 @@
 #pragma once
 #include "base.cpp"
 
+template <typename Container>
+  requires(HasValueType1D<Container> && !Printable<Container>)
+
+void debug(ostream& os, Container v);
+template <typename T, typename V>
+void debug(ostream& out, pr<T, V> const& p);
+
 template <const unsigned long N>
 void debug(ostream& out, typename bitset<N>::reference v) {
   out << (bool) v;
