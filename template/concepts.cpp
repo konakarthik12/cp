@@ -34,3 +34,8 @@ template <typename T1>
 concept Readable2D = requires(istream& is, const T1&) {
   { Readable<typename remove_reference_t<T1>::value_type::value_type> };
 };
+
+template <typename T, typename Predicate>
+concept SortPredicate = requires(T t1, T t2, Predicate p) {
+  { p(t1, t2) } -> same_as<bool>;
+};

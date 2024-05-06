@@ -59,6 +59,7 @@ GENERATE_AB(ill, int, ll)
 GENERATE_AB(lli, ll, int)
 GENERATE_AB(ci, char, int)
 
+using mpii = map<pii, pii>;
 using mivi = map<int, vi>;
 using mipii = map<int, pii>;
 
