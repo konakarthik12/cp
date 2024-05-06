@@ -23,9 +23,6 @@ void debug(ostream& out, T x) {
   out << x;
 }
 
-template <typename Container>
-  requires HasValueType1D<Container>
-void debug(ostream& os, Container v);
 template <typename T, typename V>
 void debug(ostream& out, pair<T, V> const& p) {
   out << '(';
@@ -37,7 +34,27 @@ void debug(ostream& out, pair<T, V> const& p) {
 
 template <typename T, typename V>
 void debug(ostream& out, pr<T, V> const& p) {
-  out << '(' << p.f << ", " << p.s << ')';
+  out << '(';
+  debug(out, p.f);
+  out << ", ";
+  debug(out, p.s);
+  out << ')';
+}
+
+template <size_t Index = 0, typename... Ts>
+void tuple_debug(ostream& out, const tuple<Ts...>& t) {
+  if constexpr (Index < sizeof...(Ts)) {
+    if (Index != 0) out << ", ";
+    debug(out, get<Index>(t));
+    tuple_debug<Index + 1>(out, t);
+  }
+}
+
+template <typename... Ts>
+void debug(ostream& out, const tuple<Ts...>& t) {
+  out << "(";
+  tuple_debug(out, t);
+  out << ")";
 }
 
 template <typename T, typename V, typename U>
@@ -51,7 +68,7 @@ void debug(ostream& out, priority_queue<T, V, U> p) {
 }
 
 template <typename Container>
-  requires HasValueType1D<Container>
+  requires(HasValueType1D<Container> && !Printable<Container>)
 void debug(ostream& os, Container v) {
   os << '[';
   for (auto it = v.begin(); it != v.end(); ++it) {

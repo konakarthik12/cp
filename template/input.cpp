@@ -52,8 +52,9 @@ void append(V& v, const typename V::value_type& x) {
 }
 template <typename Container>
   requires HasValueType<Container>
-void __read(Container& v, int n) {
+void __read1D(Container& v, const int& n) {
   using T = Container::value_type;
+  v.clear();
   reserve(v, n);
   for (int i = 0; i < n; i++) {
     T x;
@@ -83,17 +84,17 @@ V2::value_type emplace_empty(V2& v2) {
 
 template <typename V2>
   requires HasValueType2D<V2>
-void __read(V2& v2, int r, int c) {
+void __read2D(V2& v2, int r, int c) {
   using V = V2::value_type;
   reserve(v2, r);
   for (int i = 0; i < r; i++) {
     cexp bool EB = HasEB<V2> || HasEmplaceBack<V2>;
     if cexp (EB) {
       V& col = emplace_empty(v2);
-      __read(col, c);
+      __read1D(col, c);
     } else {
       V col;
-      __read(col, c);
+      __read1D(col, c);
       append(v2, col);
     }
   }
@@ -110,14 +111,14 @@ void read(T&& arg) {
 template <typename T, typename T2, typename... Args>
   requires(Readable1D<T> && !Readable2D<T> && !Readable<T>)
 void read(T&& first, T2&& second, Args&&... args) {
-  __read(std::forward<T>(first), std::forward<T2>(second));
+  __read1D(std::forward<T>(first), std::forward<T2>(second));
   read(std::forward<Args>(args)...);
 }
 
 template <typename T, typename T2, typename T3, typename... Args>
   requires(Readable2D<T> && !Readable<T>)
 void read(T&& first, T2&& second, T3&& third, Args&&... args) {
-  __read(std::forward<T>(first), std::forward<T2>(second), std::forward<T3>(third));
+  __read2D(std::forward<T>(first), std::forward<T2>(second), std::forward<T3>(third));
   read(std::forward<Args>(args)...);
 }
 
@@ -134,17 +135,9 @@ int readInt() {
   return x;
 }
 
-template <class T>
-void read_count(map<T, int>& m, int n) {
-  for (int i = 0; i < n; i++) {
-    T temp;
-    read(temp);
-    m[temp]++;
-  }
-}
 
 template <class T, class Comp = less<T>()>
-void read_count(map<T, int, Comp>& m, int n) {
+void read_cnt(map<T, int, Comp>& m, int n) {
   m.clear();
   for (int i = 0; i < n; i++) {
     T temp;
