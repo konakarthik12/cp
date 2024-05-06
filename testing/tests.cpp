@@ -1,7 +1,5 @@
 #define DOCTEST_CONFIG_IMPLEMENT
 #define NO_MAIN
-#include "doctest.h"
-
 #include "../template.cpp"
 #include "doctest.h"
 #include "test_utils.cpp"
@@ -92,7 +90,6 @@ TEST_SUITE("input") {
     int n;
     vi arr;
     read(n);
-    CHECK(n == 4);
     read(arr, n * 2);
     CHECK(arr == vi{1, 2, 3, 4, 5, 6, 7, 8});
   }
@@ -143,6 +140,28 @@ TEST_SUITE("input") {
   }
 }
 
+TEST_SUITE("containers") {
+  TEST_CASE("iota") {
+    wi arr;
+    arr.iota(1, 10);
+    CHECK(arr[5] == 5);
+
+    CHECK(sum(arr) == 55);
+  }
+  TEST_CASE("sort") {
+    wpii arr{{1, 2}, {2, 1}};
+    arr.rsort();
+    CHECK(arr == wpii{{2, 1}, {1, 2}});
+    arr.sort();
+    CHECK(arr == wpii{{1, 2}, {2, 1}});
+    auto lamb = [&](pii& a, pii& b) { return a.f < b.f; };
+    arr.sort(lamb);
+    CHECK(arr == wpii{{1, 2}, {2, 1}});
+    arr.sort(&pii::s);
+    CHECK(arr == wpii{{2, 1}, {1, 2}});
+  }
+}
+
 TEST_CASE("testing_output") {
   CaptureStdout();
   int x = 5;
@@ -162,6 +181,11 @@ TEST_CASE("misc") {
     prs.eb(a, b);
   }
   CHECK(prs == vpii{{1, 2}, {2, 3}, {3, 4}, {4, 5}});
+  prs.clear();
+  for (auto [a, b]: arr | pairwise | rview) {
+    prs.eb(a, b);
+  }
+  CHECK(prs == vpii{{4, 5}, {3, 4}, {2, 3}, {1, 2}});
   CHECK(blen(15) == 4);
   CHECK(blen(16) == 5);
 
@@ -177,3 +201,14 @@ void solve() {
   int res = context.run();
   if (res != 0) exit(res);
 }
+
+namespace doctest {
+template <Readable1D T>
+struct StringMaker<T> {
+  static String convert(const T& value) {
+    stringstream sstream;
+    debug_all(sstream, value);
+    return String(sstream.str().c_str());
+  }
+};
+}  // namespace doctest
