@@ -2,4 +2,5 @@
 #include "deq.cpp"
 #include "pr.cpp"
 #include "vec.cpp"
+#include "unordered.cpp"
 #include "wec.cpp"

@@ -14,8 +14,8 @@ using si = set<int>;
 template <typename T>
 using opt = optional<T>;
 
-template <class T, class Compare = less<T> >
-using pqueue = priority_queue<T, vector<T>, Compare>;
+template <class T, class Compare = less<T>, class Container = vector<T> >
+using pqueue = priority_queue<T, Container, Compare>;
 
 template <class T>
 using vv = vec<vec<T> >;
@@ -26,8 +26,6 @@ using vvll = vv<ll>;
 using str = string;
 template <class T>
 using mset = multiset<T>;
-template <class T>
-using uset = unordered_set<T>;
 
 template <typename T>
 using ww = wec<wec<T> >;
@@ -59,6 +57,8 @@ GENERATE_AB(ill, int, ll)
 GENERATE_AB(lli, ll, int)
 GENERATE_AB(ci, char, int)
 
+GENERATE_SINGLE(pii, pii)
+
 using mpii = map<pii, pii>;
 using mivi = map<int, vi>;
 using mipii = map<int, pii>;
@@ -71,5 +71,6 @@ using vvpll = vv<pll>;
 
 using vpcc = vec<pcc>;
 
-GENERATE_SINGLE(pii, pii)
+using si = set<int>;
+using spii = set<pii>;
 #endif

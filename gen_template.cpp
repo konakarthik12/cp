@@ -23,6 +23,10 @@ ll rnd(ll a, ll b) {
 char rnd_char() {
   return 'a' + rnd(0, 25);
 }
+char rnd_char(char a, char b) {
+  return rnd((int) a, (int) b);
+}
+
 int rnd_not(int a, int b, int exclude) {
   int n = exclude;
   while (n == exclude) {
@@ -74,7 +78,7 @@ vi rnd_list_distinct(int n, int a, int b) {
   if (seed < 1000) {
     b = min(b, max(a + seed / 5, (a + n - 1)));
   }
-  set<int> s;
+  uset<int> s;
   while ((int) s.size() < n) {
     s.insert(rnd_internal(a, b));
   }

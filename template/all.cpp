@@ -6,6 +6,7 @@
 #include "container.cpp"
 #include "deb.cpp"
 #include "input.cpp"
+#include "ds/all.cpp"
 #include "math.cpp"
 #include "misc.cpp"
 #include "modint.cpp"

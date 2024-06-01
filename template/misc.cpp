@@ -7,6 +7,7 @@ void swapsort(T1& a, T2& b) {
 
 template <typename T>
 int blen(T x) {
+  if (x == 0) return 1;
   return bit_width(static_cast<make_unsigned_t<decltype(x)>>(x));
 }
 
@@ -31,11 +32,39 @@ T max_false(T l, T h, F comp) {
   return max_true(l, h, not_fn(comp));
 }
 
-str Yes(bool ans, str yes = "Yes", str no = "No") {
-  return ans ? yes : no;
+template <typename T, typename F>
+T min_false(T l, T h, F comp, T d) {
+  T ans = min_false(l, h + 1, comp);
+  if (ans == h + 1) return d;
+  return ans;
 }
-str YES(bool ans, str yes = "YES", str no = "NO") {
-  return ans ? yes : no;
+
+template <typename T, typename F>
+T max_true(T l, T h, F comp, T d) {
+  T ans = max_true(l, h + 1, comp);
+  if (ans == h + 1) return d;
+  return ans;
+}
+
+template <typename T, typename F>
+T min_true(T l, T h, F comp, T d) {
+  T ans = min_true(l, h + 1, comp);
+  if (ans == h + 1) return d;
+  return ans;
+}
+
+template <typename T, typename F>
+T max_false(T l, T h, F comp, T d) {
+  T ans = max_false(l, h + 1, comp);
+  if (ans == h + 1) return d;
+  return ans;
+}
+
+str Yes(bool ans) {
+  return ans ? "Yes" : "No";
+}
+str YES(bool ans) {
+  return ans ? "YES" : "NO";
 }
 void exit() {
   exit(0);

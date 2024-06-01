@@ -5,7 +5,7 @@ template <typename T1, typename T2>
 struct pr {
   T1 f;
   T2 s;
-  pr() {
+  pr() : f(T1()), s(T2()) {
   }
 
   pr(T1 f, T2 s) : f(f), s(s) {

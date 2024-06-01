@@ -20,4 +20,10 @@ struct deq : public Con<deque<T>> {
     this->v.pop_front();
     return x;
   }
+
+  auto front_inserter() {
+    return std::front_inserter(this->v);
+  }
+
+  auto reserve() = delete;
 };

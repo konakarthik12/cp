@@ -1,5 +1,6 @@
 #pragma once
 #include "../concepts.cpp"
+
 template <typename C>
 struct Con {
   using T = C::value_type;
@@ -14,7 +15,7 @@ struct Con {
   }
   template <typename Container>
     requires HasIter<Container>
-  explicit Con(Container cnt) : v(cnt.begin(), cnt.end()) {
+  explicit Con(const Container& cnt) : v(cnt.begin(), cnt.end()) {
   }
   Con(initializer_list<T> initList) : v(initList.size()) {
     auto it = v.begin();
@@ -22,6 +23,7 @@ struct Con {
       *it++ = value;
     }
   }
+
   auto begin() const {
     return this->v.begin();
   }
@@ -105,8 +107,10 @@ struct Con {
     return this->v.insert(std::forward<Args>(args)...);
   }
 
-  void rb() {
+  T rb() {
+    T x = this->back();
     this->v.pop_back();
+    return x;
   }
 
   void clear() {
@@ -145,10 +149,47 @@ struct Con {
     return this->sort(greater());
   }
 
+  void reverse() {
+    return std::reverse(this->v.begin(), this->v.end());
+  }
+
   template <typename Pred>
     requires predicate<Pred, T>
   auto partition(Pred p) {
-    return std::partition(this->v.begin(), this->v.end(), p);
+    return std::partition(v.begin(), v.end(), p);
+  }
+  auto is_sorted() {
+    return std::is_sorted(v.begin(), v.end());
+  }
+
+  auto back_inserter() {
+    return std::back_inserter(v);
+  }
+  auto get(int x) {
+    if (x < 0) x += size();
+    return v[x];
+  }
+
+  template <class Predicate = std::equal_to<>>
+  void dedupe(Predicate p = {}) {
+    v.erase(unique(v.begin(), v.end(), p), end());
+  }
+
+  template <class Compare = std::less<>>
+  auto lower_bound(const T& x, Compare comp = {}) {
+    return std::lower_bound(v.begin(), v.end(), x, comp);
+  }
+
+  template <class Compare = std::less<>>
+  auto upper_bound(const T& x, Compare comp = {}) {
+    return std::upper_bound(v.begin(), v.end(), x, comp);
+  }
+
+  T max() {
+    return *std::max_element(v.begin(), v.end());
+  }
+  T min() {
+    return *std::min_element(v.begin(), v.end());
   }
 };
 

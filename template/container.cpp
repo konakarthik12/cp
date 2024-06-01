@@ -6,14 +6,7 @@ int idist(Iter a, Iter b) {
   return distance(a, b);
 }
 
-template <class Cont>
-void dedupe(Cont& vec) {
-  vec.erase(unique(all(vec)), vec.end());
-}
-template <class Cont, class Predicate>
-void dedupe(Cont& vec, Predicate p) {
-  vec.erase(unique(all(vec), p), vec.end());
-}
+
 
 template <class Cont>
 void rsort(Cont& vec) {
@@ -60,7 +53,7 @@ vll prefix_sum(Cont& arr) {
 }
 
 template <typename Cont>
-Cont pre_arr(Cont& arr) {
+Cont pref_arr(Cont& arr) {
   Cont prefixs(sz(arr));
   inclusive_scan(all(arr), prefixs.begin(), plus(), 0LL);
   return prefixs;

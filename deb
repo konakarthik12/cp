@@ -6,5 +6,11 @@ if [ $# -ge 1 ]; then
 fi
 
 tail -n +2 < compile_flags_deb.txt | xargs /opt/homebrew/opt/llvm/bin/clang++ "template.cpp" -o "build/$target" -DENTRY=$target || exit
-"build/$target" < input.txt
+# "build/$target" < input.txt
+#
+if [ -t 0 ]; then
+  "build/$target" < input.txt
+else
+  "build/$target"
+fi
 

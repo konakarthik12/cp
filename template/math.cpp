@@ -156,6 +156,12 @@ struct Combo {
       return choose(n - 1, k - 1);
     }
   }
+
+  T catalan(int n) {
+    assert(2 * n < sz(facts));
+
+    return facts[2 * n] * inv_facts[n] * inv_facts[n + 1];
+  }
 };
 
 template <typename T>
