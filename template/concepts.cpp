@@ -39,3 +39,5 @@ template <typename T, typename Predicate>
 concept SortPredicate = requires(T t1, T t2, Predicate p) {
   { p(t1, t2) } -> same_as<bool>;
 };
+template <typename T>
+concept Numeric = std::integral<T> || std::floating_point<T>;

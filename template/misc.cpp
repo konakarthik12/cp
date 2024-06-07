@@ -1,5 +1,6 @@
 #pragma once
 #include "base.cpp"
+#include "concepts.cpp"
 template <typename T1, typename T2>
 void swapsort(T1& a, T2& b) {
   if (a > b) swap(a, b);
@@ -9,6 +10,20 @@ template <typename T>
 int blen(T x) {
   if (x == 0) return 1;
   return bit_width(static_cast<make_unsigned_t<decltype(x)>>(x));
+}
+
+template <typename T, typename V>
+requires Numeric<V>
+T mode(map<T, V> items) {
+  T mode = items.begin()->first;
+  V max_count = items.begin()->second;
+  for (auto [item, count] : items) {
+    if (count > max_count) {
+      max_count = count;
+      mode = item;
+    }
+  }
+  return mode;
 }
 
 template <typename T, typename F>

@@ -29,6 +29,7 @@ TEST_CASE("testing combinatorics") {
   Combo<Frac> combo(12);
   CHECK(combo.choose(12, 5) == 792);
   CHECK(combo.choose(20, 4) == 4845);
+  CHECK(combo.choose(8, 8, 1) == 0);
 
   //  stars and bars
   CHECK(combo.sum(10, 4) == 286);        // zero not allowed

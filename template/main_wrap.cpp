@@ -65,7 +65,7 @@ template <typename Func, typename... Args>
 void handle_solve(Func func) {
   int qrs;
   read(qrs);
-  for (int i = 0; i < qrs; i++) {
+  for (int i = 1; i <= qrs; i++) {
     call_print(func, i);
   }
 }

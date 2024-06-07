@@ -107,21 +107,21 @@ struct Combo {
   T fact(int x) {
     return facts[x];
   }
+
+  T fact(int x, int y) {
+    return facts[x] * inv_facts[y - 1];
+  }
   T inv_fact(int x) {
     return facts[x];
   }
 
   T choose(int n, int k) {
+    if (n < k) return 0;
     if (n == k || n == 0 || k == 0) return 1;
-    if (n < k) {
-      return 0;
-    }
     T ans(1);
 
     if (n >= sz(facts)) {
-      for (int i = 0; i < k; i++) {
-        ans *= n - i;
-      }
+      for (int i = 0; i < k; i++) ans *= n - i;
     } else {
       ans = facts[n] * inv_facts[n - k];
     }
