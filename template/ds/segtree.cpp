@@ -1,5 +1,5 @@
 #pragma once
-
+#include "../base.cpp"
 template <typename Node>
 struct Segtree {
   using Merge = std::function<const Node(const Node&, const Node&)>;
@@ -15,7 +15,6 @@ struct Segtree {
   }
   template <typename Cont>
   void build(Cont& a, int v, int tl, int tr) {
-    deb(v, tl, tr);
     if (tl == tr) {
       t[v] = Node(a[tl]);
     } else {
@@ -27,7 +26,6 @@ struct Segtree {
   }
 
   void update(int v, int tl, int tr, int pos, int val) {
-    deb("update", v, tl, tr, pos, val);
     if (tl == tr) {
       t[v] = Node(val);
     } else {
