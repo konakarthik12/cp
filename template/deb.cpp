@@ -26,18 +26,18 @@ void debug(T x) {
 template <typename T, typename V>
 void debug(pair<T, V> const& p) {
   dout << '(';
-  debug(dout, p.first);
+  debug(p.first);
   dout << ", ";
-  debug(dout, p.second);
+  debug(p.second);
   dout << ')';
 }
 
 template <typename T, typename V>
 void debug(pr<T, V> const& p) {
   dout << '(';
-  debug(dout, p.f);
+  debug(p.f);
   dout << ", ";
-  debug(dout, p.s);
+  debug(p.s);
   dout << ')';
 }
 
@@ -45,7 +45,7 @@ template <size_t Index = 0, typename... Ts>
 void tuple_debug(const tuple<Ts...>& t) {
   if constexpr (Index < sizeof...(Ts)) {
     if (Index != 0) dout << ", ";
-    debug(dout, get<Index>(t));
+    debug(get<Index>(t));
     tuple_debug<Index + 1>(dout, t);
   }
 }
@@ -53,7 +53,7 @@ void tuple_debug(const tuple<Ts...>& t) {
 template <typename... Ts>
 void debug(const tuple<Ts...>& t) {
   dout << "(";
-  tuple_debug(dout, t);
+  tuple_debug(t);
   dout << ")";
 }
 
@@ -64,20 +64,20 @@ void debug(priority_queue<T, V, U> p) {
     v.pb(p.top());
     p.pop();
   }
-  debug(dout, v);
+  debug(v);
 }
 
 template <typename Container>
   requires(HasValueType1D<Container> && !Printable<Container>)
 void debug(Container v) {
-  os << '[';
+  dout << '[';
   for (auto it = v.begin(); it != v.end(); ++it) {
     if (it != v.begin()) {
-      os << ", ";
+      dout << ", ";
     }
-    debug(os, *it);
+    debug(*it);
   }
-  os << ']';
+  dout << ']';
 }
 
 template <typename Container>
@@ -88,28 +88,28 @@ void debug(Container v) {
     if (it != v.begin()) {
       dout << ",\n ";
     }
-    debug(dout, *it);
+    debug(*it);
   }
   dout << ']';
 }
 
-void debug_all(ostream&) {
+void debug_all() {
 }
 template <typename Arg, typename... Args>
 void debug_all(Arg&& arg, Args&&... args) {
-  debug(dout, arg);
+  debug(arg);
   if (sizeof...(args) > 0) {
     dout << ", ";
   }
-  debug_all(dout, args...);
+  debug_all(args...);
 }
 #ifdef __JETBRAINS_IDE__
 #define LOCAL
 #endif
 #ifdef LOCAL
 #include "execinfo.h"
-#define deb(...) logger(cerr, __LINE__, false, #__VA_ARGS__, ##__VA_ARGS__);
-#define deb_n(...) logger(cerr, __LINE__, true, #__VA_ARGS__, ##__VA_ARGS__);
+#define deb(...) logger(__LINE__, false, #__VA_ARGS__, ##__VA_ARGS__);
+#define deb_n(...) logger(__LINE__, true, #__VA_ARGS__, ##__VA_ARGS__);
 template <typename... Args>
 void logger(int line, bool nest, string vars, Args&&... values) {
   if (vars.size() == 0) {
@@ -125,7 +125,7 @@ void logger(int line, bool nest, string vars, Args&&... values) {
   }
   dout << "\033[30;1m" << line << ": ";
   dout << vars << " = ";
-  debug_all(dout, values...);
+  debug_all(values...);
   //  logger(dout, line, nest, vars, forward<Args>(values)...)
   //  (..., (dout << delim << values, delim = ", "));
   dout << "\033[0m\n";
