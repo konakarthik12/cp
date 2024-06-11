@@ -1,6 +1,6 @@
 #pragma once
 #include "base.cpp"
-ostream& dout = cerr;
+ostream* dout = &cerr;
 
 template <typename Container>
   requires(HasValueType1D<Container> && !Printable<Container>)
@@ -10,51 +10,51 @@ void debug(pr<T, V> const& p);
 
 template <const unsigned long N>
 void debug(typename bitset<N>::reference v) {
-  dout << (bool) v;
+  *dout << (bool) v;
 }
 
 template <const unsigned long N>
 void debug(bitset<N> b) {
-  dout << b;
+  *dout << b;
 }
 template <typename T>
   requires Printable<T>
 void debug(T x) {
-  dout << x;
+  *dout << x;
 }
 
 template <typename T, typename V>
 void debug(pair<T, V> const& p) {
-  dout << '(';
+  *dout << '(';
   debug(p.first);
-  dout << ", ";
+  *dout << ", ";
   debug(p.second);
-  dout << ')';
+  *dout << ')';
 }
 
 template <typename T, typename V>
 void debug(pr<T, V> const& p) {
-  dout << '(';
+  *dout << '(';
   debug(p.f);
-  dout << ", ";
+  *dout << ", ";
   debug(p.s);
-  dout << ')';
+  *dout << ')';
 }
 
 template <size_t Index = 0, typename... Ts>
 void tuple_debug(const tuple<Ts...>& t) {
   if constexpr (Index < sizeof...(Ts)) {
-    if (Index != 0) dout << ", ";
+    if (Index != 0) *dout << ", ";
     debug(get<Index>(t));
-    tuple_debug<Index + 1>(dout, t);
+    tuple_debug<Index + 1>(*dout, t);
   }
 }
 
 template <typename... Ts>
 void debug(const tuple<Ts...>& t) {
-  dout << "(";
+  *dout << "(";
   tuple_debug(t);
-  dout << ")";
+  *dout << ")";
 }
 
 template <typename T, typename V, typename U>
@@ -70,27 +70,27 @@ void debug(priority_queue<T, V, U> p) {
 template <typename Container>
   requires(HasValueType1D<Container> && !Printable<Container>)
 void debug(Container v) {
-  dout << '[';
+  *dout << '[';
   for (auto it = v.begin(); it != v.end(); ++it) {
     if (it != v.begin()) {
-      dout << ", ";
+      *dout << ", ";
     }
     debug(*it);
   }
-  dout << ']';
+  *dout << ']';
 }
 
 template <typename Container>
   requires HasValueType2D<Container>
 void debug(Container v) {
-  dout << "\n[";
+  *dout << "\n[";
   for (auto it = v.begin(); it != v.end(); ++it) {
     if (it != v.begin()) {
-      dout << ",\n ";
+      *dout << ",\n ";
     }
     debug(*it);
   }
-  dout << ']';
+  *dout << ']';
 }
 
 void debug_all() {
@@ -99,7 +99,7 @@ template <typename Arg, typename... Args>
 void debug_all(Arg&& arg, Args&&... args) {
   debug(arg);
   if (sizeof...(args) > 0) {
-    dout << ", ";
+    *dout << ", ";
   }
   debug_all(args...);
 }
@@ -113,22 +113,20 @@ void debug_all(Arg&& arg, Args&&... args) {
 template <typename... Args>
 void logger(int line, bool nest, string vars, Args&&... values) {
   if (vars.size() == 0) {
-    dout << "\n";
+    *dout << "\n";
     return;
   }
   if (nest) {
     void* callstack[20];
     int frames = backtrace(callstack, 20);
     for (int i = 4; i < frames; i++) {
-      dout << "  ";
+      *dout << "  ";
     }
   }
-  dout << "\033[30;1m" << line << ": ";
-  dout << vars << " = ";
+  *dout << "\033[30;1m" << line << ": ";
+  *dout << vars << " = ";
   debug_all(values...);
-  //  logger(dout, line, nest, vars, forward<Args>(values)...)
-  //  (..., (dout << delim << values, delim = ", "));
-  dout << "\033[0m\n";
+  *dout << "\033[0m\n";
 }
 #define dssert(...) assert(__VA_ARGS__);
 __attribute__((unused)) const bool prod = false;

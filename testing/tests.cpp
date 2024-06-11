@@ -207,8 +207,11 @@ namespace doctest {
 template <Readable1D T>
 struct StringMaker<T> {
   static String convert(const T& value) {
+    ostream* old = dout;
     stringstream sstream;
-    debug_all(sstream, value);
+    dout = &sstream;
+    debug_all(value);
+    dout = old;
     return String(sstream.str().c_str());
   }
 };
