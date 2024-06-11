@@ -6,8 +6,6 @@ int idist(Iter a, Iter b) {
   return distance(a, b);
 }
 
-
-
 template <class Cont>
 void rsort(Cont& vec) {
   sort(vec, greater());
@@ -24,10 +22,11 @@ void rsort_by(Con& vec, Comp key) {
   using T = Con::value_type;
   sort(all(vec), [&](T a, T b) { return key(a) > key(b); });
 }
- template <class Cont>
- void reverse(Cont& vec) {
-   reverse(all(vec));
- }
+
+template <class Cont>
+void reverse(Cont& vec) {
+  reverse(all(vec));
+}
 
 template <class Cont>
 void erase_all(Cont& vec, char c) {

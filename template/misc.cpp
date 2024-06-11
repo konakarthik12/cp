@@ -13,11 +13,11 @@ int blen(T x) {
 }
 
 template <typename T, typename V>
-requires Numeric<V>
+  requires Numeric<V>
 T mode(map<T, V> items) {
   T mode = items.begin()->first;
   V max_count = items.begin()->second;
-  for (auto [item, count] : items) {
+  for (auto [item, count]: items) {
     if (count > max_count) {
       max_count = count;
       mode = item;

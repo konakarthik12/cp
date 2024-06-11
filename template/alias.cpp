@@ -14,13 +14,13 @@ using si = set<int>;
 template <typename T>
 using opt = optional<T>;
 
-template <class T, class Compare = less<T>, class Container = vector<T> >
+template <class T, class Compare = less<T>, class Container = vector<T>>
 using pqueue = priority_queue<T, Container, Compare>;
 
 template <class T>
-using vv = vec<vec<T> >;
+using vv = vec<vec<T>>;
 template <class T>
-using vvv = vec<vv<T> >;
+using vvv = vec<vv<T>>;
 using vvvi = vvv<int>;
 using vvll = vv<ll>;
 using str = string;
@@ -28,7 +28,7 @@ template <class T>
 using mset = multiset<T>;
 
 template <typename T>
-using ww = wec<wec<T> >;
+using ww = wec<wec<T>>;
 using wwi = ww<int>;
 
 #define GENERATE_SINGLE(LEFT, RIGHT) \

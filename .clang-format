@@ -3,7 +3,6 @@ UseTab: Never
 IndentWidth: 2
 TabWidth: 2
 ColumnLimit: 120
-# InsertBraces: true
 IndentGotoLabels: true
 AllowShortBlocksOnASingleLine: Never
 AllowShortIfStatementsOnASingleLine: AllIfsAndElse
@@ -16,3 +15,4 @@ PackConstructorInitializers: CurrentLine
 DerivePointerAlignment: false
 PointerAlignment: Left
 SortIncludes: Never
+Standard: c++20

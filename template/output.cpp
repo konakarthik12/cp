@@ -3,7 +3,7 @@
 #include "concepts.cpp"
 
 template <typename T>
-requires Printable<T>
+  requires Printable<T>
 void __print(T x) {
   cout << x;
 }

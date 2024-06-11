@@ -16,7 +16,6 @@ void __read(bitset<N>& b) {
   b = x;
 }
 
-
 template <typename T1, typename T2>
 void __read(pr<T1, T2>& p) {
   __read(p.f);
@@ -63,7 +62,8 @@ void __read(std::tuple<Args...>& t) {
 }
 
 template <typename T, typename... Args>
-  requires(!Readable1D<T> && !Readable2D<T> && !Readable<T> && std::is_same_v<T, tuple<typename std::decay<Args>::type...>>)
+  requires(!Readable1D<T> && !Readable2D<T> && !Readable<T> &&
+           std::is_same_v<T, tuple<typename std::decay<Args>::type...>>)
 void read(T&& first, Args&&... args) {
   __read(std::forward<T>(first));
   read(std::forward<Args>(args)...);
@@ -81,7 +81,6 @@ void __read1D(Container& v, const int& n) {
     append(v, x);
   }
 }
-
 
 template <class V2>
 concept HasEB = requires(V2 v2) {
