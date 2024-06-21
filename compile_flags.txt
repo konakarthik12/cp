@@ -7,5 +7,6 @@
 -DLOCAL
 -DEDITOR
 -DENTRY=main
+-I/opt/homebrew/opt/llvm/bin/../include/c++/v1/
 -include-pch
-/usr/local/include/bits/stdc++.h.pch
+/opt/homebrew/opt/llvm/bin/../include/c++/v1/bits/stdc++.h.pch

@@ -145,12 +145,19 @@ struct Con {
     std::ranges::sort(this->v, comp, proj);
   }
 
-  void rsort() {
+  auto rsort() {
     return this->sort(greater());
   }
 
-  void reverse() {
+  auto reverse() {
     return std::reverse(this->v.begin(), this->v.end());
+  }
+
+  auto next_perm() {
+    return std::next_permutation(v.begin(), v.end());
+  }
+  auto prev_perm() {
+    return std::prev_permutation(v.begin(), v.end());
   }
 
   template <typename Pred>

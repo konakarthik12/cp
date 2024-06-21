@@ -10,31 +10,28 @@ using ld = long double;
 using uint = unsigned int;
 using ull = unsigned long long;
 
-using si = set<int>;
-template <typename T>
-using opt = optional<T>;
+using str = string;
 
 template <class T, class Compare = less<T>, class Container = vector<T>>
 using pqueue = priority_queue<T, Container, Compare>;
 
-template <class T>
+template <typename T>
 using vv = vec<vec<T>>;
-template <class T>
-using vvv = vec<vv<T>>;
-using vvvi = vvv<int>;
-using vvll = vv<ll>;
-using str = string;
-template <class T>
-using mset = multiset<T>;
+template <typename T>
+using vw = vec<wec<T>>;
+
+template <typename T>
+using wv = wec<vec<T>>;
 
 template <typename T>
 using ww = wec<wec<T>>;
-using wwi = ww<int>;
 
 #define GENERATE_SINGLE(LEFT, RIGHT) \
   using v##LEFT = vec<RIGHT>;        \
-  using vv##LEFT = vv<RIGHT>;        \
   using w##LEFT = wec<RIGHT>;        \
+  using vv##LEFT = vv<RIGHT>;        \
+  using vw##LEFT = vw<RIGHT>;        \
+  using wv##LEFT = wv<RIGHT>;        \
   using ww##LEFT = ww<RIGHT>;
 
 GENERATE_SINGLE(i, int)
@@ -71,6 +68,14 @@ using vvpll = vv<pll>;
 
 using vpcc = vec<pcc>;
 
+template <typename T>
+using opt = optional<T>;
 using si = set<int>;
 using spii = set<pii>;
+template <typename T>
+using vvv = vec<vv<T>>;
+using vvvi = vvv<int>;
+template <class T>
+using mset = multiset<T>;
+
 #endif

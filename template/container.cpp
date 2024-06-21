@@ -52,9 +52,18 @@ vll prefix_sum(Cont& arr) {
 }
 
 template <typename Cont>
+requires is_integral_v<typename Cont::value_type>
 Cont pref_arr(Cont& arr) {
   Cont prefixs(sz(arr));
   inclusive_scan(all(arr), prefixs.begin(), plus(), 0LL);
+  return prefixs;
+}
+
+template <typename Cont>
+requires( !is_integral_v<typename Cont::value_type>)
+Cont pref_arr(Cont& arr) {
+  Cont prefixs(sz(arr));
+  inclusive_scan(all(arr), prefixs.begin(), plus(), typename Cont::value_type(0));
   return prefixs;
 }
 

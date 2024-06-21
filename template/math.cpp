@@ -162,6 +162,10 @@ struct Combo {
 
     return facts[2 * n] * inv_facts[n] * inv_facts[n + 1];
   }
+  T balance(int n) {
+    if (n % 2 != 0) return 0;
+    return catalan(n / 2);
+  }
 };
 
 template <typename T>
