@@ -2,30 +2,30 @@
 #include "../wrapper.h"
 struct Bool {
   // why does c++ specialize vector<bool> :pepehands:
-  bool m;
-  Bool() : m() {
+  bool v;
+  Bool() : v() {
   }
-  Bool(bool value) : m(value) {
+  Bool(bool value) : v(value) {
   }
 
   operator bool() const {
-    return m;
+    return v;
   }
 
   bool* operator&() {
-    return &m;
+    return &v;
   }
   const bool* operator&() const {
-    return &m;
+    return &v;
   }
   friend istream& operator>>(istream& in, Bool& b) {
     char c;
     in >> c;
-    b.m = c == '1';
+    b.v = c == '1';
     return in;
   }
   friend ostream& operator<<(ostream& os, const Bool& b) {
-    os << b.m;
+    os << b.v;
     return os;
   }
 };
