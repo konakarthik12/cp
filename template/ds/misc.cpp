@@ -60,8 +60,3 @@ struct FunQueue {
     return s1.size() + s2.size();
   }
 };
-
-template <typename T>
-void debug(ostream& out, const FunQueue<T>& q) {
-  debug(out, tuple{"len", q.size()});
-}
