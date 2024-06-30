@@ -43,10 +43,10 @@ void debug(pr<T, V> const& p) {
 
 template <size_t Index = 0, typename... Ts>
 void tuple_debug(const tuple<Ts...>& t) {
-  if constexpr (Index < sizeof...(Ts)) {
+  if cexp (Index < sizeof...(Ts)) {
     if (Index != 0) *dout << ", ";
     debug(get<Index>(t));
-    tuple_debug<Index + 1>(*dout, t);
+    tuple_debug<Index + 1>(t);
   }
 }
 
@@ -58,8 +58,8 @@ void debug(const tuple<Ts...>& t) {
 }
 
 template <typename T, typename V, typename U>
-void debug(priority_queue<T, V, U> p) {
-  vector<T> v;
+void debug(pqueue<T, V, U> p) {
+  vec<T> v;
   while (!p.empty()) {
     v.pb(p.top());
     p.pop();
@@ -111,7 +111,7 @@ void debug_all(Arg&& arg, Args&&... args) {
 #define deb(...) logger(__LINE__, false, #__VA_ARGS__, ##__VA_ARGS__);
 #define deb_n(...) logger(__LINE__, true, #__VA_ARGS__, ##__VA_ARGS__);
 template <typename... Args>
-void logger(int line, bool nest, string vars, Args&&... values) {
+void logger(int line, bool nest, str vars, Args&&... values) {
   if (vars.size() == 0) {
     *dout << "\n";
     return;
