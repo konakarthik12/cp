@@ -113,16 +113,6 @@ void iota(Con& v, const typename Con::value_type start, const typename Con::valu
 
 vpii dirs4 = vpii{{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
 
-template <size_t N>
-class bits : public bitset<N> {
- public:
-  using bitset<N>::bitset;
-
-  explicit operator int() const {
-    return (int) this->to_ullong();
-  }
-};
-
 template <class F>
 struct y_comb {
   F f;
