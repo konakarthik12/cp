@@ -93,6 +93,10 @@ struct Con {
     this->v.assign(size, x);
   }
 
+  void fill(T x = T()) {
+    std::fill(all(v), x);
+  }
+
   void pb(const T& element) {
     this->v.push_back(element);
   }
@@ -135,7 +139,7 @@ struct Con {
 
   template <typename Comp = less<T>>
     requires SortPredicate<T, Comp>
-  void sort(Comp comp = less<T>()) {
+  void sort(Comp comp = {}) {
     std::sort(this->v.begin(), this->v.end(), comp);
   }
 
@@ -198,6 +202,21 @@ struct Con {
   T min() {
     return *std::min_element(v.begin(), v.end());
   }
+
+  template <typename... Args>
+  auto count(Args&&... args) {
+    return std::count(this->v.begin(), this->v.end(), std::forward<Args>(args)...);
+  }
+
+  template <typename... Args>
+  auto count_if(Args&&... args) {
+    return v.count_if(std::forward<Args>(args)...);
+  }
+
+  auto append(const Con& other) {
+    this->v.insert(this->v.end(), other.begin(), other.end());
+  }
+
 };
 
 template <typename Iter, typename Proj = std::identity>
