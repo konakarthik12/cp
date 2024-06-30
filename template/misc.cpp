@@ -123,6 +123,14 @@ struct y_comb {
   }
 };
 
+struct YoN : Bool {
+  using Bool::Bool;
+  friend std::ostream& operator<<(std::ostream& os, const YoN& b) {
+    os << ((bool) b ? "YES" : "NO");
+    return os;
+  }
+};
+
 #ifndef LOCAL
 #define assume(cond)                      \
   do {                                    \
