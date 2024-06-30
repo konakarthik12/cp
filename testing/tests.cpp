@@ -72,8 +72,8 @@ TEST_CASE("containers") {
   vd arr2 = {1.0, 2.0, 3.0};
   CHECK(sum(arr) == Approx(6));
   CHECK(sum(arr) == Approx(6));
-  CHECK(is_same_v<decltype(sum(arr)), ll>);
-  CHECK(is_same_v<decltype(sum(arr2)), double>);
+  CHECK(same_as<decltype(sum(arr)), ll>);
+  CHECK(same_as<decltype(sum(arr2)), double>);
 }
 
 TEST_SUITE("input") {
@@ -104,7 +104,7 @@ TEST_SUITE("input") {
       9 10 11 12
     )"_cin_set;
     int n, m;
-    string s;
+    str s;
 
     read(n, m, s);
 
@@ -133,7 +133,7 @@ TEST_SUITE("input") {
       hello
     )"_cin_set;
     wc s1;
-    string s2;
+    str s2;
     read(s1, 7, s2);
 
     CHECK(s1 == wc{'a', 'b', 'c', 'd', 'e', 'f', 'g'});
@@ -171,7 +171,7 @@ TEST_CASE("testing_output") {
   println(x);
   println(arr);
   println(arr[3], arr1[3]);
-  string output = GetCapturedStdout();
+  str output = GetCapturedStdout();
   CHECK(output == "5\n1 2 3 4 5\n4 3\n");
 }
 

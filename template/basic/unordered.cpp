@@ -1,5 +1,6 @@
 #pragma once
-#include "../wrapper.h"
+#include "../entry.cpp"
+
 struct custom_hash {
   static uint64_t splitmix64(uint64_t x) {
     x += 0x9e3779b97f4a7c15;
@@ -14,6 +15,6 @@ struct custom_hash {
   }
 };
 template <class T>
-using uset = unordered_set<T, custom_hash>;
+using uset = std::unordered_set<T, custom_hash>;
 template <class T, class V>
-using umap = unordered_map<T, V, custom_hash>;
+using umap = std::unordered_map<T, V, custom_hash>;

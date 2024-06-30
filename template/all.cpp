@@ -1,5 +1,6 @@
 #pragma once
 
+#include "entry.cpp"
 #include "alias.cpp"
 #include "base.cpp"
 #include "concepts.cpp"
@@ -12,4 +13,3 @@
 #include "modint.cpp"
 #include "output.cpp"
 #include "views.cpp"
-#include "wrapper.h"

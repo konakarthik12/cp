@@ -1,10 +1,12 @@
 #pragma once
-#include "wrapper.h"
+#include "entry.cpp"
 
-#define sz(x) (int) size(x)
 
 #define all(x) begin(x), end(x)
 #define rall(x) rbegin(x), rend(x)
-#define fir first
-#define sec second
+
 #define cexp constexpr
+template <typename T>
+cexp auto sz(const T& container) -> decltype(std::size(container)) {
+  return std::size(container);
+}
