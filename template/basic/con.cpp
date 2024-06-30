@@ -1,6 +1,6 @@
 #pragma once
 #include "../concepts.cpp"
-
+#include "../scaffold.cpp"
 template <typename C>
 struct Con {
   using T = C::value_type;
@@ -70,6 +70,7 @@ struct Con {
   bool empty() const {
     return this->v.empty();
   }
+
   explicit operator bool() const {
     return !this->empty();
   }

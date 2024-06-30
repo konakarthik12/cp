@@ -1,5 +1,6 @@
 #pragma once
-#include "../wrapper.h"
+#include "../entry.cpp"
+
 struct Bool {
   // why does c++ specialize vector<bool> :pepehands:
   bool v;
@@ -29,12 +30,12 @@ struct Bool {
     return os;
   }
 };
+
 template <typename T>
 struct NotBool {
-  using type = T;
+  using type = conditional_t<same_as<T, bool>, Bool, T>;
 };
 
-template <>
-struct NotBool<bool> {
-  using type = Bool;
-};
+
+template <typename T>
+using NotBool_t = NotBool<T>::type;
