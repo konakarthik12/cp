@@ -15,4 +15,5 @@ PackConstructorInitializers: CurrentLine
 DerivePointerAlignment: false
 PointerAlignment: Left
 SortIncludes: Never
+FixNamespaceComments: false
 Standard: c++20
