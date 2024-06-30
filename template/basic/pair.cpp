@@ -10,7 +10,7 @@ struct pr {
 
   pr(T1 f, T2 s) : f(f), s(s) {
   }
-  pr(pair<T1, T2> spair) : f(spair.first), s(spair.second) {
+  pr(std::pair<T1, T2> p) : f(p.first), s(p.second) {
   }
 
   void sort() {
