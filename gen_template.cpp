@@ -1,6 +1,10 @@
+#ifndef NO_GEN_MAIN
 #define NO_MAIN
+#endif
 #include "template.cpp"
+
 int seed;
+using namespace std;
 
 ll rnd_internal(ll a, ll b) {
   assert(a <= b);
@@ -85,7 +89,7 @@ vi rnd_list_distinct(int n, int a, int b) {
   return vi{s};
 }
 
-vi rnd_permute(int n) {
+vi rnd_perm(int n) {
   vi arr(n);
   iota(all(arr), 1);
   shuffle(all(arr), rng);
@@ -96,7 +100,7 @@ bool rnd_bool() {
   return rnd(0, 1);
 }
 void generate();
-
+#ifndef NO_GEN_MAIN
 int main(int argc, char* argv[]) {
   if (argc == 2) {
     seed = atoi(argv[1]);
@@ -105,3 +109,5 @@ int main(int argc, char* argv[]) {
   }
   generate();
 }
+
+#endif

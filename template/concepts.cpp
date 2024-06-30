@@ -1,5 +1,6 @@
 #pragma once
-#include "wrapper.h"
+#include "entry.cpp"
+
 template <typename T>
 concept HasValueType = requires { typename T::value_type; };
 template <typename T>

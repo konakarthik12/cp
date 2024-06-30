@@ -3,17 +3,17 @@
 #include "alias.pre.cpp"
 #else
 #include "basic/all.cpp"
-#include "wrapper.h"
+#include "entry.cpp"
 
 using ll = long long;
 using ld = long double;
 using uint = unsigned int;
 using ull = unsigned long long;
 
-using str = string;
+using str = std::string;
 
-template <class T, class Compare = less<T>, class Container = vector<T>>
-using pqueue = priority_queue<T, Container, Compare>;
+template <class T, class Compare = less<T>, class Container = std::vector<T>>
+using pqueue = std::priority_queue<T, Container, Compare>;
 
 template <typename T>
 using vv = vec<vec<T>>;
@@ -69,13 +69,13 @@ using vvpll = vv<pll>;
 using vpcc = vec<pcc>;
 
 template <typename T>
-using opt = optional<T>;
+using opt = std::optional<T>;
 using si = set<int>;
+using msi = mset<int>;
+
 using spii = set<pii>;
 template <typename T>
 using vvv = vec<vv<T>>;
 using vvvi = vvv<int>;
-template <class T>
-using mset = multiset<T>;
 
 #endif
