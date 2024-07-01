@@ -33,9 +33,13 @@ struct Bool {
 
 template <typename T>
 struct NotBool {
-  using type = conditional_t<same_as<T, bool>, Bool, T>;
+  using type = T;
 };
 
+template <>
+struct NotBool<bool> {
+  using type = Bool;
+};
 
 template <typename T>
 using NotBool_t = NotBool<T>::type;
