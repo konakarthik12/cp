@@ -1,5 +1,5 @@
 #pragma once
-#include "../entry.cpp"
+#include "../scaffold.cpp"
 
 struct Bool {
   // why does c++ specialize vector<bool> :pepehands:

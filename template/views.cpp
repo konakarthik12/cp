@@ -1,10 +1,9 @@
 #pragma once
-#include "entry.cpp"
+#include "scaffold.cpp"
 
 template <typename V>
   requires HasIter<V>
 struct custom_adjacent_pairwise_view : public ranges::view_base {
-  //  using T = remove_reference_t<V>::value_type;
 
   V& data;
 

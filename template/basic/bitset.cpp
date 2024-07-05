@@ -1,5 +1,5 @@
 #pragma once
-#include "../entry.cpp"
+#include "../scaffold.cpp"
 
 template <size_t N>
 class bitset : public std::bitset<N> {

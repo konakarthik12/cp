@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../entry.cpp"
+#include "../scaffold.cpp"
 
 template <typename T, typename Comp = less<T>>
 struct mset {

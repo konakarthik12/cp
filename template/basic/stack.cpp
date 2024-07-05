@@ -1,5 +1,5 @@
 #pragma once
-#include "../entry.cpp"
+#include "../scaffold.cpp"
 #include "con.cpp"
 #include "bool.cpp"
 #include "wec.cpp"

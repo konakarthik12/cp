@@ -1,5 +1,5 @@
 #pragma once
-#include "../entry.cpp"
+#include "../scaffold.cpp"
 
 struct custom_hash {
   static uint64_t splitmix64(uint64_t x) {

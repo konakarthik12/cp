@@ -1,6 +1,5 @@
 #pragma once
 #include "base.cpp"
-#include "views.cpp"
 
 template <int MOD = 998244353>
 struct ModInt {

@@ -3,7 +3,7 @@
 #include "alias.pre.cpp"
 #else
 #include "basic/all.cpp"
-#include "entry.cpp"
+#include "scaffold.cpp"
 
 using ll = long long;
 using ld = long double;
