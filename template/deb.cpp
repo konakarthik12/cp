@@ -31,6 +31,15 @@ void debug(pair<T, V> const& p) {
   debug(p.second);
   *dout << ')';
 }
+template <typename T>
+concept Debuggable = requires(T t) {
+  { t.debug() } -> std::same_as<void>;
+};
+
+template <Debuggable T>
+void debug(T& x) {
+  x.debug();
+}
 
 template <typename T, typename V>
 void debug(pr<T, V> const& p) {

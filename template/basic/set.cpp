@@ -62,6 +62,10 @@ struct set {
   auto insert(Args&&... args) {
     return v.insert(std::forward<Args>(args)...);
   }
+  template<typename ...Args>
+  auto emplace(Args&&... args) {
+    return v.emplace(std::forward<Args>(args)...);
+  }
   template <typename U>
   auto erase(U&& x) {
     return v.erase(std::forward<U>(x));
@@ -86,5 +90,15 @@ struct set {
   auto clear() {
     return v.clear();
   }
+
+  auto lower_bound(T x) {
+    return v.lower_bound(x);
+  }
+  auto upper_bound(T x) {
+    return v.upper_bound(x);
+  }
+
+
+
 
 };

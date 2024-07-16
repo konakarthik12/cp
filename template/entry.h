@@ -55,16 +55,10 @@ using std::map;
 using std::pair;
 using std::predicate;
 using std::tuple;
-namespace ranges{
-using namespace std::ranges;
-}
-namespace chrono {
-using namespace std::chrono;
-}
-namespace views {
-using namespace std::views;
-}
 }
 
+namespace ranges = std::ranges;
+namespace chrono = std::chrono;
+namespace views = std::views;
 
 using namespace wrapped_std;

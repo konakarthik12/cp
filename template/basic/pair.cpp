@@ -19,6 +19,13 @@ struct pr {
   auto sum() {
     return f + s;
   }
+  pr<T1, T2> operator+(const pr<T1, T2>& other) const {
+    return {f + other.f, s + other.s};
+  }
+  void operator+=(const pr<T1, T2>& other) {
+    f += other.f;
+    s += other.s;
+  }
 };
 
 template <class T1, class T2>

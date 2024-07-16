@@ -7,7 +7,7 @@ void swapsort(T1& a, T2& b) {
 }
 
 template <typename T>
-int blen(T x) {
+constexpr int blen(T x) {
   if (x == 0) return 1;
   return bit_width(static_cast<make_unsigned_t<decltype(x)>>(x));
 }
@@ -88,9 +88,9 @@ template <typename T>
 cexp auto yes(T&& opt) {
   return optional(opt);
 }
-
+auto nopt = nullopt;
 cexp auto no() {
-  return nullopt;
+  return nopt;
 }
 wi invperm(const wi& arr) {
   wi ans(sz(arr));
@@ -100,16 +100,6 @@ wi invperm(const wi& arr) {
   return ans;
 }
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
-
-template <typename Con>
-void iota(Con& v, const typename Con::value_type start = typename Con::value_type(0)) {
-  iota(all(v), start);
-}
-template <typename Con>
-void iota(Con& v, const typename Con::value_type start, const typename Con::value_type end) {
-  v.resize(end - start + 1);
-  iota(v, start);
-}
 
 vpii dirs4 = vpii{{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
 

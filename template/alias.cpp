@@ -49,6 +49,7 @@ GENERATE_AB(ii, int, int)
 GENERATE_AB(dd, double, double)
 GENERATE_AB(cc, char, char)
 GENERATE_AB(ll, ll, ll)
+GENERATE_AB(bb, bool, bool)
 
 GENERATE_AB(ill, int, ll)
 GENERATE_AB(lli, ll, int)
@@ -65,7 +66,9 @@ using vpill = vec<pill>;
 
 using vipll = vec<pill>;
 using vvpll = vv<pll>;
-
+template <typename T>
+using www = wec<ww<T>>;
+using wwwi = www<int>;
 using vpcc = vec<pcc>;
 
 template <typename T>
@@ -74,8 +77,4 @@ using si = set<int>;
 using msi = mset<int>;
 
 using spii = set<pii>;
-template <typename T>
-using vvv = vec<vv<T>>;
-using vvvi = vvv<int>;
-
 #endif
