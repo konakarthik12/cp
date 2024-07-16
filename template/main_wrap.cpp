@@ -40,15 +40,6 @@ enable_if_t<!is_same_v<invoke_result_t<Func, int>, void>> call_print(Func func, 
   handle_print(result);
 }
 
-template <class F>
-struct y_comb {
-  F f;
-
-  template <class... Args>
-  decltype(auto) operator()(Args&&... args) const {
-    return f(*this, std::forward<Args>(args)...);
-  }
-};
 template <typename Func>
 enable_if_t<is_invocable_v<Func>, void> handle_solve(Func func) {
   call_print(func);

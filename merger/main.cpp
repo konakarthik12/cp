@@ -23,7 +23,7 @@ int main() {
                                        "-iquote", ".",
                                        "-iquote", "template/",
                                        "-iquote", "build/preprocess/",
-                                       "-include-pch", "build/wrapper.h.pch"
+//                                       "-include-pch", "build/wrapper.h.pch"
     };
 
     for (const auto &item: isystemDirs) {

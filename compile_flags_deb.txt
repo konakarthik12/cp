@@ -12,5 +12,3 @@
 -Wextra
 -Wshadow
 -Wno-sign-conversion
--include-pch
-/opt/homebrew/opt/llvm/bin/../include/c++/v1/bits/stdc++.h.pch.deb

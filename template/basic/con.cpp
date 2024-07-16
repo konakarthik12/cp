@@ -3,7 +3,7 @@
 #include "../scaffold.cpp"
 template <typename C>
 struct Con {
-  using T = C::value_type;
+  using T = typename C::value_type;
   using value_type = T;
   C v;
 
@@ -13,10 +13,10 @@ struct Con {
   }
   explicit Con(int size, T init) : v(size, init) {
   }
-  template <typename Container>
-    requires HasIter<Container>
-  explicit Con(const Container& cnt) : v(cnt.begin(), cnt.end()) {
-  }
+//  template <typename Container>
+//    requires HasIter<Container>
+//  explicit Con(const Container& cnt) : v(cnt.begin(), cnt.end()) {
+//  }
   Con(initializer_list<T> initList) : v(initList.size()) {
     auto it = v.begin();
     for (const auto& value: initList) {
@@ -126,9 +126,9 @@ struct Con {
     return this->v == other.v;
   }
 
-  auto operator<=>(const Con& other) const {
-    return this->v <=> other.v;
-  }
+//  auto operator<=>(const Con& other) const {
+//    return this->v <=> other.v;
+//  }
 
   void iota(int n) {
     this->iota(1, n);
@@ -139,17 +139,12 @@ struct Con {
   }
 
   template <typename Comp = less<T>>
-    requires SortPredicate<T, Comp>
+//    requires SortPredicate<T, Comp>
   void sort(Comp comp = {}) {
     std::sort(this->v.begin(), this->v.end(), comp);
   }
 
-  template <class Proj = std::identity, class Comp = ranges::less>
-    requires(!SortPredicate<T, Proj>)
-  void sort(Proj proj, Comp comp = {}) {
-    std::ranges::sort(this->v, comp, proj);
-  }
-
+//
   auto rsort() {
     return this->sort(greater());
   }
@@ -164,12 +159,12 @@ struct Con {
   auto prev_perm() {
     return std::prev_permutation(v.begin(), v.end());
   }
-
-  template <typename Pred>
-    requires predicate<Pred, T>
-  auto partition(Pred p) {
-    return std::partition(v.begin(), v.end(), p);
-  }
+//
+//  template <typename Pred>
+//    requires predicate<Pred, T>
+//  auto partition(Pred p) {
+//    return std::partition(v.begin(), v.end(), p);
+//  }
   auto is_sorted() {
     return std::is_sorted(v.begin(), v.end());
   }
@@ -243,8 +238,3 @@ struct Con {
   }
 };
 
-template <typename Iter, typename Proj = std::identity>
-  requires(!SortPredicate<decltype(*Iter()), Proj>)
-void sort(Iter first, Iter last, Proj proj) {
-  std::ranges::sort(first, last, ranges::less{}, proj);
-}

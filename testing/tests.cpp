@@ -64,7 +64,6 @@ TEST_CASE("vectors") {
   CHECK(data3);
   CHECK(!data4);
 }
-
 TEST_CASE("containers") {
   vi arr = {1, 2, 3};
   CHECK(sum(arr) == 6);
@@ -72,8 +71,8 @@ TEST_CASE("containers") {
   vd arr2 = {1.0, 2.0, 3.0};
   CHECK(sum(arr) == Approx(6));
   CHECK(sum(arr) == Approx(6));
-  CHECK(same_as<decltype(sum(arr)), ll>);
-  CHECK(same_as<decltype(sum(arr2)), double>);
+  CHECK(is_same_v<decltype(sum(arr)), ll>);
+  CHECK(is_same_v<decltype(sum(arr2)), double>);
 }
 
 TEST_SUITE("input") {
@@ -158,8 +157,8 @@ TEST_SUITE("containers") {
     auto lamb = [&](pii& a, pii& b) { return a.f < b.f; };
     arr.sort(lamb);
     CHECK(arr == wpii{{1, 2}, {2, 1}});
-    arr.sort(&pii::s);
-    CHECK(arr == wpii{{2, 1}, {1, 2}});
+//    arr.sort(&pii::s);
+//    CHECK(arr == wpii{{2, 1}, {1, 2}});
   }
 }
 
@@ -176,17 +175,17 @@ TEST_CASE("testing_output") {
 }
 
 TEST_CASE("misc") {
-//  vi arr = {1, 2, 3, 4, 5};
-//  vpii prs;
+  vi arr = {1, 2, 3, 4, 5};
+  vpii prs;
 //  for (auto [a, b]: arr | pairwise) {
 //    prs.eb(a, b);
 //  }
 //  CHECK(prs == vpii{{1, 2}, {2, 3}, {3, 4}, {4, 5}});
-  prs.clear();
-  for (auto [a, b]: arr | pairwise | rview) {
-    prs.eb(a, b);
-  }
-  CHECK(prs == vpii{{4, 5}, {3, 4}, {2, 3}, {1, 2}});
+//  prs.clear();
+//  for (auto [a, b]: arr | pairwise | rview) {
+//    prs.eb(a, b);
+//  }
+//  CHECK(prs == vpii{{4, 5}, {3, 4}, {2, 3}, {1, 2}});
   CHECK(blen(15) == 4);
   CHECK(blen(16) == 5);
 
@@ -203,16 +202,16 @@ void solve() {
   if (res != 0) exit(res);
 }
 
-namespace doctest {
-template <Readable1D T>
-struct StringMaker<T> {
-  static String convert(const T& value) {
-    ostream* old = dout;
-    stringstream sstream;
-    dout = &sstream;
-    debug_all(value);
-    dout = old;
-    return String(sstream.str().c_str());
-  }
-};
-}  // namespace doctest
+//namespace doctest {
+//template <Readable1D T>
+//struct StringMaker<T> {
+//  static String convert(const T& value) {
+//    ostream* old = dout;
+//    stringstream sstream;
+//    dout = &sstream;
+//    debug_all(value);
+//    dout = old;
+//    return String(sstream.str().c_str());
+//  }
+//};
+//}  // namespace doctest

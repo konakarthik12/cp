@@ -27,45 +27,18 @@ double to_rad(double degrees) {
   return degrees * (pi / 180);
 }
 
-template <typename T>
-struct expand_ll_s {
-  using type = T;
-};
-
-template <integral T>
-  requires is_signed_v<T>
-struct expand_ll_s<T> {
-  using type = ll;
-};
-
-template <integral T>
-  requires is_unsigned_v<T>
-struct expand_ll_s<T> {
-  using type = ull;
-};
-
-template <typename T>
-using expand_ll = typename expand_ll_s<T>::type;
-
-template <typename T>
-expand_ll<T> asum(T a) {
-  if cexp (same_as<T, ll>) dssert(a >= 0);
-  return (expand_ll<T>) (a + 1) * a / 2;
+ll asum(ll a) {
+  return (a + 1) * a / 2;
 }
-template <typename T>
-expand_ll<T> asum(T a, T b) {
-  if (b < a) return 0;
-  if cexp (same_as<expand_ll<T>, ll>) dssert(b >= a);
-  return (expand_ll<T>) (b + a) * (b - a + 1) / 2;
+ll asum(ll a, ll b) {
+  return (b + a) * (b - a + 1) / 2;
 }
-template <typename T>
-expand_ll<T> asum(T a, T b, T c) {
-  if (b < a) return 0;
-  if cexp (same_as<T, ll>) dssert(a >= 0 && b >= a && c >= 1);
-  expand_ll<T> n = (b - a) / c + 1;
-  expand_ll<T> sum = (expand_ll<T>) (n * (2 * a + (n - 1) * c)) / 2;
+ll asum(ll a, ll b, ll c) {
+  ll n = (b - a) / c + 1;
+  ll sum = (n * (2 * a + (n - 1) * c)) / 2;
   return sum;
 }
+
 vb sieve_raw(int max_n) {
   vb is_prime(max_n + 1, true);
   is_prime[0] = false;

@@ -1,12 +1,7 @@
 #pragma once
 #include "base.cpp"
-ostream* dout = &cerr;
 
-template <typename Container>
-  requires(HasValueType1D<Container> && !Printable<Container>)
-void debug(Container v);
-template <typename T, typename V>
-void debug(pr<T, V> const& p);
+ostream* dout = &cerr;
 
 template <const unsigned long N>
 void debug(typename bitset<N>::reference v) {
@@ -24,45 +19,13 @@ enable_if_t<Printable<T>::value> debug(T x) {
 
 template <typename T, typename V>
 void debug(pair<T, V> const& p) {
-  *dout << '(';
-  debug(p.first);
-  *dout << ", ";
-  debug(p.second);
-  *dout << ')';
-}
-template <typename T>
-concept Debuggable = requires(T t) {
-  { t.debug() } -> std::same_as<void>;
-};
 
-template <Debuggable T>
-void debug(T& x) {
-  x.debug();
+  *dout << '(' << p.first << ", " << p.second << ')';
 }
 
 template <typename T, typename V>
 void debug(pr<T, V> const& p) {
-  *dout << '(';
-  debug(p.f);
-  *dout << ", ";
-  debug(p.s);
-  *dout << ')';
-}
-
-template <size_t Index = 0, typename... Ts>
-void tuple_debug(const tuple<Ts...>& t) {
-  if cexp (Index < sizeof...(Ts)) {
-    if (Index != 0) *dout << ", ";
-    debug(get<Index>(t));
-    tuple_debug<Index + 1>(t);
-  }
-}
-
-template <typename... Ts>
-void debug(const tuple<Ts...>& t) {
-  *dout << "(";
-  tuple_debug(t);
-  *dout << ")";
+  *dout << '(' << p.f << ", " << p.s << ')';
 }
 
 template <typename T, typename V, typename U>
@@ -72,12 +35,11 @@ void debug(pqueue<T, V, U> p) {
     v.pb(p.top());
     p.pop();
   }
-  debug(v);
+  debug(dout, v);
 }
-
 template <typename Container>
-enable_if_t<HasValueType1D<Container>::value> debug(ostream& os, Container v) {
-  os << '[';
+enable_if_t<HasValueType1D<Container>::value && !Printable<Container>::value> debug(Container v) {
+  *dout << '[';
   for (auto it = v.begin(); it != v.end(); ++it) {
     if (it != v.begin()) {
       *dout << ", ";
@@ -88,7 +50,7 @@ enable_if_t<HasValueType1D<Container>::value> debug(ostream& os, Container v) {
 }
 
 template <typename Container>
-  enable_if_t<HasValueType2D<Container>::value> debug(Container v) {
+enable_if_t<HasValueType2D<Container>::value> debug(Container v) {
   *dout << "\n[";
   for (auto it = v.begin(); it != v.end(); ++it) {
     if (it != v.begin()) {
@@ -132,6 +94,8 @@ void logger(int line, bool nest, str vars, Args&&... values) {
   *dout << "\033[30;1m" << line << ": ";
   *dout << vars << " = ";
   debug_all(values...);
+  //  logger(*dout, line, nest, vars, forward<Args>(values)...)
+  //  (..., (*dout << delim << values, delim = ", "));
   *dout << "\033[0m\n";
 }
 #define dssert(...) assert(__VA_ARGS__);

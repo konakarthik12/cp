@@ -9,11 +9,13 @@ void swapsort(T1& a, T2& b) {
 template <typename T>
 constexpr int blen(T x) {
   if (x == 0) return 1;
-  return bit_width(static_cast<make_unsigned_t<decltype(x)>>(x));
+  using U = make_unsigned_t<T>;
+//  return bit_width(static_cast<make_unsigned_t<decltype(x)>>(x));
+  return std::numeric_limits<U>::digits - std::__countl_zero(static_cast<U>(x));
 }
 
 template <typename T, typename V>
-  requires Numeric<V>
+//  requires Numeric<V>
 T mode(map<T, V> items) {
   T mode = items.begin()->first;
   V max_count = items.begin()->second;
