@@ -6,6 +6,8 @@
 -fno-sanitize-recover=undefined,address
 -DLOCAL
 -D_LIBCPP_ENABLE_ASSERTIONS
+-D_GLIBCXX_DEBUG
+-ggdb3
 -Wall
 -Wextra
 -Wshadow
