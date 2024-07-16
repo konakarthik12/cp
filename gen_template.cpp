@@ -38,35 +38,6 @@ int rnd_not(int a, int b, int exclude) {
   }
   return n;
 }
-vpii pruefer_decode(vec<int> const& code) {
-  int n = code.size() + 2;
-  vec<int> degree(n, 1);
-  for (int i: code) {
-    degree[i]++;
-  }
-
-  int ptr = 0;
-  while (degree[ptr] != 1) {
-    ptr++;
-  }
-  int leaf = ptr;
-
-  vpii edges;
-  for (int v: code) {
-    edges.eb(leaf, v);
-    if (--degree[v] == 1 && v < ptr) {
-      leaf = v;
-    } else {
-      ptr++;
-      while (degree[ptr] != 1) {
-        ptr++;
-      }
-      leaf = ptr;
-    }
-  }
-  edges.eb(leaf, n - 1);
-  return edges;
-}
 
 template <typename T>
 vec<T> rnd_list(int n, T a, T b) {
@@ -99,6 +70,46 @@ vi rnd_perm(int n) {
 bool rnd_bool() {
   return rnd(0, 1);
 }
+
+wpii pruefer_decode(vec<int> const& code) {
+  int n = code.size() + 2;
+  vi degree(n, 1);
+  for (int i: code) {
+    degree[i]++;
+  }
+
+  int ptr = 0;
+  while (degree[ptr] != 1) {
+    ptr++;
+  }
+  int leaf = ptr;
+
+  wpii edges;
+  for (int v: code) {
+    edges.eb(leaf, v);
+    if (--degree[v] == 1 && v < ptr) {
+      leaf = v;
+    } else {
+      ptr++;
+      while (degree[ptr] != 1) {
+        ptr++;
+      }
+      leaf = ptr;
+    }
+  }
+  edges.eb(leaf, n - 1);
+  for (auto& [a, b]: edges) {
+    a++;
+    b++;
+  }
+  return edges;
+}
+
+wpii rnd_tree(int n) {
+  if (n == 1) return {};
+  return pruefer_decode(rnd_list(n - 2, 0, n - 1));
+}
+
 void generate();
 #ifndef NO_GEN_MAIN
 int main(int argc, char* argv[]) {
