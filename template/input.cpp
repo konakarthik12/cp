@@ -1,7 +1,6 @@
 #pragma once
 
 #include "base.cpp"
-#include "basic/wec.cpp"
 #include "concepts.cpp"
 
 template <typename T>
