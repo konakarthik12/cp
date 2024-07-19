@@ -144,21 +144,12 @@ int readInt() {
   return x;
 }
 
-template <class T>
-void read_count(map<T, int>& m, int n) {
-  for (int i = 0; i < n; i++) {
-    T temp;
-    read(temp);
-    m[temp]++;
-  }
-}
-
 template <class T, class Comp = less<T>()>
-void read_count(map<T, int, Comp>& m, int n) {
+void read_cnt(map<T, int, Comp>& m, int n) {
   m.clear();
   for (int i = 0; i < n; i++) {
     T temp;
-    rd(temp);
+    read(temp);
     m[temp]++;
   }
 }

@@ -19,13 +19,20 @@ enable_if_t<Printable<T>::value> debug(T x) {
 
 template <typename T, typename V>
 void debug(pair<T, V> const& p) {
-
-  *dout << '(' << p.first << ", " << p.second << ')';
+  *dout << '(';
+  debug(p.first);
+  *dout << ", ";
+  debug(p.second);
+  *dout << ')';
 }
 
 template <typename T, typename V>
 void debug(pr<T, V> const& p) {
-  *dout << '(' << p.f << ", " << p.s << ')';
+  *dout << '(';
+  debug(p.f);
+  *dout << ", ";
+  debug(p.s);
+  *dout << ')';
 }
 
 template <typename T, typename V, typename U>
