@@ -8,13 +8,13 @@ struct set {
   set() {
   }
 
-  set(const std::set<T>& v) : v(v) {
+  set(const std::set<T>& v): v(v) {
   }
 
-  set(const set& s) : v(s.v) {
+  set(const set& s): v(s.v) {
   }
 
-  set(set&& s) : v(std::move(s.v)) {
+  set(set&& s): v(std::move(s.v)) {
   }
 
   set& operator=(const set& s) {
@@ -34,19 +34,19 @@ struct set {
     return v.end();
   }
 
-  auto front() {
+  auto min() {
     return *v.begin();
   }
 
-  auto back() {
+  auto max() {
     return *v.rbegin();
   }
 
-  auto front() const {
+  auto min() const {
     return *v.begin();
   }
 
-  auto back() const {
+  auto max() const {
     return *v.rbegin();
   }
 
@@ -58,11 +58,11 @@ struct set {
     v.erase(std::prev(v.end()));
   }
 
-  template<typename ...Args>
+  template <typename... Args>
   auto insert(Args&&... args) {
     return v.insert(std::forward<Args>(args)...);
   }
-  template<typename ...Args>
+  template <typename... Args>
   auto emplace(Args&&... args) {
     return v.emplace(std::forward<Args>(args)...);
   }
@@ -97,8 +97,4 @@ struct set {
   auto upper_bound(T x) {
     return v.upper_bound(x);
   }
-
-
-
-
 };

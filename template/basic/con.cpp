@@ -196,6 +196,10 @@ struct Con {
   auto upper_bound(const T& x, Compare comp = {}) {
     return std::upper_bound(v.begin(), v.end(), x, comp);
   }
+  auto sum() {
+    if cexp (is_integral_v<T>) return reduce(this->begin(), this->end(), 0LL);
+    else return reduce(this->begin(), this->end(), T(0));
+  }
 
   T max() {
     return *std::max_element(v.begin(), v.end());
@@ -217,7 +221,6 @@ struct Con {
   auto append(const Con& other) {
     this->v.insert(this->v.end(), other.begin(), other.end());
   }
-
 };
 
 template <typename Iter, typename Proj = std::identity>

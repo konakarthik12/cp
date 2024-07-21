@@ -54,6 +54,7 @@ GENERATE_AB(bb, bool, bool)
 GENERATE_AB(ill, int, ll)
 GENERATE_AB(lli, ll, int)
 GENERATE_AB(ci, char, int)
+GENERATE_AB(ic, int, char)
 
 GENERATE_SINGLE(pii, pii)
 

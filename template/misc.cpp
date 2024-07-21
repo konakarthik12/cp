@@ -92,6 +92,9 @@ auto nopt = nullopt;
 cexp auto no() {
   return nopt;
 }
+auto near(auto iter) {
+  return pr{prev(iter), next(iter)};
+}
 wi invperm(const wi& arr) {
   wi ans(sz(arr));
   for (int i = 1; i <= sz(arr); i++) {
@@ -120,7 +123,6 @@ struct YoN : Bool {
     return os;
   }
 };
-
 #ifndef LOCAL
 #define assume(cond)                      \
   do {                                    \
