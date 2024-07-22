@@ -103,7 +103,8 @@ auto nopt = nullopt;
 cexp auto no() {
   return nopt;
 }
-auto near(auto iter) {
+template <typename T>
+pr<T, T> near(T iter) {
   return pr{prev(iter), next(iter)};
 }
 wi invperm(const wi& arr) {

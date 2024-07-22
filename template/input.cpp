@@ -66,6 +66,7 @@ template <typename Container>
 enable_if_t<HasValueType<Container>::value> __read(Container& v, int n) {
   using T = typename Container::value_type;
   reserve(v, n);
+  v.clear();
   for (int i = 0; i < n; i++) {
     T x;
     __read(x);

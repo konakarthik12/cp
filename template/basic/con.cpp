@@ -211,8 +211,8 @@ struct Con {
     return *prev(upper_bound(x, comp));
   }
 
-  auto sum() {
-    if cexp (is_integral_v<T>) return reduce(this->begin(), this->end(), 0LL);
+  typename conditional<is_integral_v<T>, long long, T>::type sum() {
+    if cexp (is_integral_v<T>) return accumulate(this->begin(), this->end(), 0LL);
     else return reduce(this->begin(), this->end(), T(0));
   }
 

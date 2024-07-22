@@ -33,8 +33,11 @@ using std::random_access_iterator_tag;
 using std::setprecision;
 using std::size;
 using std::stringstream;
+using std::conditional;
 using std::swap;
 using std::tie;
+using std::not_fn;
+using std::accumulate;
 
 using std::common_type_t;
 using std::conditional_t;
