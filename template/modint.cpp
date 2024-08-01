@@ -1,9 +1,41 @@
 #pragma once
 #include "base.cpp"
 
-template <int MOD = 998244353>
-struct ModInt {
+template <typename T>
+struct ModIntBase {
   int value;
+
+  bool operator==(const T& b) const {
+    return value == b.value;
+  }
+  bool operator!=(const T& b) const {
+    return value != b.value;
+  }
+  explicit operator int() const {
+    return value;
+  }
+  friend T operator+(T a, T const b) {
+    return a += b;
+  }
+
+  friend T operator-(T a, T const b) {
+    return a -= b;
+  }
+  friend T operator*(T a, T const b) {
+    return a *= b;
+  }
+  friend T operator/(T a, T const b) {
+    return a /= b;
+  }
+  friend T operator-(T const a) {
+    return 0 - a;
+  }
+
+};
+
+template <int MOD = 998244353>
+struct ModInt : public ModIntBase<ModInt<MOD>> {
+  using ModIntBase<ModInt<MOD>>::value;
 
   ModInt(ll v = 0) {
     value = v % MOD;
@@ -11,7 +43,8 @@ struct ModInt {
       value += MOD;
     }
   }
-  ModInt(ModInt a, ll e) : value(1) {
+  ModInt(ModInt a, ll e) {
+    value = 1;
     while (e) {
       if (e & 1) {
         *this *= a;
@@ -20,61 +53,92 @@ struct ModInt {
       e >>= 1;
     }
   }
+
   ModInt(ll a, ll e) : ModInt(ModInt(a), e) {
   }
 
-  ModInt& operator+=(ModInt const& b) {
+  ModInt& operator+=(const ModInt& b) {
     value += b.value;
-    if (value >= MOD) {
-      value -= MOD;
-    }
+    if (value >= MOD) value -= MOD;
     return *this;
   }
-  ModInt& operator-=(ModInt const& b) {
+
+  ModInt& operator-=(const ModInt& b) {
     value -= b.value;
-    if (value < 0) {
-      value += MOD;
-    }
+    if (value < 0) value += MOD;
     return *this;
   }
-  ModInt& operator*=(ModInt const& b) {
+
+  ModInt& operator*=(const ModInt& b) {
     value = (ll) value * b.value % MOD;
     return *this;
   }
-
-  friend ModInt inverse(ModInt a) {
-    return ModInt(a, MOD - 2);
+  ModInt& operator/=(const ModInt& b) {
+    return *this *= b.inverse();
   }
 
-  ModInt& operator/=(ModInt const& b) {
-    return *this *= inverse(b);
+  ModInt inverse() const {
+    return ModInt(*this, MOD - 2);
   }
-  friend ModInt operator+(ModInt a, ModInt const b) {
-    return a += b;
+  istream& operator>>(istream& is) {
+    is >> value;
+    value %= MOD;
+    return is;
   }
-  friend ModInt operator-(ModInt a, ModInt const b) {
-    return a -= b;
+};
+
+struct DynModInt : public ModIntBase<DynModInt> {
+  int mod;
+
+  DynModInt(int mod, ll v = 0) : mod(mod) {
+    value = v % mod;
+    if (value < 0) {
+      value += mod;
+    }
   }
-  friend ModInt operator-(ModInt const a) {
-    return 0 - a;
+
+  DynModInt(DynModInt a, ll e) : mod(a.mod) {
+    value = 1;
+    while (e) {
+      if (e & 1) {
+        *this *= a;
+      }
+      a *= a;
+      e >>= 1;
+    }
   }
-  friend ModInt operator*(ModInt a, ModInt const b) {
-    return a *= b;
+
+  DynModInt(ll a, ll e, int mod) : DynModInt(DynModInt(mod, a), e) {
   }
-  friend ModInt operator/(ModInt a, ModInt const b) {
-    return a /= b;
+
+  DynModInt& operator+=(const DynModInt& b) {
+    value += b.value;
+    if (value >= mod) {
+      value -= mod;
+    }
+    return *this;
   }
-  friend ostream& operator<<(ostream& os, ModInt const& a) {
-    return os << a.value;
+  DynModInt& operator-=(const DynModInt& b) {
+    value -= b.value;
+    if (value < 0) {
+      value += mod;
+    }
+    return *this;
   }
-  friend bool operator==(ModInt const& a, ModInt const& b) {
-    return a.value == b.value;
+  DynModInt& operator*=(const DynModInt& b) {
+    value = (ll) value * b.value % mod;
+    return *this;
   }
-  friend bool operator!=(ModInt const& a, ModInt const& b) {
-    return a.value != b.value;
+  DynModInt& operator/=(const DynModInt& b) {
+    return *this *= b.inverse();
   }
-  explicit operator int() {
-    return value;
+  DynModInt inverse() const {
+    return DynModInt(*this, this->mod - 2);
+  }
+  istream& operator>>(istream& is) {
+    is >> value;
+    value %= mod;
+    return is;
   }
 };
 
@@ -131,9 +195,3 @@ struct ModDouble {
     return value;
   }
 };
-
-template <int MOD>
-void __read(ModInt<MOD>& x) {
-  cin >> x.value;
-  x.value %= MOD;
-}
