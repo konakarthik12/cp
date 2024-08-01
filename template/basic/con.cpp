@@ -196,6 +196,26 @@ struct Con {
   auto upper_bound(const T& x, Compare comp = {}) {
     return std::upper_bound(v.begin(), v.end(), x, comp);
   }
+
+  template <class Compare = std::less<>>
+  auto gr(const T& x, Compare comp = {}) {
+    return *upper_bound(x, comp);
+  }
+
+  template <class Compare = std::less<>>
+  auto ge(const T& x, Compare comp = {}) {
+    return *lower_bound(x, comp);
+  }
+
+  template <class Compare = std::less<>>
+  auto ls(const T& x, Compare comp = {}) {
+    return *prev(lower_bound(x, comp));
+  }
+  template <class Compare = std::less<>>
+  auto le(const T& x, Compare comp = {}) {
+    return *prev(upper_bound(x, comp));
+  }
+
   auto sum() {
     if cexp (is_integral_v<T>) return reduce(this->begin(), this->end(), 0LL);
     else return reduce(this->begin(), this->end(), T(0));

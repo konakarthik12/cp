@@ -44,15 +44,15 @@ void fill(C& vec, T value) {
   fill(all(vec), value);
 }
 
-template <typename Cont>
-vll prefix_sum(Cont& arr) {
-  vll prefixs(sz(arr) + 1);
-  inclusive_scan(all(arr), prefixs.begin() + 1, plus(), 0LL);
+template <typename Out = ll, typename Cont>
+vec<Out> prefix_sum(Cont& arr) {
+  vec<Out> prefixs(sz(arr) + 1);
+  inclusive_scan(all(arr), prefixs.begin() + 1, plus(), Out(0));
   return prefixs;
 }
 
 template <typename Cont>
-requires is_integral_v<typename Cont::value_type>
+  requires is_integral_v<typename Cont::value_type>
 Cont pref_arr(Cont& arr) {
   Cont prefixs(sz(arr));
   inclusive_scan(all(arr), prefixs.begin(), plus(), 0LL);
@@ -60,7 +60,7 @@ Cont pref_arr(Cont& arr) {
 }
 
 template <typename Cont>
-requires( !is_integral_v<typename Cont::value_type>)
+  requires(!is_integral_v<typename Cont::value_type>)
 Cont pref_arr(Cont& arr) {
   Cont prefixs(sz(arr));
   inclusive_scan(all(arr), prefixs.begin(), plus(), typename Cont::value_type(0));

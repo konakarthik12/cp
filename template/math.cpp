@@ -54,11 +54,13 @@ expand_ll<T> asum(T a) {
 }
 template <typename T>
 expand_ll<T> asum(T a, T b) {
-  if cexp (same_as<T, ll>) dssert(a >= 0 && b >= a);
+  if (b < a) return 0;
+  if cexp (same_as<expand_ll<T>, ll>) dssert(b >= a);
   return (expand_ll<T>) (b + a) * (b - a + 1) / 2;
 }
 template <typename T>
 expand_ll<T> asum(T a, T b, T c) {
+  if (b < a) return 0;
   if cexp (same_as<T, ll>) dssert(a >= 0 && b >= a && c >= 1);
   expand_ll<T> n = (b - a) / c + 1;
   expand_ll<T> sum = (expand_ll<T>) (n * (2 * a + (n - 1) * c)) / 2;

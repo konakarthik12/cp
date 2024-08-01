@@ -40,6 +40,8 @@ using std::swap;
 using std::tie;
 using std::variant;
 using std::integral;
+using std::forward;
+using std::not_fn;
 
 using std::common_type_t;
 using std::conditional_t;
