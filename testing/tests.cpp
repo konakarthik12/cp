@@ -16,13 +16,25 @@ int main(int argc, char** argv) {
 
   return res;
 }
-TEST_CASE("testing modint") {
-  using Mi = ModInt<17>;
-  Mi x = 11;
-  Mi y = 12;
-  CHECK(x + y == Mi(6));
-  CHECK(x * y == Mi(13));
-  CHECK((x * 3 + y) / 5 == Mi(9));
+TEST_SUITE("testing modint") {
+  TEST_CASE("static mod") {
+    using Mi = ModInt<17>;
+    Mi x = 11;
+    Mi y = 12;
+    CHECK(x + y == Mi(6));
+    CHECK(x * y == Mi(13));
+    CHECK((x * 3 + y) / 5 == Mi(9));
+  }
+
+  TEST_CASE("dynamic mod") {
+    using DMi = DynModInt;
+    DMi::mod = 17;
+    DMi x = 11;
+    DMi y = 12;
+    CHECK(x + y == DMi(6));
+    CHECK(x * y == DMi(13));
+    CHECK((x * 3 + y) / 5 == DMi(9));
+  }
 }
 
 TEST_CASE("testing combinatorics") {

@@ -25,10 +25,14 @@ struct ModIntBase {
     return a *= b;
   }
   friend T operator/(T a, T const b) {
+    assert(b != 0);
     return a /= b;
   }
   friend T operator-(T const a) {
     return 0 - a;
+  }
+  friend ostream& operator<<(ostream& os, T const& a) {
+    return os << a.value;
   }
 
 };
@@ -73,6 +77,7 @@ struct ModInt : public ModIntBase<ModInt<MOD>> {
     value = (ll) value * b.value % MOD;
     return *this;
   }
+
   ModInt& operator/=(const ModInt& b) {
     return *this *= b.inverse();
   }
@@ -80,24 +85,23 @@ struct ModInt : public ModIntBase<ModInt<MOD>> {
   ModInt inverse() const {
     return ModInt(*this, MOD - 2);
   }
-  istream& operator>>(istream& is) {
-    is >> value;
-    value %= MOD;
+
+  friend istream& operator>>(istream& is, ModInt& m) {
+    is >> m.value;
+    m.value %= MOD;
     return is;
   }
 };
 
 struct DynModInt : public ModIntBase<DynModInt> {
-  int mod;
+  static int mod;
 
-  DynModInt(int mod, ll v = 0) : mod(mod) {
+  DynModInt(ll v = 0) {
     value = v % mod;
-    if (value < 0) {
-      value += mod;
-    }
+    if (value < 0) value += mod;
   }
 
-  DynModInt(DynModInt a, ll e) : mod(a.mod) {
+  DynModInt(DynModInt a, ll e) {
     value = 1;
     while (e) {
       if (e & 1) {
@@ -108,7 +112,7 @@ struct DynModInt : public ModIntBase<DynModInt> {
     }
   }
 
-  DynModInt(ll a, ll e, int mod) : DynModInt(DynModInt(mod, a), e) {
+  DynModInt(ll a, ll e) : DynModInt(DynModInt(a), e) {
   }
 
   DynModInt& operator+=(const DynModInt& b) {
@@ -135,12 +139,13 @@ struct DynModInt : public ModIntBase<DynModInt> {
   DynModInt inverse() const {
     return DynModInt(*this, this->mod - 2);
   }
-  istream& operator>>(istream& is) {
-    is >> value;
-    value %= mod;
+  friend istream& operator>>(istream& is, DynModInt& m) {
+    is >> m.value;
+    m.value %= m.mod;
     return is;
   }
 };
+int DynModInt::mod = 998244353;
 
 struct ModDouble {
   ld value;
