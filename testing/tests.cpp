@@ -77,15 +77,31 @@ TEST_CASE("vectors") {
   CHECK(!data4);
 }
 
-TEST_CASE("containers") {
-  vi arr = {1, 2, 3};
-  CHECK(sum(arr) == 6);
+TEST_SUITE("containers") {
+  int big = 1e9;
+  ll bigl = 1e9;
+  vi ints = {big, big, big, big};
+  vd doubles = {1.0, 2.0, 3.0};
+  vb bools = {false, false, true, true};
+  wll longs = {1, 2, 3, 4, 5};
+  TEST_CASE("sum") {
+    CHECK(sum(ints) == bigl * 4);
 
-  vd arr2 = {1.0, 2.0, 3.0};
-  CHECK(sum(arr) == Approx(6));
-  CHECK(sum(arr) == Approx(6));
-  CHECK(same_as<decltype(sum(arr)), ll>);
-  CHECK(same_as<decltype(sum(arr2)), double>);
+    CHECK(sum(doubles) == Approx(6));
+    CHECK(same_as<decltype(sum(ints)), ll>);
+    CHECK(same_as<decltype(sum(doubles)), double>);
+  }
+
+  TEST_CASE("prefix") {
+    // static_assert(same_as<decltype(bools.pref_arr()), wec<int>>);
+    // CHECK(bools.prefix_arr() == vi{0, 0, 0, 1, 2});
+    // CHECK(ints.prefix_arr() == vll{0, bigl, bigl * 2, bigl * 3, bigl * 4});
+    // CHECK(longs.prefix_arr() == wll{0, 1, 3, 6, 10, 15});
+    // CHECK(doubles.prefix_arr()[3] == Approx(6));
+    // CHECK(longs.pref_arr() == wll{1, 3, 6, 10, 15});
+    // CHECK(longs.diff_arr() == wll{1, 1, 1, 1, 1});
+    // CHECK(longs.pref_arr().diff_arr() == longs);
+  }
 }
 
 TEST_SUITE("input") {

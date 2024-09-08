@@ -3,6 +3,7 @@
 #include "concepts.cpp"
 #include "input.cpp"
 #include "output.cpp"
+#include "deb.cpp"
 template <typename Res>
 void handle_print(optional<Res>& res) {
   if (res) {
@@ -72,7 +73,7 @@ void handle_solve(Func func) {
 
 void init_main() {
   cin.tie(0)->sync_with_stdio(0);
-  cin.exceptions(ios_base::failbit);
+  // if cexp (!prod) cin.exceptions(ios_base::failbit);
   cout << fixed << setprecision(15);
 }
 

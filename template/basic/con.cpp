@@ -1,11 +1,13 @@
 #pragma once
 #include "../concepts.cpp"
-#include "../scaffold.cpp"
-template <typename C>
+#include "bool.cpp"
+
+template <typename T, template <class, class...> class C>
 struct Con {
-  using T = C::value_type;
+  using V = C<T>;
+  using iter = C<T>::iterator;
   using value_type = T;
-  C v;
+  V v;
 
   Con() {
   }
@@ -63,6 +65,7 @@ struct Con {
   T& back() {
     return this->v.back();
   }
+
   int size() const {
     return this->v.size();
   }
@@ -95,7 +98,7 @@ struct Con {
   }
 
   void fill(T x = T()) {
-    std::fill(all(v), x);
+    std::fill(v.begin(), v.end(), x);
   }
 
   void pb(const T& element) {
@@ -152,6 +155,11 @@ struct Con {
 
   auto rsort() {
     return this->sort(greater());
+  }
+  template <class Proj = std::identity, class Comp = ranges::greater>
+    requires(!SortPredicate<T, Proj>)
+  void rsort(Proj proj, Comp comp = {}) {
+    std::ranges::sort(this->v, comp, proj);
   }
 
   auto reverse() {

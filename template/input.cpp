@@ -2,6 +2,8 @@
 
 #include "base.cpp"
 #include "concepts.cpp"
+#include "container.cpp"
+
 
 template <typename T>
   requires Readable<T>
@@ -22,16 +24,7 @@ void __read(pr<T1, T2>& p) {
   __read(p.s);
 }
 
-template <typename T>
-void reserve(T& v, size_t s) {
-  cexp bool HasReserve = requires {
-    { v.reserve(s) };
-  };
 
-  if cexp (HasReserve) {
-    v.reserve(s);
-  }
-}
 
 template <typename V>
 void append(V& v, const typename V::value_type& x) {

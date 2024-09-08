@@ -19,6 +19,13 @@ struct pr {
   auto sum() {
     return f + s;
   }
+  auto min() {
+    return std::min(f, s);
+  }
+  auto max() {
+    return std::max(f, s);
+  }
+
   pr<T1, T2> operator+(const pr<T1, T2>& other) const {
     return {f + other.f, s + other.s};
   }

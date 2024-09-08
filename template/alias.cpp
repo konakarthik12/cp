@@ -57,6 +57,9 @@ GENERATE_AB(ci, char, int)
 GENERATE_AB(ic, int, char)
 
 GENERATE_SINGLE(pii, pii)
+GENERATE_SINGLE(pll, pll)
+GENERATE_SINGLE(pill, pill)
+GENERATE_SINGLE(plll, plli)
 
 using mpii = map<pii, pii>;
 using mivi = map<int, vi>;

@@ -9,5 +9,4 @@ for((i = 1000; ; ++i)); do
     build/gen $i > input_file
     TIMEFORMAT=%R /usr/bin/time -o /tmp/time_log build/main < input_file > /dev/null 
     cat /tmp/time_log
-# echo -e "\e[Ran test: "  $i
 done

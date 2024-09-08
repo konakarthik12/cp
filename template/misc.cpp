@@ -6,20 +6,15 @@ void swapsort(T1& a, T2& b) {
   if (a > b) swap(a, b);
 }
 
-template <typename T>
-constexpr int blen(T x) {
-  if (x == 0) return 1;
-  return bit_width(static_cast<make_unsigned_t<decltype(x)>>(x));
-}
+
 
 template <typename T, typename V>
   requires Numeric<V>
 T mode(map<T, V> items) {
-  T mode = items.begin()->first;
-  V max_count = items.begin()->second;
+  auto [mode, max_cnt] = *items.begin();
   for (auto [item, count]: items) {
-    if (count > max_count) {
-      max_count = count;
+    if (count > max_cnt) {
+      max_cnt = count;
       mode = item;
     }
   }
@@ -84,6 +79,13 @@ str YES(bool ans) {
 void exit() {
   exit(0);
 }
+template <class T = void>
+struct max_op {
+  constexpr T operator()(const T& lhs, const T& rhs) const {
+    return max(lhs, rhs);
+  }
+};
+
 template <typename T>
 cexp auto yes(T&& opt) {
   return optional(opt);

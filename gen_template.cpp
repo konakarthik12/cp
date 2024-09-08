@@ -47,6 +47,11 @@ vec<T> rnd_list(int n, T a, T b) {
   }
   return arr;
 }
+pll rnd_range(ll a, ll b) {
+  ll w = rnd(1, b - a + 1);
+  ll l = rnd(a, b - w + 1);
+  return pll{l, l + w - 1};
+}
 
 vi rnd_list_distinct(int n, int a, int b) {
   assert((b - a + 1) >= n);
@@ -68,7 +73,7 @@ vi rnd_perm(int n) {
 }
 
 bool rnd_bool() {
-  return rnd(0, 1);
+  return rnd_internal(0, 1);
 }
 
 wpii pruefer_decode(vec<int> const& code) {

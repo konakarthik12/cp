@@ -42,3 +42,6 @@ concept SortPredicate = requires(T t1, T t2, Predicate p) {
 };
 template <typename T>
 concept Numeric = std::integral<T> || std::floating_point<T>;
+
+template <typename Op, typename Arg1, typename Arg2>
+concept binary_op = std::is_invocable_v<Op, Arg1, Arg2>;

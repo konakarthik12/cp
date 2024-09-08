@@ -3,7 +3,7 @@
 #include "con.cpp"
 
 template <typename V>
-struct vec : public Con<std::vector<NotBool_t<V>>> {
-  using T = NotBool<V>::type;
-  using Con<std::vector<NotBool_t<V>>>::Con;
+struct vec : public Con<NotBool_t<V>, std::vector> {
+  using T = NotBool_t<V>;
+  using Con<NotBool_t<V>, std::vector>::Con;
 };

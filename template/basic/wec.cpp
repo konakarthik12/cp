@@ -3,9 +3,10 @@
 #include "con.cpp"
 
 template <typename V>
-struct wec : public Con<std::vector<NotBool_t<V>>> {
-  using T = NotBool_t<V>;
-  using Con<std::vector<typename NotBool<V>::type>>::Con;
+struct wec : public vec<V> {
+  using T =  vec<V>::T;
+
+  using vec<V>::vec;
 
   T& operator[](size_t index) {
     return this->v[index - 1];

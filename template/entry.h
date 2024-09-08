@@ -15,6 +15,7 @@ using std::end;
 using std::exit;
 using std::fixed;
 using std::gcd;
+using std::lcm;
 using std::greater;
 using std::index_sequence;
 using std::index_sequence_for;
@@ -31,6 +32,7 @@ using std::nullopt;
 using std::optional;
 using std::ostream;
 using std::plus;
+using std::minus;
 using std::random_access_iterator_tag;
 using std::same_as;
 using std::setprecision;
@@ -41,7 +43,12 @@ using std::tie;
 using std::variant;
 using std::integral;
 using std::forward;
+using std::bit_or;
 using std::not_fn;
+using std::function;
+using std::iterator;
+using std::span;
+using std::adjacent_difference;
 
 using std::common_type_t;
 using std::conditional_t;
@@ -51,6 +58,11 @@ using std::is_signed_v;
 using std::is_unsigned_v;
 using std::make_unsigned_t;
 using std::remove_reference_t;
+using std::is_void_v;
+
+
+using std::invocable;
+
 
 using std::array;
 using std::map;
