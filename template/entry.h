@@ -34,6 +34,7 @@ using std::ostream;
 using std::plus;
 using std::minus;
 using std::random_access_iterator_tag;
+using std::input_iterator;
 using std::same_as;
 using std::setprecision;
 using std::size;

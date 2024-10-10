@@ -1,5 +1,6 @@
 #pragma once
 #include "../scaffold.cpp"
+#include "pair.cpp"
 
 // TODO: merge with set
 template <typename T, typename Comp = less<T>>
@@ -116,5 +117,28 @@ struct mset {
   void erase_one(const T& x) {
     auto it = v.find(x);
     if (it != v.end()) v.erase(it);
+  }
+
+  pr<T&, T&> near_lr(T x) {
+    auto cur = *v.upper_bound(x);
+    auto prv = *prev(cur);
+    return pr{prv, cur};
+  }
+  auto ge(T x) {
+    return *v.lower_bound(x);
+  }
+
+  auto gr(T x) {
+    return *v.upper_bound(x);
+  }
+
+  auto ls(T x) {
+    auto iter = v.lower_bound(x);
+    return *prev(iter);
+  }
+
+  auto le(T x) {
+    auto iter = v.upper_bound(x);
+    return *prev(iter);
   }
 };

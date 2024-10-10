@@ -73,7 +73,7 @@ void handle_solve(Func func) {
 
 void init_main() {
   cin.tie(0)->sync_with_stdio(0);
-  // if cexp (!prod) cin.exceptions(ios_base::failbit);
+  if cexp (!prod) cin.exceptions(ios_base::failbit);
   cout << fixed << setprecision(15);
 }
 

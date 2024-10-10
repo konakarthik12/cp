@@ -70,7 +70,7 @@ TEST_CASE("vectors") {
   CHECK(data[1] == 1);
   CHECK(data2[2] == 0);
   wec<int> data3 = {5};
-  CHECK(sz(data3) == 1);
+  CHECK(data3.sz() == 1);
   CHECK(data3[1] == 5);
   wec<int> data4;
   CHECK(data3);

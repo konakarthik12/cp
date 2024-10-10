@@ -6,8 +6,6 @@ void swapsort(T1& a, T2& b) {
   if (a > b) swap(a, b);
 }
 
-
-
 template <typename T, typename V>
   requires Numeric<V>
 T mode(map<T, V> items) {
@@ -97,9 +95,10 @@ cexp auto no() {
 auto near(auto iter) {
   return pr{prev(iter), next(iter)};
 }
+
 wi invperm(const wi& arr) {
-  wi ans(sz(arr));
-  for (int i = 1; i <= sz(arr); i++) {
+  wi ans(arr.sz());
+  for (int i = 1; i <= arr.sz(); i++) {
     ans[arr[i]] = i;
   }
   return ans;

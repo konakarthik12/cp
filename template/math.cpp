@@ -145,7 +145,7 @@ struct Combo {
     if (n == k || n == 0 || k == 0) return 1;
     T ans(1);
 
-    if (n >= sz(facts)) {
+    if (n >= facts.sz()) {
       for (int i = 0; i < k; i++) ans *= n - i;
     } else {
       ans = facts[n] * inv_facts[n - k];
@@ -183,7 +183,7 @@ struct Combo {
   }
 
   T catalan(int n) {
-    assert(2 * n < sz(facts));
+    assert(2 * n < facts.sz());
 
     return facts[2 * n] * inv_facts[n] * inv_facts[n + 1];
   }

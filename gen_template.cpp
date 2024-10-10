@@ -40,8 +40,8 @@ int rnd_not(int a, int b, int exclude) {
 }
 
 template <typename T>
-vec<T> rnd_list(int n, T a, T b) {
-  vec<T> arr;
+wec<T> rnd_list(int n, T a, T b) {
+  wec<T> arr;
   for (int i = 0; i < n; i++) {
     arr.pb(rnd(a, b));
   }
@@ -53,7 +53,7 @@ pll rnd_range(ll a, ll b) {
   return pll{l, l + w - 1};
 }
 
-vi rnd_list_distinct(int n, int a, int b) {
+wi rnd_list_distinct(int n, int a, int b) {
   assert((b - a + 1) >= n);
   if (seed < 1000) {
     b = min(b, max(a + seed / 5, (a + n - 1)));
@@ -62,12 +62,12 @@ vi rnd_list_distinct(int n, int a, int b) {
   while ((int) s.size() < n) {
     s.insert(rnd_internal(a, b));
   }
-  return vi{s};
+  return wi{s};
 }
 
-vi rnd_perm(int n) {
-  vi arr(n);
-  iota(all(arr), 1);
+wi rnd_perm(int n) {
+  wi arr;
+  arr.iota(n);
   shuffle(all(arr), rng);
   return arr;
 }
@@ -77,7 +77,7 @@ bool rnd_bool() {
 }
 
 wpii pruefer_decode(vec<int> const& code) {
-  int n = code.size() + 2;
+  int n = code.sz() + 2;
   vi degree(n, 1);
   for (int i: code) {
     degree[i]++;
