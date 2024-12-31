@@ -1,23 +1,30 @@
 #pragma once
 #include "../base.cpp"
 #include "../deb.cpp"
-template <typename Node>
+template <typename Node, bool easy_index = true>
 struct RecurSegtree {
   using Merge = std::function<const Node(const Node&, const Node&)>;
   Merge merge;
   int n;
+
   vec<Node> t;
 
   template <typename Cont>
   RecurSegtree(Merge merge, Cont arr) : merge(merge),
-                                        n(sz(arr)),
+                                        n(arr.sz()),
                                         t(4 * n) {
-    build(arr, 1, 0, sz(arr) - 1);
+    build(arr);
   }
   template <typename Cont>
-  void build(Cont& a, int v, int tl, int tr) {
-    n = sz(a);
+  void build(Cont& a) {
+    n = a.sz();
     t.assign(4 * n);
+    build(a, 1, 1, a.sz());
+  }
+
+  template <typename Cont>
+  void build(Cont& a, int v, int tl, int tr) {
+
     if (tl == tr) {
       t[v] = Node(a[tl]);
     } else {
@@ -28,13 +35,13 @@ struct RecurSegtree {
     }
   }
 
-  void update(int v, int tl, int tr, int pos, int val) {
+  void assign(int v, int tl, int tr, int pos, int val) {
     if (tl == tr) {
       t[v] = Node(val);
     } else {
       int tm = (tl + tr) / 2;
-      if (pos <= tm) update(v * 2, tl, tm, pos, val);
-      else update(v * 2 + 1, tm + 1, tr, pos, val);
+      if (pos <= tm) assign(v * 2, tl, tm, pos, val);
+      else assign(v * 2 + 1, tm + 1, tr, pos, val);
       t[v] = merge(t[v * 2], t[v * 2 + 1]);
     }
   }
@@ -45,13 +52,20 @@ struct RecurSegtree {
       return t[v];
     }
     int tm = (tl + tr) / 2;
-    return merge(query(v * 2, tl, tm, l, min(r, tm)), query(v * 2 + 1, tm + 1, tr, max(l, tm + 1), r));
+    Node left = query(v * 2, tl, tm, l, min(r, tm));
+    Node right = query(v * 2 + 1, tm + 1, tr, max(l, tm + 1), r);
+    return merge(left, right);
   }
+
   Node query(int l, int r) {
+    if cexp (easy_index) l--;
+    if cexp (easy_index) r--;
     return query(1, 0, n - 1, l, r);
   }
-  void update(int idx, int v) {
-    return update(1, 0, n - 1, idx, v);
+  void assign(int idx, int v) {
+    if cexp (easy_index) idx--;
+
+    return assign(1, 0, n - 1, idx, v);
   }
 };
 
@@ -62,12 +76,15 @@ struct Segtree {
   int n;
   wec<Node> t;
 
-  Segtree(Merge merge) : merge(merge) {
+  Segtree(Merge merge = std::plus()) : merge(merge) {
   }
   Segtree(Merge merge, int n) : merge(merge) {
     init(n);
   }
 
+  Segtree(Merge merge, int n, int v) : merge(merge) {
+    init(n, v);
+  }
   template <typename Cont>
   Segtree(Merge merge, Cont& a) : merge(merge) {
     build(a);
@@ -76,6 +93,11 @@ struct Segtree {
   void init(int _n) {
     n = _n;
     t.assign(2 * n - 1);
+  }
+  void init(int _n, int v) {
+    n = _n;
+    t.assign(2 * n - 1, v);
+    build();
   }
 
   void init_set(int p, Node v) {
@@ -94,16 +116,21 @@ struct Segtree {
 
   template <typename Cont>
   void build(Cont& a) {
-    init(sz(a));
+    init(a.sz());
     int i = n;
     for (int x: a) t[i++] = x;
     build();
   }
 
-  void update(int p, Node v) {
+  void assign(int p, Node v) {
     if cexp (easy_index) p--;
     dssert(p >= 0 && p < n);
     for (t[p += n] = v; p > 1; p >>= 1) t[p >> 1] = merge(t[p], t[p ^ 1]);
+  }
+  void inc(int p, Node v) {
+    if cexp (easy_index) p--;
+    dssert(p >= 0 && p < n);
+    for (t[p += n] += v; p > 1; p >>= 1) t[p >> 1] = merge(t[p], t[p ^ 1]);
   }
 
   Node query(int l, int r) {

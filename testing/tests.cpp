@@ -35,6 +35,14 @@ TEST_SUITE("testing modint") {
     CHECK(x * y == DMi(13));
     CHECK((x * 3 + y) / 5 == DMi(9));
   }
+
+  TEST_CASE("mod double") {
+    using Mi = ModDouble;
+    Mi x = Mi(1) / Mi(2);
+    Mi y = 2;
+    CHECK(x + y == Mi(5) / Mi(2));
+    CHECK(x * y == Mi(1));
+  }
 }
 
 TEST_CASE("testing combinatorics") {
@@ -167,6 +175,15 @@ TEST_SUITE("input") {
     CHECK(s1 == wc{'a', 'b', 'c', 'd', 'e', 'f', 'g'});
     CHECK(s2 == "hello");
   }
+
+  TEST_CASE("") {
+    R"(
+      abc def hij
+    )"_cin_set;
+
+    ws s_arr;
+    read(s_arr, 3);
+  }
 }
 
 TEST_SUITE("containers") {
@@ -214,6 +231,13 @@ TEST_CASE("misc") {
   for (auto [a, b]: arr | pairwise | rview) {
     prs.eb(a, b);
   }
+
+  // for (auto [a, b]: arr | triangle) {
+  //   prs.eb(a, b);
+  // }
+
+  vec<tuple<int, int, int>> arr2;
+  arr2.sort(get<1>);
   CHECK(prs == vpii{{4, 5}, {3, 4}, {2, 3}, {1, 2}});
   CHECK(blen(15) == 4);
   CHECK(blen(16) == 5);

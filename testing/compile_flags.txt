@@ -1,5 +1,5 @@
 /opt/homebrew/opt/llvm/bin/clang++
--std=c++20
+-std=c++23
 -iquote
 /Users/konak/Projects/cp/build/cmake-build-release/doctest/src/doctest/doctest/
 -Wall

@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.5)
 project(cp)
 include(ExternalProject)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 23)
 add_executable(cp template.cpp)
 
 add_executable(internal_main main.cpp)

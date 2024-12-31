@@ -34,7 +34,6 @@ struct ModIntBase {
   friend ostream& operator<<(ostream& os, T const& a) {
     return os << a.value;
   }
-
 };
 
 template <int MOD = 998244353>
@@ -144,6 +143,9 @@ struct DynModInt : public ModIntBase<DynModInt> {
     m.value %= m.mod;
     return is;
   }
+  explicit operator ll() {
+    return value;
+  }
 };
 int DynModInt::mod = 998244353;
 
@@ -164,12 +166,12 @@ struct ModDouble {
     return *this;
   }
   ModDouble& operator*=(ModDouble const& b) {
-    value = (ll) value * b.value;
+    value = (ld) value * b.value;
     return *this;
   }
 
   ModDouble& operator/=(ModDouble const& b) {
-    value = (ll) value / b.value;
+    value = (ld) value / b.value;
     return *this;
   }
   friend ModDouble operator+(ModDouble a, ModDouble const b) {

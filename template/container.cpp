@@ -1,15 +1,5 @@
 #pragma once
 #include "base.cpp"
-//
-// template <typename T>
-// struct widen_pre {
-//  using type = T;
-//};
-
-// template <>
-// struct widen_pre<Bool> {
-//   using type = int;
-// };
 
 template <typename T>
   requires integral<T>
@@ -19,28 +9,6 @@ struct widen_pre_t {
 
 template <class T>
 using widen_pre = widen_pre_t<T>::type;
-
-template <class Iter>
-int idist(Iter a, Iter b) {
-  return distance(a, b);
-}
-
-template <class Cont>
-void rsort(Cont& vec) {
-  sort(vec, greater());
-}
-
-template <class Con, class Comp>
-void sort_by(Con& vec, Comp key) {
-  using T = Con::value_type;
-  sort(all(vec), [&](T a, T b) { return key(a) < key(b); });
-}
-
-template <class Con, class Comp>
-void rsort_by(Con& vec, Comp key) {
-  using T = Con::value_type;
-  sort(all(vec), [&](T a, T b) { return key(a) > key(b); });
-}
 
 template <class Cont>
 void reverse(Cont& vec) {
@@ -92,7 +60,7 @@ auto prefix_arr(Cont& v, Op op, I i = {}) {
   using ReplaceI = decltype(op(T{}, T{}));
 
   replace_first<Cont, ReplaceI> p;
-  reserve(p, size(v) + 1);
+  reserve(p, v.sz() + 1);
   I cur = i;
   p.pb(cur);
 
@@ -117,7 +85,7 @@ auto pref_arr(Cont& v, Op op) {
   using ReplaceI = decltype(op(T{}, T{}));
 
   replace_first<Cont, ReplaceI> p;
-  reserve(p, size(v));
+  reserve(p, v.sz());
   auto iter = begin(v);
 
   p.pb(*iter);
@@ -156,4 +124,9 @@ template <typename T>
   requires HasIter<T>
 auto max(T& arr) {
   return *max_element(all(arr));
+}
+
+template <typename Cont>
+auto mismatch(Cont& a, Cont& b) {
+  return std::mismatch(all(a), all(b));
 }

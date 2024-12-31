@@ -1,6 +1,9 @@
 #pragma once
 #include "scaffold.cpp"
-
+#include "concepts.cpp"
+auto rview = views::reverse;
+auto dview = views::drop;
+#if defined(__clang__) or __cplusplus < 202302L
 template <typename V>
   requires HasIter<V>
 struct custom_adjacent_pairwise_view : public ranges::view_base {
@@ -105,5 +108,6 @@ template <typename T>
 auto operator|(T&& data, pairwise_tag) {
   return custom_adjacent_pairwise_view<T>(data);
 }
-
-auto rview = views::reverse;
+#else
+auto pairwise = views::pairwise;
+#endif

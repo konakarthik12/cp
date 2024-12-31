@@ -62,6 +62,7 @@ struct FastSparse : Sparse<Node, easy_index> {
   using Sparse<Node>::Sparse;
   using Sparse<Node>::table;
   Node query(int l, int r) {
+    if (r < l) return Node();
     if (easy_index) {
       l--;
       r--;

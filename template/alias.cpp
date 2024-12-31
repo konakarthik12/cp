@@ -11,6 +11,7 @@ using uint = unsigned int;
 using ull = unsigned long long;
 
 using str = std::string;
+using sview = std::string_view;
 
 template <class T, class Compare = less<T>, class Container = std::vector<T>>
 using pqueue = std::priority_queue<T, Container, Compare>;
@@ -55,6 +56,7 @@ GENERATE_AB(ill, int, ll)
 GENERATE_AB(lli, ll, int)
 GENERATE_AB(ci, char, int)
 GENERATE_AB(ic, int, char)
+GENERATE_AB(ib, int, bool)
 
 GENERATE_SINGLE(pii, pii)
 GENERATE_SINGLE(pll, pll)
@@ -65,14 +67,17 @@ using mpii = map<pii, pii>;
 using mivi = map<int, vi>;
 using mipii = map<int, pii>;
 
-using vpll = vec<pll>;
-using vpill = vec<pill>;
+// using vpll = vec<pll>;
+// using vpill = vec<pill>;
 
 using vipll = vec<pill>;
 using vvpll = vv<pll>;
 template <typename T>
 using www = wec<ww<T>>;
 using wwwi = www<int>;
+template <typename T>
+using vvv = vec<vv<T>>;
+using vvvi = vvv<int>;
 using vpcc = vec<pcc>;
 
 template <typename T>

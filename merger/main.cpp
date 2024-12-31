@@ -16,14 +16,15 @@ int main() {
     int maxConsecutiveEmptyLines = 1;
     vector<string> isystemDirs = {
             "/opt/homebrew/opt/llvm/include/c++/v1/",
-            "/opt/homebrew/opt/llvm/lib/clang/18/include/",
+            "/opt/homebrew/opt/llvm/lib/clang/19/include/",
             "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/"};
 
-    inliner.clangCompilationOptions = {"-std=c++20",
+    inliner.clangCompilationOptions = {"-std=c++23",
                                        "-iquote", ".",
                                        "-iquote", "template/",
+
                                        "-iquote", "build/preprocess/",
-                                       "-include-pch", "build/wrapper.h.pch"
+                                       "-include-pch", "build/wrapper.hpp.pch"
     };
 
     for (const auto &item: isystemDirs) {
@@ -33,7 +34,6 @@ int main() {
 
     inliner.clangCompilationOptions.emplace_back("-DINLINER");
     inliner.clangCompilationOptions.emplace_back("-DPREPROCESS");
-
     inliner.clangCompilationOptions.emplace_back("-fparse-all-comments");
     inliner.maxConsequentEmptyLines = maxConsecutiveEmptyLines;
     auto t1 = std::chrono::high_resolution_clock::now();

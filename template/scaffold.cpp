@@ -11,8 +11,12 @@ cexp auto sz(const T& container) -> int {
   return std::size(container);
 }
 
-template <typename T>
-constexpr int blen(T x) {
+constexpr int blen(unsigned long long x) {
   if (x == 0) return 1;
-  return bit_width(make_unsigned_t<T>(x));
+  return bit_width(x);
+}
+
+template <class Iter>
+int idist(Iter a, Iter b) {
+  return distance(a, b);
 }

@@ -18,6 +18,10 @@ struct set {
   set(set&& s) : v(std::move(s.v)) {
   }
 
+  set(initializer_list<T> initList) {
+    for (const auto& value: initList) v.insert(value);
+  }
+
   set& operator=(const set& s) {
     v = s.v;
     return *this;
@@ -77,7 +81,7 @@ struct set {
     return v.erase(std::forward<U>(x));
   }
 
-  int size() const {
+  int sz() const {
     return v.size();
   }
 

@@ -7,7 +7,7 @@ fi
 
 pattern="template/**.cpp"
 function expand () {
-     clang++ -std=c++20 -C -E -Wno-pragma-once-outside-header "$1" -o "$2" || exit
+     clang++ -std=c++23 -C -E -Wno-pragma-once-outside-header "$1" -o "$2" || exit
 
 }
 # Iterate over each file matching the pattern

@@ -1,5 +1,9 @@
 #pragma once
 #include "../concepts.cpp"
+#include "../scaffold.cpp"
+#include "../deb.cpp"
+
+
 #include "bool.cpp"
 
 template <typename T, template <class, class...> class C>
@@ -11,15 +15,14 @@ struct Con {
 
   Con() {
   }
-  Con(int size) : v(size) {
+  explicit Con(int size) : v(size) {
   }
   Con(int size, T init) : v(size, init) {
   }
   template <typename Iter>
-  requires input_iterator<Iter>
+    requires input_iterator<Iter>
   Con(Iter start, Iter end) : v(start, end) {
   }
-
 
   template <typename Container>
     requires HasIter<Container>
@@ -85,10 +88,13 @@ struct Con {
   }
 
   T& operator[](size_t index) {
+    dssert(index >= 1 && <= this->v.size());
     return this->v[index];
   }
 
   const T& operator[](size_t index) const {
+    dssert(index >= 1 && <= this->v.size());
+
     return this->v[index];
   }
 
@@ -139,12 +145,13 @@ struct Con {
     return this->v <=> other.v;
   }
 
-  void iota(int n) {
-    this->iota(1, n);
-  }
   void iota(T a, T b) {
     this->resize(b - a + 1);
     std::iota(this->v.begin(), this->v.end(), a);
+  }
+
+  void iota(int n) {
+    iota(0, n - 1);
   }
 
   template <typename Comp = less<T>>
@@ -156,7 +163,18 @@ struct Con {
   template <class Proj = std::identity, class Comp = ranges::less>
     requires(!SortPredicate<T, Proj>)
   void sort(Proj proj, Comp comp = {}) {
-    std::ranges::sort(this->v, comp, proj);
+    std::ranges::sort(this->v.begin(), this->v.end(), comp, proj);
+  }
+  template <typename Comp = less<T>>
+    requires SortPredicate<T, Comp>
+  void stable_sort(Comp comp = {}) {
+    std::stable_sort(this->v.begin(), this->v.end(), comp);
+  }
+
+  template <class Proj = std::identity, class Comp = ranges::less>
+    requires(!SortPredicate<T, Proj>)
+  void stable_sort(Proj proj, Comp comp = {}) {
+    std::ranges::stable_sort(this->v, comp, proj);
   }
 
   auto rsort() {
@@ -220,6 +238,11 @@ struct Con {
   auto ge(const T& x, Compare comp = {}) {
     return *lower_bound(x, comp);
   }
+  template <class Compare = std::less<>>
+  auto cnt_ge(const T& x, Compare comp = {}) {
+    auto iter = lower_bound(x, comp);
+    return idist(v.begin(), iter);
+  }
 
   template <class Compare = std::less<>>
   auto ls(const T& x, Compare comp = {}) {
@@ -252,8 +275,17 @@ struct Con {
     return v.count_if(std::forward<Args>(args)...);
   }
 
-  auto append(const Con& other) {
+  //  auto append(const Con& other) {
+  //    this->v.insert(this->v.end(), other.begin(), other.end());
+  //  }
+
+  auto operator+=(const Con& other) {
     this->v.insert(this->v.end(), other.begin(), other.end());
+  }
+
+  template <class RNG>
+  auto shuffle(RNG& gen) {
+    std::shuffle(v.begin(), v.end(), gen);
   }
 };
 

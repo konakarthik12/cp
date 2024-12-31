@@ -12,7 +12,6 @@ concept HasValueType1D = requires {
   requires !HasValueType2D<T>;
 };
 
-
 template <typename T>
 concept HasIter = requires(T& container) {
   { container.begin() } -> same_as<decltype(container.end())>;
@@ -36,7 +35,10 @@ concept Readable1D = requires(istream& is, const T1&) {
 template <typename T1>
 concept Readable2D = requires(istream& is, const T1&) {
   { Readable<typename remove_reference_t<T1>::value_type::value_type> };
+  // not strings
+  requires !same_as<typename remove_reference_t<T1>::value_type, std::string>;
 };
+
 
 template <typename T, typename Predicate>
 concept SortPredicate = requires(T t1, T t2, Predicate p) {

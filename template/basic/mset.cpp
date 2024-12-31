@@ -79,7 +79,7 @@ struct mset {
     return v.erase(std::forward<U>(x));
   }
 
-  int size() const {
+  int sz() const {
     return v.size();
   }
 

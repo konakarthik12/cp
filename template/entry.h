@@ -1,7 +1,7 @@
 #pragma once
 // konakarthik12
 // cpp20
-#include "wrapper.h"
+#include "wrapper.hpp"
 
 namespace wrapped_std {
 
@@ -50,6 +50,7 @@ using std::function;
 using std::iterator;
 using std::span;
 using std::adjacent_difference;
+using std::strong_ordering;
 
 using std::common_type_t;
 using std::conditional_t;

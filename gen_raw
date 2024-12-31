@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+tail -n +2 < compile_flags_prod.txt | xargs /opt/homebrew/opt/llvm/bin/clang++ template.cpp -DENTRY=main -o build/main || exit
+# tail -n +2 < compile_flags_prod.txt | xargs /opt/homebrew/opt/llvm/bin/clang++ template.cpp -DENTRY=brute -o build/brute || exit
+g++-14 -std=c++20 brute_raw.cpp -o build/brute_raw || exit
+tail -n +2 < compile_flags_prod.txt | xargs /opt/homebrew/opt/llvm/bin/clang++ template.cpp -DENTRY=gen -o build/gen || exit
+
+echo "Running tests..."
+echo ""
+for((i = 1; ; ++i)); do
+    build/gen $i > input_file || break
+    build/main < input_file > myAnswer 2> /dev/null || break
+    build/brute_raw < input_file > correctAnswer 2> /dev/null || break
+    diff -Z myAnswer correctAnswer > /dev/null || break
+    echo -e "\e[1APassed test: "  $i
+done
+echo "WA on the following test:"
+cat input_file
+echo "Your answer is:"
+cat myAnswer
+echo "Correct answer is:"
+cat correctAnswer
