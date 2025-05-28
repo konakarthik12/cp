@@ -14,7 +14,16 @@ struct pr {
   }
 
   void sort() {
-    swapsort(f, s);
+    if (f > s) swap(f, s);
+  }
+  pr<T1, T2> sorted() const {
+    pr<T1, T2> x = *this;
+    x.sort();
+    return x;
+  }
+
+  void rsort() {
+    if (f < s) swap(f, s);
   }
   auto sum() {
     return f + s;

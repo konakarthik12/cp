@@ -73,8 +73,14 @@ void handle_solve(Func func) {
 
 void init_main() {
   cin.tie(0)->sync_with_stdio(0);
-  if cexp (!prod) cin.exceptions(ios_base::failbit);
+#ifdef LOCAL
+  cin.exceptions(ios_base::failbit);
+#endif
   cout << fixed << setprecision(15);
+}
+
+template <typename T = void>
+void init() {
 }
 
 // ********************************************** ACTUAL CODE STARTS HERE **********************************************
@@ -86,6 +92,7 @@ void init_main() {
 int main() {
   init_main();
 #ifndef EDITOR
+  init();
   handle_solve(solve);
 #endif
   return 0;

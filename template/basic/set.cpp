@@ -1,7 +1,7 @@
 #pragma once
-#include "../scaffold.cpp"
+#include "../concepts.cpp"
+#include "con.cpp"
 #include "pair.cpp"
-
 template <typename T, typename Comp = less<T>>
 struct set {
   std::set<T, Comp> v;
@@ -20,6 +20,14 @@ struct set {
 
   set(initializer_list<T> initList) {
     for (const auto& value: initList) v.insert(value);
+  }
+  template <typename Iter>
+    requires input_iterator<Iter>
+  set(Iter start, Iter end) : v(start, end) {
+  }
+
+  template <HasIter Container>
+  explicit set(const Container& cnt) : v(cnt.begin(), cnt.end()) {
   }
 
   set& operator=(const set& s) {
@@ -76,6 +84,10 @@ struct set {
   auto emplace(Args&&... args) {
     return v.emplace(std::forward<Args>(args)...);
   }
+  auto erase(const T& x) {
+    return v.erase(x);
+  }
+
   template <typename U>
   auto erase(U&& x) {
     return v.erase(std::forward<U>(x));
@@ -85,7 +97,7 @@ struct set {
     return v.size();
   }
 
-  auto contains(T x) const {
+  auto has(T x) const {
     return v.contains(x);
   }
 
@@ -135,5 +147,9 @@ struct set {
   auto le(T x) {
     auto iter = v.upper_bound(x);
     return *prev(iter);
+  }
+
+  auto operator==(const set<T>& other) const {
+    return this->v == other.v;
   }
 };

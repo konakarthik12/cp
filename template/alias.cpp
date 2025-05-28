@@ -3,9 +3,11 @@
 #include "alias.pre.cpp"
 #else
 #include "basic/all.cpp"
-#include "scaffold.cpp"
 
 using ll = long long;
+using lll = __int128;
+template <typename T>
+using expand_ll = std::common_type<ll, T>::type;
 using ld = long double;
 using uint = unsigned int;
 using ull = unsigned long long;
@@ -23,6 +25,8 @@ using vw = vec<wec<T>>;
 
 template <typename T>
 using wv = wec<vec<T>>;
+template <typename T>
+using wvv = wec<vec<vec<T>>>;
 
 template <typename T>
 using ww = wec<wec<T>>;
@@ -57,8 +61,10 @@ GENERATE_AB(lli, ll, int)
 GENERATE_AB(ci, char, int)
 GENERATE_AB(ic, int, char)
 GENERATE_AB(ib, int, bool)
+GENERATE_AB(di, double, int)
 
 GENERATE_SINGLE(pii, pii)
+GENERATE_SINGLE(pcc, pcc)
 GENERATE_SINGLE(pll, pll)
 GENERATE_SINGLE(pill, pill)
 GENERATE_SINGLE(plll, plli)
@@ -83,6 +89,7 @@ using vpcc = vec<pcc>;
 template <typename T>
 using opt = std::optional<T>;
 using si = set<int>;
+using sd = set<double>;
 using msi = mset<int>;
 
 using spii = set<pii>;

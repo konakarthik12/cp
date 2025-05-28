@@ -33,6 +33,7 @@ using std::optional;
 using std::ostream;
 using std::plus;
 using std::minus;
+using std::multiplies;
 using std::random_access_iterator_tag;
 using std::input_iterator;
 using std::same_as;
@@ -71,6 +72,9 @@ using std::map;
 using std::pair;
 using std::predicate;
 using std::tuple;
+using std::string;
+
+// using std::ranges::views::zip;
 }
 
 namespace ranges = std::ranges;

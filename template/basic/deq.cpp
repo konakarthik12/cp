@@ -2,8 +2,8 @@
 #include "con.cpp"
 
 template <typename T>
-struct deq : public Con<T, std::deque> {
-  using Con<T, std::deque>::Con;
+struct deq : Con<T, std::deque, 1> {
+  using Con<T, std::deque, 1>::Con;
   using value_type = T;
 
   void pf(const T& element) {

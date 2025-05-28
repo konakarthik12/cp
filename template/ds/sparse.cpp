@@ -4,7 +4,7 @@ template <typename Func>
 wwi build_sparse(wi arr, Func merge) {
   int n = arr.sz();
   int w = blen(n);
-  wwi table(w, wi(n));
+  wwi table(w, n);
   table[0] = arr;
   for (int h = 1; h < w; h++) {
     int hw = 1 << (h - 1);

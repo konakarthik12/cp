@@ -83,6 +83,11 @@ TEST_CASE("vectors") {
   wec<int> data4;
   CHECK(data3);
   CHECK(!data4);
+
+  www<int> nested(3, 4, 5);
+  CHECK(nested.sz() == 3);
+  CHECK(nested[1].sz() == 4);
+  CHECK(nested[1][1].sz() == 5);
 }
 
 TEST_SUITE("containers") {
@@ -243,7 +248,7 @@ TEST_CASE("misc") {
   CHECK(blen(16) == 5);
 
   assert(sum(vi(3, 1e9)) == 3e9);
-  assert(asum(4) == 10);
+  assert(asum(1e9) == 500000000500000000);
   assert(asum(0) == 0);
   assert(asum(0, 0) == 0);
 }

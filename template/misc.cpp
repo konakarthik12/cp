@@ -75,10 +75,10 @@ auto yes(bool ans, auto a, auto b) {
   return ans ? a : b;
 }
 
-str Yes(bool ans) {
+auto Yes(bool ans) {
   return ans ? "Yes" : "No";
 }
-str YES(bool ans) {
+auto YES(bool ans) {
   return ans ? "YES" : "NO";
 }
 void exit() {
@@ -93,7 +93,13 @@ struct max_op {
 template <class T = void>
 struct min_op {
   constexpr T operator()(const T& lhs, const T& rhs) const {
-    return max(lhs, rhs);
+    return min(lhs, rhs);
+  }
+};
+template <class T = void>
+struct gcd_op {
+  constexpr T operator()(const T& lhs, const T& rhs) const {
+    return gcd(lhs, rhs);
   }
 };
 
@@ -101,9 +107,10 @@ template <typename T>
 cexp auto yes(T&& opt) {
   return optional(opt);
 }
-auto nopt = nullopt;
-cexp auto no() {
-  return nopt;
+std::nullopt_t nopt = nullopt;
+template <typename T = void*>
+cexp std::nullopt_t no() {
+  return nullopt;
 }
 auto near(auto iter) {
   return pr{prev(iter), next(iter)};
@@ -117,6 +124,20 @@ wi invperm(const wi& arr) {
 vi invperm(const vi& arr) {
   vi ans(arr.sz());
   for (int i = 0; i < arr.sz(); i++) ans[arr[i]] = i;
+  return ans;
+}
+wwi invarr(const wi& arr) {
+  wwi ans(arr.max());
+  for (int i = 1; i <= arr.sz(); i++) ans[arr[i]].pb(i);
+  return ans;
+}
+
+int mex(wi arr) {
+  arr.sort();
+  int ans = 0;
+  for (int x: arr) {
+    if (x == ans) ans++;
+  }
   return ans;
 }
 

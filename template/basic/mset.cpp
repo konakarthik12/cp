@@ -114,9 +114,11 @@ struct mset {
     T b = *iter;
     return abs(a - x) < abs(b - x) ? a : b;
   }
-  void erase_one(const T& x) {
+  bool erase_one(const T& x) {
     auto it = v.find(x);
-    if (it != v.end()) v.erase(it);
+    if (it == v.end()) return false;
+    v.erase(it);
+    return true;
   }
 
   pr<T&, T&> near_lr(T x) {

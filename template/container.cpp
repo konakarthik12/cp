@@ -1,14 +1,16 @@
 #pragma once
 #include "base.cpp"
-
+using lll = __int128;
 template <typename T>
-  requires integral<T>
-struct widen_pre_t {
-  using type = long long;
-};
+using expand_ll = std::common_type<ll, T>::type;
+// template <typename T>
+//   requires integral<T>
+// struct widen_pre_t {
+//   using type = long long;
+// };
 
-template <class T>
-using widen_pre = widen_pre_t<T>::type;
+// template <class T>
+// using widen_pre = widen_pre_t<T>::type;
 
 template <class Cont>
 void reverse(Cont& vec) {
@@ -31,15 +33,16 @@ void fill(C& vec, T value) {
   fill(all(vec), value);
 }
 
-template <class In, class Replace>
-struct replace_first_type;
-template <template <class...> class Z, class T0, class... Ts, class Replace>
-struct replace_first_type<Z<T0, Ts...>, Replace> {
-  using type = Z<Replace, Ts...>;
+template <typename NewT1, typename T>
+struct ReplaceFirst;
+
+template <typename NewT1, template <typename, auto...> class Template, typename OldT1, auto... Rest>
+struct ReplaceFirst<NewT1, Template<OldT1, Rest...>> {
+  using type = Template<NewT1, Rest...>;
 };
 
-template <class In, class Replace>
-using replace_first = typename replace_first_type<In, Replace>::type;
+template <typename NewT1, typename T>
+using replace_first = typename ReplaceFirst<T, NewT1>::type;
 
 template <typename T>
 void reserve(T& v, size_t s) {
@@ -59,7 +62,7 @@ auto prefix_arr(Cont& v, Op op, I i = {}) {
   using T = Cont::value_type;
   using ReplaceI = decltype(op(T{}, T{}));
 
-  replace_first<Cont, ReplaceI> p;
+  vec<ReplaceI> p;
   reserve(p, v.sz() + 1);
   I cur = i;
   p.pb(cur);
@@ -98,8 +101,53 @@ auto pref_arr(Cont& v, Op op) {
 
 template <typename T = void, typename Cont>
 auto pref_arr(Cont& v) {
-  using W = conditional_t<is_void_v<T>, widen_pre<typename Cont::value_type>, T>;
+  using W = conditional_t<is_void_v<T>, expand_ll<typename Cont::value_type>, T>;
   return pref_arr(v, std::plus<W>{});
+}
+
+template <typename Cont, typename Op, typename T = typename Cont::value_type,
+          typename I = std::invoke_result_t<Op, T, T>>
+  requires std::invocable<Op, T, T>
+auto difference_arr(Cont& v, Op op) {
+  using ReplaceI = I;
+
+  replace_first<Cont, ReplaceI> d;
+  reserve(d, v.sz() - 1);
+  if (v.sz() < 2) return d;  // return empty if fewer than 2 elements
+
+  for (int i = 2; i <= v.sz(); ++i) {
+    d.pb(op(v[i], v[i - 1]));
+  }
+
+  return d;
+}
+
+template <typename Cont, typename I = typename Cont::value_type>
+  requires(!std::invocable<I, typename Cont::value_type, typename Cont::value_type>)
+auto difference_arr(Cont& v, I = {}) {
+  return difference_arr(v, std::minus<I>{});
+}
+template <typename Cont, typename Op>
+auto diff_arr(Cont& v, Op op) {
+  using T = Cont::value_type;
+  using ReplaceI = decltype(op(T{}, T{}));
+
+  replace_first<Cont, ReplaceI> d;
+  if (v.empty()) return d;
+
+  d.reserve(v.size());
+  d.push_back(v[0]);
+
+  for (size_t i = 1; i < v.size(); ++i) {
+    d.push_back(op(v[i], v[i - 1]));
+  }
+
+  return d;
+}
+template <typename T = void, typename Cont>
+auto diff_arr(Cont& v) {
+  using W = conditional_t<is_void_v<T>, typename Cont::value_type, T>;
+  return diff_arr(v, std::minus<W>{});
 }
 
 template <typename Cont, typename T>

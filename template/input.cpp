@@ -4,11 +4,15 @@
 #include "concepts.cpp"
 #include "container.cpp"
 
-
 template <typename T>
   requires Readable<T>
 void __read(T& arr) {
   cin >> arr;
+}
+template <typename T>
+  requires HasRead<T>
+void __read(T&& x) {
+  x.input();
 }
 template <const size_t N>
 void __read(bitset<N>& b) {
@@ -23,8 +27,6 @@ void __read(pr<T1, T2>& p) {
   __read(p.f);
   __read(p.s);
 }
-
-
 
 template <typename V>
 void append(V& v, const typename V::value_type& x) {
