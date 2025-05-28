@@ -25,4 +25,26 @@ class bitset : public std::bitset<N> {
   bool operator<(const bitset& other) const {
     return this->to_ullong() < other.to_ullong();
   }
+
+  bitset operator^(const bitset& other) const {
+    std::bitset<N> result = std::operator^(*this, other);
+
+    return bitset(result);
+  }
+
+  // performance
+  // Construct from base bitset directly
+  explicit bitset(const std::bitset<N>& b) : std::bitset<N>(b) {
+  }
+
+  // Move constructor from base
+  explicit bitset(std::bitset<N>&& b) : std::bitset<N>(std::move(b)) {
+  }
+
+  // Construct from unsigned long long
+  explicit bitset(unsigned long long value) : std::bitset<N>(value) {
+  }
 };
+
+template <int N>
+using witset = bitset<N, true>;

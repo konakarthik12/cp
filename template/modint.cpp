@@ -1,9 +1,10 @@
 #pragma once
 #include "base.cpp"
+#include "math.cpp"
 
 template <typename T>
 struct ModIntBase {
-  int value;
+  int value = 0;
 
   bool operator==(const T& b) const {
     return value == b.value;
@@ -16,6 +17,22 @@ struct ModIntBase {
   }
   friend T operator+(T a, T const b) {
     return a += b;
+  }
+  friend T operator++(T& a) {
+    return a += 1;
+  }
+  friend T operator--(T& a) {
+    return a -= 1;
+  }
+  friend T operator++(T& a, int) {
+    T b = a;
+    a += 1;
+    return b;
+  }
+  friend T operator--(T& a, int) {
+    T b = a;
+    a -= 1;
+    return b;
   }
 
   friend T operator-(T a, T const b) {
@@ -42,22 +59,17 @@ struct ModInt : public ModIntBase<ModInt<MOD>> {
 
   ModInt(ll v = 0) {
     value = v % MOD;
-    if (value < 0) {
-      value += MOD;
-    }
+    if (value < 0) value += MOD;
   }
-  ModInt(ModInt a, ll e) {
+
+  template <typename E>
+  ModInt(ModInt a, E e) {
     value = 1;
     while (e) {
-      if (e & 1) {
-        *this *= a;
-      }
+      if (e & 1) *this *= a;
       a *= a;
       e >>= 1;
     }
-  }
-
-  ModInt(ll a, ll e) : ModInt(ModInt(a), e) {
   }
 
   ModInt& operator+=(const ModInt& b) {
@@ -156,6 +168,8 @@ struct ModDouble {
   }
   ModDouble(ll a, ld e) : value(powl(a, e)) {
   }
+  ModDouble(ModDouble a, ld e) : value(powl(a.value, e)) {
+  }
 
   ModDouble& operator+=(ModDouble const& b) {
     value += b.value;
@@ -198,7 +212,32 @@ struct ModDouble {
   friend bool operator!=(ModDouble const& a, ModDouble const& b) {
     return a.value != b.value;
   }
-  explicit operator ld() {
+  explicit operator ld() const {
     return value;
+  }
+  explicit operator int() const {
+    return (int) value;
+  }
+};
+
+struct ModFrac : Frac {
+
+  // Frac value;
+  //
+  ModFrac() : Frac(0) {
+  }
+  ModFrac(ll v) : Frac(v) {
+  }
+  ModFrac(Frac v) : Frac(v) {
+  }
+  ModFrac(Frac a, int e) : Frac(1) {
+
+    for (int i = 0; i < e; i++) {
+      *this *= a;
+    }
+
+    for (int i = 0; i < -e; i++) {
+      *this /= a;
+    }
   }
 };

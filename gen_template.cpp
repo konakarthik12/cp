@@ -76,7 +76,7 @@ bool rnd_bool() {
   return rnd_internal(0, 1);
 }
 
-wpii pruefer_decode(vec<int> const& code) {
+wpii pruefer_decode(wec<int> const& code) {
   int n = code.sz() + 2;
   vi degree(n, 1);
   for (int i: code) {

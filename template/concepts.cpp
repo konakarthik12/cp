@@ -27,6 +27,10 @@ concept Readable = requires(istream& is, T& val) {
   { is >> val } -> same_as<istream&>;
 };
 
+template <typename T>
+concept HasRead = requires(T&& val) {
+  { val.input() } -> same_as<void>;
+};
 template <typename T1>
 concept Readable1D = requires(istream& is, const T1&) {
   { Readable<typename remove_reference_t<T1>::value_type> };

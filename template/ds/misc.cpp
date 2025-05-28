@@ -10,8 +10,8 @@ struct FunStack {
   }
 
   void push(T x) {
-    if (st.empty()) st.emplace(x, x);
-    else st.emplace(x, op(st.top().s, x));
+    if (st.empty()) st.eb(x, x);
+    else st.eb(x, op(st.top().s, x));
   }
 
   T pop() {
@@ -24,10 +24,10 @@ struct FunStack {
     return st.top().s;
   }
   operator bool() {
-    return st.size() > 0;
+    return st.sz() > 0;
   }
   int size() const {
-    return st.size();
+    return st.sz();
   }
 };
 

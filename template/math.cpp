@@ -28,40 +28,24 @@ double to_rad(double degrees) {
 }
 
 template <typename T>
-struct expand_ll_s {
-  using type = T;
-};
-
-template <integral T>
-  requires is_signed_v<T>
-struct expand_ll_s<T> {
-  using type = ll;
-};
-
-template <integral T>
-  requires is_unsigned_v<T>
-struct expand_ll_s<T> {
-  using type = ull;
-};
-
-template <typename T>
-using expand_ll = typename expand_ll_s<T>::type;
-
-template <typename T>
 expand_ll<T> asum(T a) {
   if cexp (same_as<T, ll>) dssert(a >= 0);
   return (expand_ll<T>) (a + 1) * a / 2;
 }
 template <typename T>
 expand_ll<T> asum(T a, T b) {
-  if (b < a) return 0;
-  if cexp (same_as<expand_ll<T>, ll>) dssert(b >= a);
+  if cexp (same_as<expand_ll<T>, ll>) {
+    if (b < a) return 0;
+    dssert(b >= a);
+  }
   return (expand_ll<T>) (b + a) * (b - a + 1) / 2;
 }
 template <typename T>
 expand_ll<T> asum(T a, T b, T c) {
-  if (b < a) return 0;
-  if cexp (same_as<T, ll>) dssert(a >= 0 && b >= a && c >= 1);
+  if cexp (is_integral_v<T>) {
+    if (b < a) return 0;
+    dssert(a >= 0 && b >= a && c >= 1);
+  }
   expand_ll<T> n = (b - a) / c + 1;
   expand_ll<T> sum = (expand_ll<T>) (n * (2 * a + (n - 1) * c)) / 2;
   return sum;
@@ -79,8 +63,8 @@ vb sieve_raw(int max_n) {
   }
   return is_prime;
 }
-vi sieve(int max_n) {
-  vi primes;
+wi sieve(int max_n) {
+  wi primes;
   vb is_prime = sieve_raw(max_n);
   for (int i = 2; i <= max_n; i++) {
     if (is_prime[i]) primes.pb(i);
@@ -106,8 +90,8 @@ vi linsieve(int n) {
   return lp;
 }
 
-vi divisors(int n) {
-  vi divs;
+wi divisors(int n) {
+  wi divs;
   for (int j = 1; j * j <= n; j++) {
     if (n % j == 0) {
       divs.pb(j);
@@ -116,6 +100,27 @@ vi divisors(int n) {
   }
   return divs;
 }
+
+struct Primes {
+  wi primes;
+  Primes(int n) : primes(sieve(n)) {
+  }
+  wi factor(int x) {
+    wi facts;
+    for (int p: primes) {
+      while (x % p == 0) {
+        facts.pb(p);
+        x /= p;
+      }
+    }
+    if (x > 1) facts.pb(x);
+    return facts;
+  }
+
+  bool has(int x) {
+    return primes.has(x);
+  }
+};
 
 template <typename T>
 struct Combo {
@@ -197,8 +202,15 @@ template <typename T>
 concept Number = is_integral_v<T>;
 
 struct Frac {
-  ll p, q;
+  ll p = 0, q = 1;
+  Frac() {
+    simplify();
+  }
+  Frac(int p) : p(p), q(1) {
+    simplify();
+  }
   Frac(ll p = 0, ll q = 1) : p(p), q(q) {
+    simplify();
   }
   Frac simplify() const {
     ll g = gcd(p, q);
@@ -211,12 +223,12 @@ struct Frac {
     return *this;
   }
   Frac operator+=(const Frac& other) {
-    int num = q * other.p + other.q * p;
+    int num = p * other.q + other.p * q;
     int denom = q * other.q;
     return Frac(num, denom);
   }
   Frac operator-=(const Frac& other) {
-    int num = q * other.p - other.q * p;
+    int num = p * other.q - other.p * q;
     int denom = q * other.q;
     return Frac(num, denom);
   }
@@ -255,5 +267,16 @@ struct Frac {
   friend bool operator==(Frac const& a, Number auto const& b) {
     Frac const& x = a.simplify();
     return x.q == 1 && x.p == b;
+  }
+
+  void debug() {
+    simplify();
+    if (q == 1) {
+      ::debug(p);
+    } else {
+      ::debug(p);
+      ::debug('/');
+      ::debug(q);
+    }
   }
 };

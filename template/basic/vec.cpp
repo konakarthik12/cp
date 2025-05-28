@@ -2,9 +2,10 @@
 #include "bool.cpp"
 #include "con.cpp"
 
-template <typename V>
-struct vec : public Con<NotBool_t<V>, std::vector> {
+template <typename V, const int offset = 0>
+struct vec : Con<NotBool_t<V>, std::vector, offset> {
   using T = NotBool_t<V>;
-  using C = Con<T, std::vector>;
-  using Con<NotBool_t<V>, std::vector>::Con;
+  using C = Con<T, std::vector, offset>;
+  using Con<NotBool_t<V>, std::vector, offset>::Con;
 };
+

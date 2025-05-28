@@ -1,31 +1,32 @@
 #pragma once
-#include "../concepts.cpp"
 #include "../scaffold.cpp"
-#include "../deb.cpp"
-
-
+#include "../concepts.cpp"
+#include "../deb_raw.cpp"
 #include "bool.cpp"
+// TODO fix caide cpp inliner
 
-template <typename T, template <class, class...> class C>
+template <typename T>
+concept HasIterAlt = requires(T& container) {
+  { container.begin() } -> same_as<decltype(container.end())>;
+  { container.end() } -> same_as<decltype(container.begin())>;
+};
+
+template <typename T, template <class, class...> class C, const int offset = 0>
 struct Con {
   using V = C<T>;
-  using iter = C<T>::iterator;
   using value_type = T;
   V v;
 
   Con() {
   }
-  explicit Con(int size) : v(size) {
+
+  explicit Con(int size, T init = T()) : v(size, init) {
   }
-  Con(int size, T init) : v(size, init) {
-  }
-  template <typename Iter>
-    requires input_iterator<Iter>
+  template <input_iterator Iter>
   Con(Iter start, Iter end) : v(start, end) {
   }
 
-  template <typename Container>
-    requires HasIter<Container>
+  template <HasIter Container>
   explicit Con(const Container& cnt) : v(cnt.begin(), cnt.end()) {
   }
   Con(initializer_list<T> initList) : v(initList.size()) {
@@ -33,6 +34,17 @@ struct Con {
     for (const auto& value: initList) {
       *it++ = value;
     }
+  }
+
+  template <std::integral First, std::integral... Rest>
+    requires requires(T& container) {
+      { sizeof...(Rest) >= 1 };
+      { container.begin() } -> same_as<decltype(container.end())>;
+      { container.end() } -> same_as<decltype(container.begin())>;
+      { std::constructible_from<T, Rest...> };
+    }
+  explicit Con(First first, Rest... rest) : v(static_cast<size_t>(first), T(static_cast<size_t>(rest)...)) {
+    static_assert(HasIter<T>);
   }
 
   auto begin() const {
@@ -71,7 +83,11 @@ struct Con {
     return this->v.front();
   }
 
-  T& back() {
+  auto& back() {
+    return this->v.back();
+  }
+
+  auto& back() const {
     return this->v.back();
   }
 
@@ -87,13 +103,15 @@ struct Con {
     return !this->empty();
   }
 
-  T& operator[](size_t index) {
-    dssert(index >= 1 && <= this->v.size());
+  T& operator[](int idx) {
+    int index = idx - offset;
+    dssert(index >= 0 && index < this->sz());
     return this->v[index];
   }
 
-  const T& operator[](size_t index) const {
-    dssert(index >= 1 && <= this->v.size());
+  const T& operator[](int idx) const {
+    int index = idx - offset;
+    dssert(index >= 0 && index < this->sz());
 
     return this->v[index];
   }
@@ -122,9 +140,11 @@ struct Con {
     return this->v.emplace_back(std::forward<Args>(args)...);
   }
 
-  template <typename... Args>
-  auto& insert(Args&&... args) {
-    return this->v.insert(std::forward<Args>(args)...);
+  auto insert(int idx, const T& x) {
+    idx -= offset;
+    if (idx < 0) idx += sz();
+    dssert(idx >= 0 && idx <= sz());
+    return v.insert(v.begin() + idx, x);
   }
 
   T rb() {
@@ -151,7 +171,7 @@ struct Con {
   }
 
   void iota(int n) {
-    iota(0, n - 1);
+    iota(offset, n - 1 + offset);
   }
 
   template <typename Comp = less<T>>
@@ -186,8 +206,8 @@ struct Con {
     std::ranges::sort(this->v, comp, proj);
   }
 
-  auto reverse() {
-    return std::reverse(this->v.begin(), this->v.end());
+  void reverse() {
+    std::reverse(this->v.begin(), this->v.end());
   }
 
   auto next_perm() {
@@ -205,10 +225,14 @@ struct Con {
   auto is_sorted() {
     return std::is_sorted(v.begin(), v.end());
   }
+  auto is_rsorted() {
+    return std::is_sorted(v.begin(), v.end(), greater());
+  }
 
   auto back_inserter() {
     return std::back_inserter(v);
   }
+
   auto get(int x) {
     if (x < 0) x += sz();
     return v[x];
@@ -238,10 +262,20 @@ struct Con {
   auto ge(const T& x, Compare comp = {}) {
     return *lower_bound(x, comp);
   }
-  template <class Compare = std::less<>>
-  auto cnt_ge(const T& x, Compare comp = {}) {
-    auto iter = lower_bound(x, comp);
-    return idist(v.begin(), iter);
+  // template <class Compare = std::less<>>
+  // auto cnt_ge(const T& x, Compare comp = {}) {
+  //   auto iter = lower_bound(x, comp);
+  //   return idist(v.begin(), iter);
+  // }
+  // template <class Compare = std::less<>>
+  // auto cnt_ls(const T& x, Compare comp = {}) {
+  //   auto iter = prev(lower_bound(x, comp));
+  //   return idist(v.begin(), iter);
+  // }
+
+  template <typename... Args>
+  void erase_if(Args&&... args) {
+    std::erase_if(this->v, std::forward<Args>(args)...);
   }
 
   template <class Compare = std::less<>>
@@ -253,16 +287,19 @@ struct Con {
     return *prev(upper_bound(x, comp));
   }
 
-  auto sum() {
+  auto sum() const {
     if cexp (is_integral_v<T>) return reduce(this->begin(), this->end(), 0LL);
     else return reduce(this->begin(), this->end(), T(0));
   }
 
-  T max() {
+  T max() const {
     return *std::max_element(v.begin(), v.end());
   }
-  T min() {
+  T min() const {
     return *std::min_element(v.begin(), v.end());
+  }
+  T gcd() const {
+    return reduce(all(v), v[0], std::gcd<int, int>);
   }
 
   template <typename... Args>
@@ -275,9 +312,10 @@ struct Con {
     return v.count_if(std::forward<Args>(args)...);
   }
 
-  //  auto append(const Con& other) {
-  //    this->v.insert(this->v.end(), other.begin(), other.end());
-  //  }
+  auto index(const T& x) {
+    const auto it = std::find(v.begin(), v.end(), x);
+    return idist(v.begin(), it) + offset;
+  }
 
   auto operator+=(const Con& other) {
     this->v.insert(this->v.end(), other.begin(), other.end());
@@ -286,6 +324,23 @@ struct Con {
   template <class RNG>
   auto shuffle(RNG& gen) {
     std::shuffle(v.begin(), v.end(), gen);
+  }
+  bool has(T y) {
+    return std::any_of(v.begin(), v.end(), [&](T x) { return x == y; });
+  }
+
+  bool every(T y) {
+    return std::all_of(v.begin(), v.end(), [&](T x) { return x == y; });
+  }
+
+  void rotate_l(int idx) {
+    std::rotate(v.begin(), v.begin() + idx, v.end());
+  }
+  void rotate_r(int idx) {
+    std::rotate(v.rbegin(), v.rbegin() + idx, v.rend());
+  }
+  void erase(int idx) {
+    this->v.erase(this->v.begin() + idx - offset);
   }
 };
 

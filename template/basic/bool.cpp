@@ -8,7 +8,10 @@ struct Bool {
   }
   Bool(bool value) : v(value) {
   }
-
+  Bool& operator=(const bool value) {
+    v = value;
+    return *this;
+  }
   operator bool() const {
     return v;
   }
@@ -29,6 +32,8 @@ struct Bool {
     os << b.v;
     return os;
   }
+
+
 };
 
 template <typename T>
