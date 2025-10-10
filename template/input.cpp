@@ -113,7 +113,7 @@ void __read2D(V2& v2, int r, int c) {
     }
   }
 }
-
+namespace io {
 void read() {
 }
 
@@ -142,7 +142,8 @@ void read(T&& first, Args&&... args) {
   __read(std::forward<T>(first));
   read(std::forward<Args>(args)...);
 }
-
+}
+using namespace io;
 int readInt() {
   int x;
   read(x);

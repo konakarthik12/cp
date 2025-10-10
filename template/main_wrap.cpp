@@ -4,6 +4,8 @@
 #include "input.cpp"
 #include "output.cpp"
 #include "deb.cpp"
+#include "keyboard.cpp"
+int test_cases = -1;
 template <typename Res>
 void handle_print(optional<Res>& res) {
   if (res) {
@@ -64,10 +66,12 @@ template <typename Func, typename... Args>
     { invoke_result_t<Func, int>() };
   }
 void handle_solve(Func func) {
-  int qrs;
-  read(qrs);
-  for (int i = 1; i <= qrs; i++) {
+  read(test_cases);
+  for (int i = 1; i <= test_cases; i++) {
     call_print(func, i);
+#ifdef LOCAL
+    if (i != test_cases) wait_for_spacebar();
+#endif
   }
 }
 

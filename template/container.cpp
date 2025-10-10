@@ -3,14 +3,6 @@
 using lll = __int128;
 template <typename T>
 using expand_ll = std::common_type<ll, T>::type;
-// template <typename T>
-//   requires integral<T>
-// struct widen_pre_t {
-//   using type = long long;
-// };
-
-// template <class T>
-// using widen_pre = widen_pre_t<T>::type;
 
 template <class Cont>
 void reverse(Cont& vec) {

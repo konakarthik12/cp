@@ -105,6 +105,9 @@ struct set {
     return !v.empty();
   }
 
+  auto merge(set<T>& u) {
+    return v.merge(std::forward<std::set<T>>(u.v));
+  }
   auto find(T x) {
     return v.find(x);
   }

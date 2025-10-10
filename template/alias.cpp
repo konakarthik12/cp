@@ -73,9 +73,6 @@ using mpii = map<pii, pii>;
 using mivi = map<int, vi>;
 using mipii = map<int, pii>;
 
-// using vpll = vec<pll>;
-// using vpill = vec<pill>;
-
 using vipll = vec<pill>;
 using vvpll = vv<pll>;
 template <typename T>
@@ -90,7 +87,8 @@ template <typename T>
 using opt = std::optional<T>;
 using si = set<int>;
 using sd = set<double>;
-using msi = mset<int>;
-
+using sll = set<ll>;
 using spii = set<pii>;
+
+using msi = mset<int>;
 #endif

@@ -1,10 +1,10 @@
 #pragma once
 #include "../scaffold.cpp"
+#include "../concepts.cpp"
 #include "pair.cpp"
-
-// TODO: merge with set
 template <typename T, typename Comp = less<T>>
 struct mset {
+  // TODO: merge with set
   std::multiset<T, Comp> v;
   using value_type = T;
 
@@ -19,7 +19,17 @@ struct mset {
 
   mset(mset&& s) : v(std::move(s.v)) {
   }
+  mset(initializer_list<T> initList) {
+    for (const auto& value: initList) v.insert(value);
+  }
+  template <typename Iter>
+    requires input_iterator<Iter>
+  mset(Iter start, Iter end) : v(start, end) {
+  }
 
+  template <HasIter Container>
+  explicit mset(const Container& cnt) : v(cnt.begin(), cnt.end()) {
+  }
   mset& operator=(const mset& s) {
     v = s.v;
     return *this;
@@ -75,7 +85,7 @@ struct mset {
     return v.emplace(std::forward<Args>(args)...);
   }
   template <typename U>
-  auto erase(U&& x) {
+  auto erase_all(U&& x) {
     return v.erase(std::forward<U>(x));
   }
 
