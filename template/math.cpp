@@ -105,8 +105,8 @@ struct Primes {
   wi primes;
   Primes(int n) : primes(sieve(n)) {
   }
-  wi factor(int x) {
-    wi facts;
+  wll factor(ll x) {
+    wll facts;
     for (int p: primes) {
       while (x % p == 0) {
         facts.pb(p);
@@ -145,9 +145,10 @@ struct Combo {
     return facts[x];
   }
 
-  T choose(int n, int k) {
+  T choose(ll n, ll k) {
     if (n < k) return 0;
     if (n == k || n == 0 || k == 0) return 1;
+    if (k > n - k) k = n - k;
     T ans(1);
 
     if (n >= facts.sz()) {
@@ -159,7 +160,7 @@ struct Combo {
   }
 
   template <class... Args>
-  T choose(int n, Args&&... args) {
+  T choose(ll n, Args&&... args) {
     T ans(1);
     for (int a: {args...}) {
       ans *= choose(n, a);
@@ -179,11 +180,13 @@ struct Combo {
     return T(2, n);
   }
 
-  T sum(int n, int k, bool allow_zero = true) {
+  T sum(ll s, ll n, bool allow_zero = true) {
+    if (n <= 0 || s < 0) return 0;
     if (allow_zero) {
-      return choose(n + k - 1, k - 1);
+      return choose(s + n - 1, n - 1);
     } else {
-      return choose(n - 1, k - 1);
+      if (s < n) return 0;
+      return choose(s - 1, n - 1);
     }
   }
 

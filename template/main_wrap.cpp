@@ -69,9 +69,9 @@ void handle_solve(Func func) {
   read(test_cases);
   for (int i = 1; i <= test_cases; i++) {
     call_print(func, i);
-#ifdef LOCAL
-    if (i != test_cases) wait_for_spacebar();
-#endif
+    // #ifdef LOCAL
+    //     if (i != test_cases) wait_for_spacebar();
+    // #endif
   }
 }
 

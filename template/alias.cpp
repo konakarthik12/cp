@@ -46,9 +46,15 @@ GENERATE_SINGLE(d, double)
 GENERATE_SINGLE(b, bool)
 GENERATE_SINGLE(s, str)
 
-#define GENERATE_AB(LEFT, RIGHT_A, RIGHT_B) \
-  using m##LEFT = map<RIGHT_A, RIGHT_B>;    \
-  using p##LEFT = pr<RIGHT_A, RIGHT_B>;
+#define GENERATE_AB(LEFT, RIGHT_A, RIGHT_B)         \
+  using m##LEFT = map<RIGHT_A, RIGHT_B>;            \
+  using p##LEFT = pr<RIGHT_A, RIGHT_B>;             \
+  using vp##LEFT = vec<pr<RIGHT_A, RIGHT_B>>;       \
+  using wp##LEFT = wec<pr<RIGHT_A, RIGHT_B>>;       \
+  using vvp##LEFT = vec<vec<pr<RIGHT_A, RIGHT_B>>>; \
+  using vwp##LEFT = vec<wec<pr<RIGHT_A, RIGHT_B>>>; \
+  using wvp##LEFT = wec<vec<pr<RIGHT_A, RIGHT_B>>>; \
+  using wwp##LEFT = ww<pr<RIGHT_A, RIGHT_B>>;
 
 GENERATE_AB(ii, int, int)
 GENERATE_AB(dd, double, double)
@@ -63,18 +69,12 @@ GENERATE_AB(ic, int, char)
 GENERATE_AB(ib, int, bool)
 GENERATE_AB(di, double, int)
 
-GENERATE_SINGLE(pii, pii)
-GENERATE_SINGLE(pcc, pcc)
-GENERATE_SINGLE(pll, pll)
-GENERATE_SINGLE(pill, pill)
-GENERATE_SINGLE(plll, plli)
-
 using mpii = map<pii, pii>;
 using mivi = map<int, vi>;
+using miwi = map<int, wi>;
 using mipii = map<int, pii>;
 
 using vipll = vec<pill>;
-using vvpll = vv<pll>;
 template <typename T>
 using www = wec<ww<T>>;
 using wwwi = www<int>;

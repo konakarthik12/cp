@@ -1,5 +1,6 @@
 #pragma once
 #include "base.cpp"
+#include "views.cpp"
 using lll = __int128;
 template <typename T>
 using expand_ll = std::common_type<ll, T>::type;
@@ -127,12 +128,9 @@ auto diff_arr(Cont& v, Op op) {
   replace_first<Cont, ReplaceI> d;
   if (v.empty()) return d;
 
-  d.reserve(v.size());
-  d.push_back(v[0]);
-
-  for (size_t i = 1; i < v.size(); ++i) {
-    d.push_back(op(v[i], v[i - 1]));
-  }
+  d.reserve(v.sz());
+  d.pb(v.front());
+  for (auto [a, b]: v | pairwise) d.pb(op(b, a));
 
   return d;
 }

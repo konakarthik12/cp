@@ -16,10 +16,10 @@ void __read(T&& x) {
 }
 template <const size_t N>
 void __read(bitset<N>& b) {
-  using Type = typename std::conditional_t<(N <= sizeof(int) * 8), int, ll>;
+  using Type = typename std::conditional_t<(N <= sizeof(int) * 8), int, ull>;
   Type x;
   cin >> x;
-  b = x;
+  b = bitset<N>(x);
 }
 
 template <typename T1, typename T2>

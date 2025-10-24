@@ -1,11 +1,11 @@
 #pragma once
 #include "base.cpp"
 #include "concepts.cpp"
-
+static bool output_disable = false;
 template <typename T>
   requires Printable<T>
 void __print(T x) {
-  cout << x;
+  if (!output_disable) cout << x;
 }
 void println() {
   __print('\n');

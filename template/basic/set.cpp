@@ -2,14 +2,14 @@
 #include "../concepts.cpp"
 #include "con.cpp"
 #include "pair.cpp"
-template <typename T, typename Comp = less<T>>
+template <typename T, typename Comp = less<T>, template <typename, typename> class SetType = std::set>
 struct set {
-  std::set<T, Comp> v;
+  SetType<T, Comp> v;
   using value_type = T;
   set() {
   }
 
-  set(const std::set<T>& v) : v(v) {
+  set(const SetType<T, Comp>& v) : v(v) {
   }
 
   set(const set& s) : v(s.v) {
@@ -106,7 +106,7 @@ struct set {
   }
 
   auto merge(set<T>& u) {
-    return v.merge(std::forward<std::set<T>>(u.v));
+    return v.merge(std::forward<SetType<T, Comp>>(u.v));
   }
   auto find(T x) {
     return v.find(x);

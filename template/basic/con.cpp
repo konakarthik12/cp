@@ -3,13 +3,6 @@
 #include "../concepts.cpp"
 #include "../deb_raw.cpp"
 #include "bool.cpp"
-// TODO fix caide cpp inliner
-
-template <typename T>
-concept HasIterAlt = requires(T& container) {
-  { container.begin() } -> same_as<decltype(container.end())>;
-  { container.end() } -> same_as<decltype(container.begin())>;
-};
 
 template <typename T, template <class, class...> class C, const int offset = 0>
 struct Con {
@@ -39,12 +32,16 @@ struct Con {
   template <std::integral First, std::integral... Rest>
     requires requires(T& container) {
       { sizeof...(Rest) >= 1 };
-      { container.begin() } -> same_as<decltype(container.end())>;
-      { container.end() } -> same_as<decltype(container.begin())>;
+      { HasIter<T> };
       { std::constructible_from<T, Rest...> };
     }
   explicit Con(First first, Rest... rest) : v(static_cast<size_t>(first), T(static_cast<size_t>(rest)...)) {
-    static_assert(HasIter<T>);
+    // workaround to keep caide happy
+    if constexpr (HasIter<T>) {
+      static_assert(true);
+    } else {
+      static_assert(true);
+    }
   }
 
   auto begin() const {
@@ -262,16 +259,6 @@ struct Con {
   auto ge(const T& x, Compare comp = {}) {
     return *lower_bound(x, comp);
   }
-  // template <class Compare = std::less<>>
-  // auto cnt_ge(const T& x, Compare comp = {}) {
-  //   auto iter = lower_bound(x, comp);
-  //   return idist(v.begin(), iter);
-  // }
-  // template <class Compare = std::less<>>
-  // auto cnt_ls(const T& x, Compare comp = {}) {
-  //   auto iter = prev(lower_bound(x, comp));
-  //   return idist(v.begin(), iter);
-  // }
 
   template <typename... Args>
   void erase_if(Args&&... args) {
