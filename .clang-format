@@ -10,7 +10,7 @@ AllowShortFunctionsOnASingleLine: None
 KeepEmptyLinesAtTheStartOfBlocks: true
 SpaceAfterCStyleCast: true
 SpaceBeforeRangeBasedForLoopColon: false
-AllowShortLambdasOnASingleLine: All
+AllowShortLambdasOnASingleLine: Inline
 PackConstructorInitializers: CurrentLine
 DerivePointerAlignment: false
 PointerAlignment: Left

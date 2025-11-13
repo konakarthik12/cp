@@ -10,6 +10,30 @@ add_executable(internal_testing testing/tests.cpp)
 
 target_compile_definitions(cp PUBLIC ENTRY=main LOCAL)
 
+include(FetchContent)
+
+# Also requires one of: libbfd (gnu binutils), libdwarf, libdw (elfutils)
+FetchContent_Declare(backward
+        GIT_REPOSITORY https://github.com/bombela/backward-cpp
+        GIT_TAG master  # or a version tag, such as v1.6
+        SYSTEM          # optional, the Backward include directory will be treated as system directory
+)
+FetchContent_MakeAvailable(backward)
+
+include(FetchContent)
+FetchContent_Declare(
+  cpptrace
+  GIT_REPOSITORY https://github.com/jeremy-rifkin/cpptrace.git
+  GIT_TAG        v1.0.4 # <HASH or TAG>
+)
+FetchContent_MakeAvailable(cpptrace)
+target_link_libraries(cp PUBLIC cpptrace::cpptrace)
+
+
+# Add Backward to your target (either Backward::Interface, Backward::Object, or Backward::Backward)
+target_link_libraries(cp PUBLIC Backward::Interface)
+
+
 add_executable(tests template.cpp)
 target_compile_definitions(tests PUBLIC ENTRY=testing/tests)
 ExternalProject_Add(doctest
@@ -22,12 +46,12 @@ ExternalProject_Add(doctest
         LOG_DOWNLOAD ON
 )
 
-message(STATUS "Root directory of doctest: ${DOCTEST_INCLUDE_DIR}")
-ExternalProject_Get_Property(doctest source_dir)
-set(DOCTEST_INCLUDE_DIR ${source_dir}/doctest CACHE INTERNAL "Path to include folder for doctest")
+ message(STATUS "Root directory of doctest: ${DOCTEST_INCLUDE_DIR}")
+ ExternalProject_Get_Property(doctest source_dir)
+ set(DOCTEST_INCLUDE_DIR ${source_dir}/doctest CACHE INTERNAL "Path to include folder for doctest")
 
 add_dependencies(tests doctest)
 target_include_directories(tests PUBLIC ${DOCTEST_INCLUDE_DIR})
 target_include_directories(internal_testing PUBLIC ${DOCTEST_INCLUDE_DIR})
 
-add_subdirectory(merger build/cmake/merger/)
+ add_subdirectory(merger build/cmake/merger/)

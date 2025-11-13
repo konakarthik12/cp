@@ -22,8 +22,8 @@ int main() {
     inliner.clangCompilationOptions = {"-std=c++23",
                                        "-iquote", ".",
                                        "-iquote", "template/",
-
                                        "-iquote", "build/preprocess/",
+      // clang++ -x c++-header -std=c++23 template/wrapper.hpp -o build/wrapper.hpp.pch
                                        "-include-pch", "build/wrapper.hpp.pch"
     };
 
@@ -34,18 +34,13 @@ int main() {
 
     inliner.clangCompilationOptions.emplace_back("-DINLINER");
     inliner.clangCompilationOptions.emplace_back("-DPREPROCESS");
-    inliner.clangCompilationOptions.emplace_back("-fparse-all-comments");
+    // inliner.clangCompilationOptions.emplace_back("-fparse-all-comments");
     inliner.maxConsequentEmptyLines = maxConsecutiveEmptyLines;
     auto t1 = std::chrono::high_resolution_clock::now();
-    try {
-        inliner.inlineCode(sourceFiles, outputFile);
-        auto t2 = std::chrono::high_resolution_clock::now();
-        std::chrono::duration<double, std::milli> ms_double = t2 - t1;
-        std::cout << "Merged in " << ms_double.count() << " ms" << endl;
-    } catch (...) {
-        std::cout << "Failed to merge" << endl;
-        return -1;
-    }
+    inliner.inlineCode(sourceFiles, outputFile);
+    auto t2 = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double, std::milli> ms_double = t2 - t1;
+    std::cout << "Merged in " << ms_double.count() << " ms" << endl;
 
     return 0;
 }

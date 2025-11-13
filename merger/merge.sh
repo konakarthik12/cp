@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 cd "$(dirname "$0")" && cd .. || exit
+rm -f output/merged.cpp
 scripts/preprocess.sh
-if ! /Users/konak/Projects/cp/build/cmake-build-release/build/cmake/merger/merger "$@"; then
-  rm -f output/merged.cpp
-fi
+/Users/konak/Projects/cp/release/build/cmake/merger/merger

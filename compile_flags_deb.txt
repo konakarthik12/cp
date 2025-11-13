@@ -8,6 +8,10 @@
 -D_LIBCPP_ENABLE_ASSERTIONS
 -D_GLIBCXX_DEBUG
 -ggdb3
+-ldwarf -lz -lzstd -ldl
+-lcpptrace
+-I/usr/local/include
+-L/usr/local/lib
 -Wall
 -Wextra
 -Wshadow
