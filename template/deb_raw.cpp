@@ -7,15 +7,16 @@ template <typename Container>
 void debug(Container v);
 
 template <typename T>
-  requires Printable<T>
+concept Debuggable = requires(T t) {
+  { t.debug() } -> std::same_as<void>;
+};
+
+template <typename T>
+  requires (Printable<T> && !Debuggable<T>)
 void debug(T x) {
   *dout << x;
 }
 
-template <typename T>
-concept Debuggable = requires(T t) {
-  { t.debug() } -> std::same_as<void>;
-};
 
 template <Debuggable T>
 void debug(T& x) {

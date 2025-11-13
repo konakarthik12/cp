@@ -1,6 +1,7 @@
 #pragma once
 #include "scaffold.cpp"
 #include "alias.cpp"
+
 const double pi = acos(-1);
 template <typename T>
 int sgn(T val) {
@@ -82,9 +83,7 @@ vi linsieve(int n) {
     }
     for (int j = 0; i * pr[j] <= n; ++j) {
       lp[i * pr[j]] = pr[j];
-      if (pr[j] == lp[i]) {
-        break;
-      }
+      if (pr[j] == lp[i]) break;
     }
   }
   return lp;
@@ -117,8 +116,26 @@ struct Primes {
     return facts;
   }
 
-  bool has(int x) {
+  bool check(int x) {
     return primes.has(x);
+  }
+};
+struct LinPrime {
+  vi lp;
+  LinPrime(int n) : lp(linsieve(n)) {
+  }
+  wi factor(int x) {
+    wi facts;
+    while (x > 1) {
+      int p = lp[x];
+      facts.pb(p);
+      x /= p;
+    }
+    return facts;
+  }
+
+  bool check(int x) {
+    return lp[x] == x;
   }
 };
 

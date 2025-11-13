@@ -1,6 +1,8 @@
 #pragma once
 #include "../scaffold.cpp"
 
+using ull = unsigned long long;
+using ll = long long;
 template <size_t N, bool easy_index = false>
 class bitset : public std::bitset<N> {
  public:
@@ -9,8 +11,11 @@ class bitset : public std::bitset<N> {
   explicit operator int() const {
     return (int) this->to_ullong();
   }
-  explicit operator long long() const {
-    return (long long) this->to_ullong();
+  explicit operator ll() const {
+    return (ll) this->to_ullong();
+  }
+  explicit operator ull() const {
+    return this->to_ullong();
   }
 
   auto operator[](size_t index) {
@@ -22,8 +27,14 @@ class bitset : public std::bitset<N> {
     if cexp (easy_index) index--;
     return std::bitset<N>::operator[](index);
   }
-  bool operator<(const bitset& other) const {
-    return this->to_ullong() < other.to_ullong();
+  auto operator<=>(const bitset& other) const {
+    return this->to_ullong() <=> other.to_ullong();
+  }
+
+  template <typename T>
+    requires std::integral<T> || std::floating_point<T>
+  auto operator<=>(const T& other) const {
+    return static_cast<ll>(*this) <=> other;
   }
 
   bitset operator^(const bitset& other) const {
@@ -31,6 +42,18 @@ class bitset : public std::bitset<N> {
 
     return bitset(result);
   }
+
+  bitset operator+(const bitset& other) const {
+    static_assert(N <= 64, "bitset size must fit in ull for addition");
+    ull sum = (ull) *this + (ull) other;
+    return bitset(sum);
+  }
+  bitset operator-(const bitset& other) const {
+    static_assert(N <= 64, "bitset size must fit in ull for subtraction");
+    ull diff = (ull) *this - (ull) other;
+    return bitset(diff);
+  }
+
 
   // performance
   // Construct from base bitset directly
@@ -41,10 +64,51 @@ class bitset : public std::bitset<N> {
   explicit bitset(std::bitset<N>&& b) : std::bitset<N>(std::move(b)) {
   }
 
-  // Construct from unsigned long long
-  explicit bitset(unsigned long long value) : std::bitset<N>(value) {
+  bitset(ull value) : std::bitset<N>(value) {
+  }
+
+  void input() {
+    ull x;
+    std::cin >> x;
+    *this = bitset<N, easy_index>(x);
+  }
+
+  bitset& operator++() {
+    *this = *this + bitset(1ULL);
+    return *this;
+  }
+  bitset& operator--() {
+    *this = *this - bitset(1ULL);
+    return *this;
+  }
+  bitset operator++(int) {
+    bitset tmp = *this;
+    *this = *this + bitset(1ULL);
+    return tmp;
+  }
+  bitset operator--(int) {
+    bitset tmp = *this;
+    *this = *this - bitset(1ULL);
+    return tmp;
+  }
+
+
+  void debug() const {
+    std::stringstream ss;
+    ss << std::bitset<N>(*this);
+    ss << " (" << (ull) *this << ')';
+    auto s = ss.str();
+
+    debug_all(s);
   }
 };
+
+// Non-member comparison operators for numeric < bitset
+template <size_t N, bool easy_index, typename T>
+  requires std::integral<T> || std::floating_point<T>
+auto operator<=>(const T& lhs, const bitset<N, easy_index>& rhs) {
+  return lhs <=> (ull) (rhs);
+}
 
 template <int N>
 using witset = bitset<N, true>;

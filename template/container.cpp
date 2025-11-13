@@ -15,10 +15,11 @@ void erase_all(Cont& vec, char c) {
   vec.erase(remove(all(vec), c), vec.end());
 }
 
-template <typename C>
-auto sum(const C& c) {
-  if cexp (is_integral_v<typename C::value_type>) return reduce(all(c), 0LL);
-  else return reduce(all(c), typename C::value_type(0));
+template <typename Cont>
+map<typename Cont::value_type, int> freq_map(Cont&& vec) {
+  map<typename Cont::value_type, int> cnt;
+  for (auto x: vec) cnt[x]++;
+  return cnt;
 }
 
 template <class C, typename T>

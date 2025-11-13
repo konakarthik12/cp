@@ -274,10 +274,24 @@ struct Con {
     return *prev(upper_bound(x, comp));
   }
 
-  auto sum() const {
-    if cexp (is_integral_v<T>) return reduce(this->begin(), this->end(), 0LL);
-    else return reduce(this->begin(), this->end(), T(0));
+  template <typename Op>
+  auto reduce(Op op) const {
+    if constexpr (std::integral<T>) {
+      return reduce(op, 0LL);
+    } else {
+      return reduce(op, T());
+    }
   }
+
+  template <typename Op, typename Init>
+  auto reduce(Op op, Init init) const {
+    return std::accumulate(v.begin(), v.end(), init, op);
+  }
+
+  auto sum() const {
+    return reduce(std::plus<T>());
+  }
+
 
   T max() const {
     return *std::max_element(v.begin(), v.end());
@@ -304,8 +318,12 @@ struct Con {
     return idist(v.begin(), it) + offset;
   }
 
-  auto operator+=(const Con& other) {
+  auto ab(const Con& other) { 
     this->v.insert(this->v.end(), other.begin(), other.end());
+  }
+
+  auto af(const Con& other) {
+    this->v.insert(this->v.begin(), other.begin(), other.end());
   }
 
   template <class RNG>

@@ -122,7 +122,7 @@ struct Segtree {
     build();
   }
 
-  void assign(int p, Node v) {
+  void set(int p, Node v) {
     if cexp (easy_index) p--;
     dssert(p >= 0 && p < n);
     for (t[p += n] = v; p > 1; p >>= 1) t[p >> 1] = merge(t[p], t[p ^ 1]);

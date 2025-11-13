@@ -1,11 +1,10 @@
 #pragma once
 
-#include "base.cpp"
 #include "concepts.cpp"
 #include "container.cpp"
 
 template <typename T>
-  requires Readable<T>
+  requires (Readable<T> && !HasRead<T>)
 void __read(T& arr) {
   cin >> arr;
 }
@@ -13,13 +12,6 @@ template <typename T>
   requires HasRead<T>
 void __read(T&& x) {
   x.input();
-}
-template <const size_t N>
-void __read(bitset<N>& b) {
-  using Type = typename std::conditional_t<(N <= sizeof(int) * 8), int, ull>;
-  Type x;
-  cin >> x;
-  b = bitset<N>(x);
 }
 
 template <typename T1, typename T2>
@@ -91,7 +83,8 @@ template <typename V2>
 V2::value_type emplace_empty(V2& v2) {
   if cexp (HasEB<V2>) {
     return v2.eb();
-  } else if cexp (HasEmplaceBack<V2>) {
+  } else {
+    static_assert(HasEmplaceBack<V2>);
     return v2.emplace_back();
   }
 }
@@ -100,6 +93,7 @@ template <typename V2>
   requires HasValueType2D<V2>
 void __read2D(V2& v2, int r, int c) {
   using V = V2::value_type;
+  v2.clear();
   reserve(v2, r);
   for (int i = 0; i < r; i++) {
     cexp bool EB = HasEB<V2> || HasEmplaceBack<V2>;

@@ -7,7 +7,7 @@
 #include "keyboard.cpp"
 int test_cases = -1;
 template <typename Res>
-void handle_print(optional<Res>& res) {
+void handle_print(optional<Res>&& res) {
   if (res) {
     println("YES");
     println(*res);
@@ -16,7 +16,7 @@ void handle_print(optional<Res>& res) {
   }
 }
 template <typename Res>
-void handle_print(Res& res) {
+void handle_print(Res&& res) {
   println(res);
 }
 template <typename Func>
