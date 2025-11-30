@@ -52,8 +52,8 @@ TEST_CASE("testing combinatorics") {
   CHECK(combo.choose(8, 8, 1) == 0);
 
   //  stars and bars
-  CHECK(combo.sum(10, 4) == 286);        // zero not allowed
-  CHECK(combo.sum(10, 4, false) == 84);  // zero not allowed
+  CHECK(combo.sum(10, 4) == 286);
+  CHECK(combo.sum(10, 4, false) == 84);
 
   Combo<ModInt<17>> combo2(3);
   CHECK(combo2.bin(20) == (1 << 20) % 17);
@@ -88,6 +88,13 @@ TEST_CASE("vectors") {
   CHECK(nested.sz() == 3);
   CHECK(nested[1].sz() == 4);
   CHECK(nested[1][1].sz() == 5);
+
+  www<int> nested_def(3, 4, 5, 2);
+  CHECK(nested_def.sz() == 3);
+  CHECK(nested_def[1].sz() == 4);
+  CHECK(nested_def[1][1].sz() == 5);
+  CHECK(nested_def[1][1][1] == 2);
+
 }
 
 TEST_SUITE("containers") {
@@ -98,22 +105,31 @@ TEST_SUITE("containers") {
   vb bools = {false, false, true, true};
   wll longs = {1, 2, 3, 4, 5};
   TEST_CASE("sum") {
-    CHECK(sum(ints) == bigl * 4);
+    CHECK(ints.sum() == bigl * 4);
 
-    CHECK(sum(doubles) == Approx(6));
-    CHECK(same_as<decltype(sum(ints)), ll>);
-    CHECK(same_as<decltype(sum(doubles)), double>);
+    CHECK(doubles.sum() == Approx(6));
+    CHECK(same_as<decltype(ints.sum()), ll>);
+    CHECK(same_as<decltype(doubles.sum()), double>);
   }
 
   TEST_CASE("prefix") {
-    // static_assert(same_as<decltype(bools.pref_arr()), wec<int>>);
-    // CHECK(bools.prefix_arr() == vi{0, 0, 0, 1, 2});
-    // CHECK(ints.prefix_arr() == vll{0, bigl, bigl * 2, bigl * 3, bigl * 4});
-    // CHECK(longs.prefix_arr() == wll{0, 1, 3, 6, 10, 15});
-    // CHECK(doubles.prefix_arr()[3] == Approx(6));
-    // CHECK(longs.pref_arr() == wll{1, 3, 6, 10, 15});
-    // CHECK(longs.diff_arr() == wll{1, 1, 1, 1, 1});
-    // CHECK(longs.pref_arr().diff_arr() == longs);
+    static_assert(same_as<decltype(pref_arr(bools)), vll>);
+    CHECK(prefix_arr(bools) == vll{0, 0, 0, 1, 2});
+    CHECK(prefix_arr(ints) == vll{0, bigl, bigl * 2, bigl * 3, bigl * 4});
+    CHECK(prefix_arr(longs) == vll{0, 1, 3, 6, 10, 15});
+    CHECK(prefix_arr(doubles)[3] == Approx(6));
+    CHECK(pref_arr(longs) == wll{1, 3, 6, 10, 15});
+    CHECK(diff_arr(longs) == wll{1, 1, 1, 1, 1});
+    CHECK(diff_arr(pref_arr(longs)) == longs);
+  }
+
+  TEST_CASE("replace_first") {
+    static_assert(same_as<replace_first<vec<int>, ll>, vec<ll>>);
+    static_assert(same_as<replace_first<const vec<int>, ll>, vec<ll>>);
+    static_assert(same_as<replace_first<wec<int>, ll>, wec<ll>>);
+    static_assert(same_as<replace_first<const wec<int>, ll>, wec<ll>>);
+    static_assert(same_as<replace_first<vec<ll>, int>, vec<int>>);
+    static_assert(same_as<replace_first<vec<int>, double>, vec<double>>);
   }
 }
 
@@ -197,7 +213,7 @@ TEST_SUITE("containers") {
     arr.iota(1, 10);
     CHECK(arr[5] == 5);
 
-    CHECK(sum(arr) == 55);
+    CHECK(arr.sum() == 55);
   }
   TEST_CASE("sort") {
     wpii arr{{1, 2}, {2, 1}};
@@ -205,7 +221,9 @@ TEST_SUITE("containers") {
     CHECK(arr == wpii{{2, 1}, {1, 2}});
     arr.sort();
     CHECK(arr == wpii{{1, 2}, {2, 1}});
-    auto lamb = [&](pii& a, pii& b) { return a.f < b.f; };
+    auto lamb = [&](pii& a, pii& b) {
+      return a.f < b.f;
+    };
     arr.sort(lamb);
     CHECK(arr == wpii{{1, 2}, {2, 1}});
     arr.sort(&pii::s);
@@ -227,30 +245,60 @@ TEST_CASE("testing_output") {
 
 TEST_CASE("misc") {
   vi arr = {1, 2, 3, 4, 5};
-  vpii prs;
-  for (auto [a, b]: arr | pairwise) {
-    prs.eb(a, b);
-  }
+  vpii prs(arr | pairwise);
+
   CHECK(prs == vpii{{1, 2}, {2, 3}, {3, 4}, {4, 5}});
   prs.clear();
   for (auto [a, b]: arr | pairwise | rview) {
     prs.eb(a, b);
   }
+  CHECK(prs == vpii{{4, 5}, {3, 4}, {2, 3}, {1, 2}});
 
-  // for (auto [a, b]: arr | triangle) {
-  //   prs.eb(a, b);
-  // }
 
   vec<tuple<int, int, int>> arr2;
   arr2.sort(get<1>);
-  CHECK(prs == vpii{{4, 5}, {3, 4}, {2, 3}, {1, 2}});
   CHECK(blen(15) == 4);
   CHECK(blen(16) == 5);
 
-  assert(sum(vi(3, 1e9)) == 3e9);
+  assert(vi(3, 1e9).sum() == 3e9);
   assert(asum(1e9) == 500000000500000000);
   assert(asum(0) == 0);
   assert(asum(0, 0) == 0);
+}
+
+TEST_SUITE("Bool operators") {
+  TEST_CASE("Bool |= Bool") {
+    Bool a = false;
+    Bool b = true;
+    a |= b;
+    CHECK(a == true);
+  }
+
+  TEST_CASE("Bool |= bool") {
+    Bool a = false;
+    bool b = true;
+    a |= b;
+    CHECK(a == true);
+    
+    Bool c = false;
+    bool d = false;
+    c |= d;
+    CHECK(c == false);
+  }
+
+  TEST_CASE("vb[1] |= bool") {
+    vb arr = {false, false, true, false};
+    bool val = true;
+    arr[1] |= val;
+    CHECK(arr[1] == true);
+  }
+
+  TEST_CASE("vb[1] |= Bool") {
+    vb arr = {false, false, true, false};
+    Bool val = true;
+    arr[1] |= val;
+    CHECK(arr[1] == true);
+  }
 }
 
 void solve() {
