@@ -57,7 +57,6 @@ using std::to_string;
 using std::common_type_t;
 using std::conditional_t;
 using std::invoke_result_t;
-using std::is_integral_v;
 using std::is_signed_v;
 using std::is_unsigned_v;
 using std::make_unsigned_t;

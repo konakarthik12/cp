@@ -289,9 +289,18 @@ struct Con {
   }
 
   auto sum() const {
-    return reduce(std::plus<T>());
+    return reduce(std::plus<>());
   }
 
+  template <typename F>
+    requires std::invocable<F, const T&>
+  auto map(F&& f) const {
+    using U = std::decay_t<std::invoke_result_t<F, const T&>>;
+    Con<U, C, offset> result;
+    result.reserve(sz());
+    std::ranges::transform(v, std::back_inserter(result.v), std::forward<F>(f));
+    return result;
+  }
 
   T max() const {
     return *std::max_element(v.begin(), v.end());

@@ -2,8 +2,6 @@
 #include "base.cpp"
 #include "views.cpp"
 using lll = __int128;
-template <typename T>
-using expand_ll = std::common_type<ll, T>::type;
 
 template <class Cont>
 void reverse(Cont& vec) {
@@ -16,8 +14,14 @@ void erase_all(Cont& vec, char c) {
 }
 
 template <typename Cont>
-map<typename Cont::value_type, int> freq_map(Cont&& vec) {
+map<typename Cont::value_type, int> freq_map(const Cont& vec) {
   map<typename Cont::value_type, int> cnt;
+  for (auto x: vec) cnt[x]++;
+  return cnt;
+}
+template <typename Cont>
+wi freq_wi(const Cont& vec, int n) {
+  wi cnt(n);
   for (auto x: vec) cnt[x]++;
   return cnt;
 }
@@ -27,15 +31,38 @@ void fill(C& vec, T value) {
   fill(all(vec), value);
 }
 
-template <typename NewT1, typename T>
-struct ReplaceFirst;
+template <typename T, typename NewT1>
+struct ReplaceFirstImpl {
+  using type = T;
+};
 
-template <typename NewT1, template <typename, auto...> class Template, typename OldT1, auto... Rest>
-struct ReplaceFirst<NewT1, Template<OldT1, Rest...>> {
+// Handle templates with type parameter first, then template template parameter, then non-type parameters
+template <template <typename, template <class, class...> class, auto...> class Template, 
+          typename OldT1, template <class, class...> class TT, auto... Rest, typename NewT1>
+struct ReplaceFirstImpl<Template<OldT1, TT, Rest...>, NewT1> {
+  using type = Template<NewT1, TT, Rest...>;
+};
+
+// Handle templates with type parameter first, then non-type parameters (auto) - check this first
+template <template <typename, auto...> class Template, typename OldT1, auto... Rest, typename NewT1>
+  requires (sizeof...(Rest) > 0)
+struct ReplaceFirstImpl<Template<OldT1, Rest...>, NewT1> {
   using type = Template<NewT1, Rest...>;
 };
 
-template <typename NewT1, typename T>
+// Handle templates with type parameter first, then any other type parameters
+template <template <typename, typename...> class Template, typename OldT1, typename... Rest, typename NewT1>
+struct ReplaceFirstImpl<Template<OldT1, Rest...>, NewT1> {
+  using type = Template<NewT1, Rest...>;
+};
+
+// Main ReplaceFirst - strips cv qualifiers first, then delegates
+template <typename T, typename NewT1>
+struct ReplaceFirst {
+  using type = typename ReplaceFirstImpl<std::remove_cv_t<T>, NewT1>::type;
+};
+
+template <typename T, typename NewT1>
 using replace_first = typename ReplaceFirst<T, NewT1>::type;
 
 template <typename T>
@@ -94,7 +121,7 @@ auto pref_arr(Cont& v, Op op) {
 }
 
 template <typename T = void, typename Cont>
-auto pref_arr(Cont& v) {
+auto pref_arr(const Cont& v) {
   using W = conditional_t<is_void_v<T>, expand_ll<typename Cont::value_type>, T>;
   return pref_arr(v, std::plus<W>{});
 }
@@ -122,11 +149,12 @@ auto difference_arr(Cont& v, I = {}) {
   return difference_arr(v, std::minus<I>{});
 }
 template <typename Cont, typename Op>
-auto diff_arr(Cont& v, Op op) {
-  using T = Cont::value_type;
+auto diff_arr(Cont&& v, Op op) {
+  using ContNoRef = std::remove_reference_t<Cont>;
+  using T = typename ContNoRef::value_type;
   using ReplaceI = decltype(op(T{}, T{}));
 
-  replace_first<Cont, ReplaceI> d;
+  replace_first<ContNoRef, ReplaceI> d;
   if (v.empty()) return d;
 
   d.reserve(v.sz());
@@ -136,9 +164,10 @@ auto diff_arr(Cont& v, Op op) {
   return d;
 }
 template <typename T = void, typename Cont>
-auto diff_arr(Cont& v) {
-  using W = conditional_t<is_void_v<T>, typename Cont::value_type, T>;
-  return diff_arr(v, std::minus<W>{});
+auto diff_arr(Cont&& v) {
+  using ContNoRef = std::remove_reference_t<Cont>;
+  using W = conditional_t<is_void_v<T>, typename ContNoRef::value_type, T>;
+  return diff_arr(std::forward<Cont>(v), std::minus<W>{});
 }
 
 template <typename Cont, typename T>

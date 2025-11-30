@@ -176,7 +176,8 @@ struct Combo {
     return ans * inv_facts[k];
   }
 
-  template <class... Args>
+  template <typename... Args>
+  requires (sizeof...(Args) > 1)
   T choose(ll n, Args&&... args) {
     T ans(1);
     for (int a: {args...}) {

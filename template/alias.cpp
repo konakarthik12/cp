@@ -7,7 +7,7 @@
 using ll = long long;
 using lll = __int128;
 template <typename T>
-using expand_ll = std::common_type<ll, T>::type;
+using expand_ll = std::common_type_t<ll, T>;
 using ld = long double;
 using uint = unsigned int;
 using ull = unsigned long long;

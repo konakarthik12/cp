@@ -153,4 +153,7 @@ struct Segtree {
   Node whole() {
     return t.front();
   }
+  void debug() {
+    debug_all(span{t.begin() + n - 1, t.begin() + 2 * n - 1});
+  }
 };

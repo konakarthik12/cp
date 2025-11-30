@@ -66,8 +66,8 @@ struct custom_adjacent_pairwise_view : public ranges::view_base {
       --(*this);
       return tmp;
     }
-    auto operator-(custom_iterator& other) {
-      return std::distance(*this, other);
+    auto operator-(const custom_iterator& other) const {
+      return iter - other.iter;
     }
 
     auto operator+=(int n) {
@@ -86,12 +86,12 @@ struct custom_adjacent_pairwise_view : public ranges::view_base {
     }
   };
 
-  custom_iterator begin() {
+  custom_iterator begin() const {
 
     return custom_iterator(data.begin());
   }
   //
-  custom_iterator end() {
+  custom_iterator end() const {
     auto hmm = custom_iterator(std::prev(data.end()));
     return hmm;
   }

@@ -33,7 +33,15 @@ struct Bool {
     return os;
   }
 
+  Bool& operator|=(const Bool& other) {
+    v |= other.v;
+    return *this;
+  }
 
+  Bool& operator|=(bool value) {
+    v |= value;
+    return *this;
+  }
 };
 
 template <typename T>
@@ -49,4 +57,24 @@ struct NotBool<bool> {
 template <typename T>
 using NotBool_t = NotBool<T>::type;
 
+template <>
+struct is_integral_helper<Bool> : std::true_type {};
 
+template <>
+struct is_integral_helper<const Bool> : std::true_type {};
+
+template <>
+struct is_integral_helper<volatile Bool> : std::true_type {};
+
+template <>
+struct is_integral_helper<const volatile Bool> : std::true_type {};
+
+template <>
+struct std::common_type<Bool, long long> {
+  using type = long long;
+};
+
+template <>
+struct std::common_type<long long, Bool> {
+  using type = long long;
+};

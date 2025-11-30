@@ -25,3 +25,11 @@ template <class Iter>
 int idist(Iter a, Iter b) {
   return distance(a, b);
 }
+
+// Helper for custom is_integral_v that can be specialized for Bool
+template <typename T>
+struct is_integral_helper : std::is_integral<T> {};
+
+// Custom is_integral_v that uses the helper (can be specialized later for Bool)
+template <typename T>
+inline constexpr bool is_integral_v = is_integral_helper<std::remove_cv_t<std::remove_reference_t<T>>>::value;

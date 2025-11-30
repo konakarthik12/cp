@@ -8,7 +8,7 @@ struct PreSum {
   template <typename T1>
   PreSum(const wec<T1>& arr) : offset(0) {
     pre.reserve(arr.sz() + 1);
-    for (int x: arr) pre.pb(pre.back() + x);
+    for (const T1& x: arr) pre.pb(pre.back() + x);
   }
   template <typename T1>
   PreSum(const vec<T1>& arr) : offset(1) {
@@ -26,3 +26,7 @@ struct PreSum {
     return query(0, r);
   }
 };
+
+template <typename Container>
+  requires requires { typename Container::value_type; }
+PreSum(const Container&) -> PreSum<expand_ll<typename Container::value_type>>;
