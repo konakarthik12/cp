@@ -1,9 +1,6 @@
 /opt/homebrew/opt/llvm/bin/clang++
 -std=c++23
--Wall
--Wextra
--Wshadow
--Wno-sign-conversion
+-Wall -Wextra -Wshadow 
 -DLOCAL
 -DEDITOR
 -DENTRY=main

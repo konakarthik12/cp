@@ -19,7 +19,7 @@ auto build_cls(vi& order, func hash) {
 auto suffix_arr(str s) {
   int n;
   s += '$';
-  n = sz(s);
+  n = s.sz();
   vi order;
   auto raw_hash = [&](int x) { return s[x]; };
   order.iota(n);

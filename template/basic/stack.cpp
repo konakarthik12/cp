@@ -15,8 +15,6 @@ struct stack : public wec<T> {
     return this->rb();
   }
 
-
-
   auto& top() {
     return this->v.back();
   }
@@ -24,7 +22,4 @@ struct stack : public wec<T> {
   auto& top() const {
     return this->v.back();
   }
-
-
-
 };

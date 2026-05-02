@@ -12,11 +12,7 @@ using ld = long double;
 using uint = unsigned int;
 using ull = unsigned long long;
 
-using str = std::string;
-using sview = std::string_view;
-
-template <class T, class Compare = less<T>, class Container = std::vector<T>>
-using pqueue = std::priority_queue<T, Container, Compare>;
+using strvw = std::string_view;
 
 template <typename T>
 using vv = vec<vec<T>>;
@@ -25,11 +21,14 @@ using vw = vec<wec<T>>;
 
 template <typename T>
 using wv = wec<vec<T>>;
-template <typename T>
-using wvv = wec<vec<vec<T>>>;
 
 template <typename T>
 using ww = wec<wec<T>>;
+template <typename T>
+using wvv = wec<vv<T>>;
+
+template <typename T>
+using vww = vec<ww<T>>;
 
 #define GENERATE_SINGLE(LEFT, RIGHT) \
   using v##LEFT = vec<RIGHT>;        \
@@ -44,7 +43,7 @@ GENERATE_SINGLE(ll, ll)
 GENERATE_SINGLE(c, char)
 GENERATE_SINGLE(d, double)
 GENERATE_SINGLE(b, bool)
-GENERATE_SINGLE(s, str)
+GENERATE_SINGLE(s, str_raw<1>)
 
 #define GENERATE_AB(LEFT, RIGHT_A, RIGHT_B)         \
   using m##LEFT = map<RIGHT_A, RIGHT_B>;            \

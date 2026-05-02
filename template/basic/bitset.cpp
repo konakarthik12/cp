@@ -45,15 +45,14 @@ class bitset : public std::bitset<N> {
 
   bitset operator+(const bitset& other) const {
     static_assert(N <= 64, "bitset size must fit in ull for addition");
-    ull sum = (ull) *this + (ull) other;
+    ull sum = (ull) * this + (ull) other;
     return bitset(sum);
   }
   bitset operator-(const bitset& other) const {
     static_assert(N <= 64, "bitset size must fit in ull for subtraction");
-    ull diff = (ull) *this - (ull) other;
+    ull diff = (ull) * this - (ull) other;
     return bitset(diff);
   }
-
 
   // performance
   // Construct from base bitset directly
@@ -91,19 +90,20 @@ class bitset : public std::bitset<N> {
     *this = *this - bitset(1ULL);
     return tmp;
   }
-
-
+  // TODO: operator << and >>
   void debug() const {
     std::stringstream ss;
     ss << std::bitset<N>(*this);
-    ss << " (" << (ull) *this << ')';
+    ss << " (" << (ull) * this << ')';
     auto s = ss.str();
 
     debug_all(s);
   }
+  // TODO: count return ans
+
+  // TODO: convert to bool
 };
 
-// Non-member comparison operators for numeric < bitset
 template <size_t N, bool easy_index, typename T>
   requires std::integral<T> || std::floating_point<T>
 auto operator<=>(const T& lhs, const bitset<N, easy_index>& rhs) {

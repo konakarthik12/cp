@@ -1,37 +1,30 @@
 #!/usr/bin/env bash
 set -e
 set -o pipefail
-tail -n +2 < compile_flags_prod.txt | xargs /opt/homebrew/opt/llvm/bin/clang++ template.cpp -DENTRY=main -o build/main || exit
-tail -n +2 < compile_flags_prod.txt | xargs /opt/homebrew/opt/llvm/bin/clang++ template.cpp -DENTRY=gen -o build/gen || exit
-#
-# Create named pipes
-
-# Run command1 in the background, redirecting its output to pipe1
-# build/gen 5 < pipe1 | build/main > pipe1
-
-# # Run command2, redirecting its input from pipe1 and output to pipe2
-# build/main < pipe2 > pipe1
-
-# # Read the output of command2 from pipe2
-# cat pipe1
-# cat pipe2
-
-# # Clean up named pipes
+tail -n +2 < compile_flags_deb.txt | xargs /opt/homebrew/opt/llvm/bin/clang++ template.cpp -DENTRY=main -o build/main || exit
+tail -n +2 < compile_flags_deb.txt | xargs /opt/homebrew/opt/llvm/bin/clang++ template.cpp -DENTRY=gen -o build/gen || exit
 
 echo "Running tests..."
 echo ""
-for((i = 1; ; ++i)); do
-    rm -f build/pipe1 build/pipe2
-    mkfifo build/pipe1 build/pipe2
-    build/main < pipe2 | tee pipe1_output.txt > build/pipe1 &
-    build/gen $i < pipe1 | tee pipe2_output.txt > build/pipe2 || break
-    echo -e "\e[1APassed test: "  $i 
+
+for ((i=1; ; ++i)); do
+  echo "huh"
+  rm -f build/pipe1 build/pipe2
+  mkfifo build/pipe1 build/pipe2
+
+  # Optional: reduce buffering to avoid stalls
+  # stdbuf -oL build/main < build/pipe2 | tee pipe1_output.txt > build/pipe1 &
+  # echo "huh1"
+  build/main < build/pipe2 | tee pipe1_output.txt > build/pipe1 &
+  # echo "huh2"
+  # If gen exits non-zero, break
+  build/gen "$i" < build/pipe1 | tee pipe2_output.txt > build/pipe2 || break
+  # echo "huh3"
+
+  # Move cursor up one line, overwrite with "Passed test: i"
+  # echo -e "\e[1APassed test: $i"
+  echo "Passed test: $i"
 done
 
 echo "WA on the following seed:"
-echo $i
-# cat input_file
-# echo "Your answer is:"
-# cat myAnswer
-# echo "Correct answer is:"
-# cat correctAnswer
+echo "$i"

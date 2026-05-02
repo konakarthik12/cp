@@ -12,15 +12,24 @@ concept Debuggable = requires(T t) {
 };
 
 template <typename T>
-  requires (Printable<T> && !Debuggable<T>)
+  requires(Printable<T> && !Debuggable<T>)
 void debug(T x) {
   *dout << x;
 }
 
-
 template <Debuggable T>
 void debug(T& x) {
   x.debug();
+}
+
+template <typename T>
+  requires(!same_as<remove_cv_t<T>, char>)
+void debug(T* ptr) {
+  if (ptr == nullptr) {
+    *dout << "nullptr";
+  } else {
+    debug(*ptr);
+  }
 }
 
 void debug_all() {
@@ -56,13 +65,13 @@ void logger(int line, bool nest, string vars, Args&&... values) {
   *dout << "\033[0m\n";
 }
 #ifndef NO_MAIN
-#include <cpptrace/cpptrace.hpp>
+// #include <cpptrace/cpptrace.hpp>
 void dssert(bool res, string msg = "") {
   if (res) return;
   if (msg.size() > 0) {
     cerr << msg << "\n";
   }
-  cpptrace::generate_trace().print();
+  // cpptrace::generate_trace().print();
   exit(0);
   // std::cout << std::stacktrace::current();
 }

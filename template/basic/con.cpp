@@ -4,17 +4,15 @@
 #include "../deb_raw.cpp"
 #include "bool.cpp"
 
-template <typename T, template <class, class...> class C, const int offset = 0>
+template <typename T, template <class, class...> class C, const int offset = 0, typename... Extra>
 struct Con {
-  using V = C<T>;
+  using V = C<T, Extra...>;
   using value_type = T;
   V v;
 
   Con() {
   }
 
-  explicit Con(int size, T init = T()) : v(size, init) {
-  }
   template <input_iterator Iter>
   Con(Iter start, Iter end) : v(start, end) {
   }
@@ -22,26 +20,8 @@ struct Con {
   template <HasIter Container>
   explicit Con(const Container& cnt) : v(cnt.begin(), cnt.end()) {
   }
-  Con(initializer_list<T> initList) : v(initList.size()) {
-    auto it = v.begin();
-    for (const auto& value: initList) {
-      *it++ = value;
-    }
-  }
 
-  template <std::integral First, std::integral... Rest>
-    requires requires(T& container) {
-      { sizeof...(Rest) >= 1 };
-      { HasIter<T> };
-      { std::constructible_from<T, Rest...> };
-    }
-  explicit Con(First first, Rest... rest) : v(static_cast<size_t>(first), T(static_cast<size_t>(rest)...)) {
-    // workaround to keep caide happy
-    if constexpr (HasIter<T>) {
-      static_assert(true);
-    } else {
-      static_assert(true);
-    }
+  Con(initializer_list<T> initList) : v(initList) {
   }
 
   auto begin() const {
@@ -76,20 +56,8 @@ struct Con {
     return this->v.rend();
   }
 
-  T& front() {
-    return this->v.front();
-  }
-
-  auto& back() {
-    return this->v.back();
-  }
-
-  auto& back() const {
-    return this->v.back();
-  }
-
   int sz() const {
-    return this->v.size();
+    return (int) this->v.size();
   }
 
   bool empty() const {
@@ -100,56 +68,6 @@ struct Con {
     return !this->empty();
   }
 
-  T& operator[](int idx) {
-    int index = idx - offset;
-    dssert(index >= 0 && index < this->sz());
-    return this->v[index];
-  }
-
-  const T& operator[](int idx) const {
-    int index = idx - offset;
-    dssert(index >= 0 && index < this->sz());
-
-    return this->v[index];
-  }
-
-  void reserve(int size) {
-    this->v.reserve(size);
-  }
-
-  void resize(int size) {
-    this->v.resize(size);
-  }
-  void assign(int size, T x = T()) {
-    this->v.assign(size, x);
-  }
-
-  void fill(T x = T()) {
-    std::fill(v.begin(), v.end(), x);
-  }
-
-  void pb(const T& element) {
-    this->v.push_back(element);
-  }
-
-  template <typename... Args>
-  auto& eb(Args&&... args) {
-    return this->v.emplace_back(std::forward<Args>(args)...);
-  }
-
-  auto insert(int idx, const T& x) {
-    idx -= offset;
-    if (idx < 0) idx += sz();
-    dssert(idx >= 0 && idx <= sz());
-    return v.insert(v.begin() + idx, x);
-  }
-
-  T rb() {
-    T x = this->back();
-    this->v.pop_back();
-    return x;
-  }
-
   void clear() {
     this->v.clear();
   }
@@ -157,209 +75,4 @@ struct Con {
   bool operator==(const Con& other) const {
     return this->v == other.v;
   }
-
-  auto operator<=>(const Con& other) const {
-    return this->v <=> other.v;
-  }
-
-  void iota(T a, T b) {
-    this->resize(b - a + 1);
-    std::iota(this->v.begin(), this->v.end(), a);
-  }
-
-  void iota(int n) {
-    iota(offset, n - 1 + offset);
-  }
-
-  template <typename Comp = less<T>>
-    requires SortPredicate<T, Comp>
-  void sort(Comp comp = {}) {
-    std::sort(this->v.begin(), this->v.end(), comp);
-  }
-
-  template <class Proj = std::identity, class Comp = ranges::less>
-    requires(!SortPredicate<T, Proj>)
-  void sort(Proj proj, Comp comp = {}) {
-    std::ranges::sort(this->v.begin(), this->v.end(), comp, proj);
-  }
-  template <typename Comp = less<T>>
-    requires SortPredicate<T, Comp>
-  void stable_sort(Comp comp = {}) {
-    std::stable_sort(this->v.begin(), this->v.end(), comp);
-  }
-
-  template <class Proj = std::identity, class Comp = ranges::less>
-    requires(!SortPredicate<T, Proj>)
-  void stable_sort(Proj proj, Comp comp = {}) {
-    std::ranges::stable_sort(this->v, comp, proj);
-  }
-
-  auto rsort() {
-    return this->sort(greater());
-  }
-  template <class Proj = std::identity, class Comp = ranges::greater>
-    requires(!SortPredicate<T, Proj>)
-  void rsort(Proj proj, Comp comp = {}) {
-    std::ranges::sort(this->v, comp, proj);
-  }
-
-  void reverse() {
-    std::reverse(this->v.begin(), this->v.end());
-  }
-
-  auto next_perm() {
-    return std::next_permutation(v.begin(), v.end());
-  }
-  auto prev_perm() {
-    return std::prev_permutation(v.begin(), v.end());
-  }
-
-  template <typename Pred>
-    requires predicate<Pred, T>
-  auto partition(Pred p) {
-    return std::partition(v.begin(), v.end(), p);
-  }
-  auto is_sorted() {
-    return std::is_sorted(v.begin(), v.end());
-  }
-  auto is_rsorted() {
-    return std::is_sorted(v.begin(), v.end(), greater());
-  }
-
-  auto back_inserter() {
-    return std::back_inserter(v);
-  }
-
-  auto get(int x) {
-    if (x < 0) x += sz();
-    return v[x];
-  }
-
-  template <class Predicate = std::equal_to<>>
-  void dedupe(Predicate p = {}) {
-    v.erase(unique(v.begin(), v.end(), p), end());
-  }
-
-  template <class Compare = std::less<>>
-  auto lower_bound(const T& x, Compare comp = {}) {
-    return std::lower_bound(v.begin(), v.end(), x, comp);
-  }
-
-  template <class Compare = std::less<>>
-  auto upper_bound(const T& x, Compare comp = {}) {
-    return std::upper_bound(v.begin(), v.end(), x, comp);
-  }
-
-  template <class Compare = std::less<>>
-  auto gr(const T& x, Compare comp = {}) {
-    return *upper_bound(x, comp);
-  }
-
-  template <class Compare = std::less<>>
-  auto ge(const T& x, Compare comp = {}) {
-    return *lower_bound(x, comp);
-  }
-
-  template <typename... Args>
-  void erase_if(Args&&... args) {
-    std::erase_if(this->v, std::forward<Args>(args)...);
-  }
-
-  template <class Compare = std::less<>>
-  auto ls(const T& x, Compare comp = {}) {
-    return *prev(lower_bound(x, comp));
-  }
-  template <class Compare = std::less<>>
-  auto le(const T& x, Compare comp = {}) {
-    return *prev(upper_bound(x, comp));
-  }
-
-  template <typename Op>
-  auto reduce(Op op) const {
-    if constexpr (std::integral<T>) {
-      return reduce(op, 0LL);
-    } else {
-      return reduce(op, T());
-    }
-  }
-
-  template <typename Op, typename Init>
-  auto reduce(Op op, Init init) const {
-    return std::accumulate(v.begin(), v.end(), init, op);
-  }
-
-  auto sum() const {
-    return reduce(std::plus<>());
-  }
-
-  template <typename F>
-    requires std::invocable<F, const T&>
-  auto map(F&& f) const {
-    using U = std::decay_t<std::invoke_result_t<F, const T&>>;
-    Con<U, C, offset> result;
-    result.reserve(sz());
-    std::ranges::transform(v, std::back_inserter(result.v), std::forward<F>(f));
-    return result;
-  }
-
-  T max() const {
-    return *std::max_element(v.begin(), v.end());
-  }
-  T min() const {
-    return *std::min_element(v.begin(), v.end());
-  }
-  T gcd() const {
-    return reduce(all(v), v[0], std::gcd<int, int>);
-  }
-
-  template <typename... Args>
-  auto count(Args&&... args) {
-    return std::count(this->v.begin(), this->v.end(), std::forward<Args>(args)...);
-  }
-
-  template <typename... Args>
-  auto count_if(Args&&... args) {
-    return v.count_if(std::forward<Args>(args)...);
-  }
-
-  auto index(const T& x) {
-    const auto it = std::find(v.begin(), v.end(), x);
-    return idist(v.begin(), it) + offset;
-  }
-
-  auto ab(const Con& other) { 
-    this->v.insert(this->v.end(), other.begin(), other.end());
-  }
-
-  auto af(const Con& other) {
-    this->v.insert(this->v.begin(), other.begin(), other.end());
-  }
-
-  template <class RNG>
-  auto shuffle(RNG& gen) {
-    std::shuffle(v.begin(), v.end(), gen);
-  }
-  bool has(T y) {
-    return std::any_of(v.begin(), v.end(), [&](T x) { return x == y; });
-  }
-
-  bool every(T y) {
-    return std::all_of(v.begin(), v.end(), [&](T x) { return x == y; });
-  }
-
-  void rotate_l(int idx) {
-    std::rotate(v.begin(), v.begin() + idx, v.end());
-  }
-  void rotate_r(int idx) {
-    std::rotate(v.rbegin(), v.rbegin() + idx, v.rend());
-  }
-  void erase(int idx) {
-    this->v.erase(this->v.begin() + idx - offset);
-  }
 };
-
-template <typename Iter, typename Proj = std::identity>
-  requires(!SortPredicate<decltype(*Iter()), Proj>)
-void sort(Iter first, Iter last, Proj proj) {
-  std::ranges::sort(first, last, ranges::less{}, proj);
-}

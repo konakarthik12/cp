@@ -9,6 +9,7 @@ input.txt
 build
 output/
 /cf/*
+/arc/*
 /euler/*
 debug
 release

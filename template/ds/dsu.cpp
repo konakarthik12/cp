@@ -47,15 +47,18 @@ struct DSU {
     return a == b;
   }
 
-  void debug() {
-    map<int, wi> groups;
+  wwi groups() {
+    map<int, wi> groups_map;
     for (int i = 1; i <= p.sz(); i++) {
-      groups[find(i)].pb(i);
+      groups_map[find(i)].pb(i);
     }
 
-    wwi debug_groups;
-    for (auto members: groups | views::values) debug_groups.eb(members);
+    wwi groups;
+    for (auto members: groups_map | views::values) groups.eb(members);
+    return groups;
+  }
+  void debug() {
 
-    debug_all(debug_groups);
+    debug_all(groups());
   }
 };

@@ -1,9 +1,9 @@
 #pragma once
-#include "con.cpp"
+#include "list.cpp"
 
 template <typename T>
-struct deq : Con<T, std::deque, 1> {
-  using Con<T, std::deque, 1>::Con;
+struct deq : list<T, std::deque, 1> {
+  using list<T, std::deque, 1>::list;
   using value_type = T;
 
   void pf(const T& element) {
@@ -12,7 +12,7 @@ struct deq : Con<T, std::deque, 1> {
 
   template <typename... Args>
   auto ef(Args&&... args) {
-    return this->v.emplace_back(std::forward<Args>(args)...);
+    return this->v.emplace_front(std::forward<Args>(args)...);
   }
 
   auto rf() {

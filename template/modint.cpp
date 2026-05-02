@@ -2,9 +2,9 @@
 #include "base.cpp"
 #include "math.cpp"
 
-template <typename T>
+template <typename T, typename ValueType = int>
 struct ModIntBase {
-  int value = 0;
+  ValueType value = 0;
 
   bool operator==(const T& b) const {
     return value == b.value;
@@ -13,7 +13,7 @@ struct ModIntBase {
     return value != b.value;
   }
   explicit operator int() const {
-    return value;
+    return (int) value;
   }
   friend T operator+(T a, T const b) {
     return a += b;
@@ -160,6 +160,66 @@ struct DynModInt : public ModIntBase<DynModInt> {
   }
 };
 int DynModInt::mod = 998244353;
+
+struct ModUll : public ModIntBase<ModUll, ull> {
+  using ModIntBase<ModUll, ull>::value;
+
+  ModUll() {
+  }
+
+  ModUll(ull v) {
+    value = v;
+  }
+
+  ModUll(ll v) {
+    value = (ull) v;
+  }
+
+  ModUll(int v) {
+    value = (ull) v;
+  }
+
+  template <typename E>
+  ModUll(ModUll a, E e) {
+    value = 1;
+    while (e) {
+      if (e & 1) *this *= a;
+      a *= a;
+      e >>= 1;
+    }
+  }
+
+  ModUll& operator+=(const ModUll& b) {
+    value += b.value;  // Natural overflow wraps around
+    return *this;
+  }
+
+  ModUll& operator-=(const ModUll& b) {
+    value -= b.value;  // Natural underflow wraps around
+    return *this;
+  }
+
+  ModUll& operator*=(const ModUll& b) {
+    value *= b.value;  // Natural overflow wraps around
+    return *this;
+  }
+
+  // Division is disabled
+  ModUll& operator/=(const ModUll& b) = delete;
+  friend ModUll operator/(ModUll a, ModUll const b) = delete;
+
+  explicit operator ull() const {
+    return value;
+  }
+  explicit operator ll() const {
+    return (ll) value;
+  }
+
+  friend istream& operator>>(istream& is, ModUll& m) {
+    is >> m.value;
+    return is;
+  }
+};
 
 struct ModDouble {
   ld value;

@@ -13,4 +13,3 @@ if [ -t 0 ]; then
 else
   "build/$target"
 fi
-

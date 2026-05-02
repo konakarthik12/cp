@@ -4,7 +4,7 @@
 #include "container.cpp"
 
 template <typename T>
-  requires (Readable<T> && !HasRead<T>)
+  requires(Readable<T> && !HasRead<T>)
 void __read(T& arr) {
   cin >> arr;
 }
@@ -34,7 +34,7 @@ void append(V& v, const typename V::value_type& x) {
   } else if cexp (HasPushBack) {
     v.push_back(x);
   } else {
-    v.insert(x);
+    v.ps(x);
   }
 }
 

@@ -21,6 +21,15 @@ T mode(map<T, V> items) {
   return mode;
 }
 
+template <typename Container>
+wi order(const Container& arr) {
+  int n = arr.sz();
+  wi ord;
+  ord.iota(n);
+  ord.sort([&](int x) { return arr[x]; });
+  return ord;
+}
+
 template <typename T, typename F>
 T min_false(T l, T h, F comp, T d) {
 
@@ -86,20 +95,30 @@ void exit() {
 }
 template <class T = void>
 struct max_op {
-  constexpr T operator()(const T& lhs, const T& rhs) const {
-    return max(lhs, rhs);
+  constexpr T operator()(const T& a, const T& b) const {
+    return max(a, b);
   }
 };
 template <class T = void>
 struct min_op {
-  constexpr T operator()(const T& lhs, const T& rhs) const {
-    return min(lhs, rhs);
+  constexpr T operator()(const T& a, const T& b) const {
+    return min(a, b);
   }
 };
 template <class T = void>
 struct gcd_op {
-  constexpr T operator()(const T& lhs, const T& rhs) const {
-    return gcd(lhs, rhs);
+  constexpr T operator()(const T& a, const T& b) const {
+    return gcd(a, b);
+  }
+};
+template <class T = void>
+struct minmax_op {
+  constexpr pr<T, T> operator()(const T& a, const T& b) const {
+    return {min(a, b), max(a, b)};
+  }
+  
+  constexpr pr<T, T> operator()(const pr<T, T>& a, const pr<T, T>& b) const {
+    return {min(a.f, b.f), max(a.s, b.s)};
   }
 };
 
@@ -132,16 +151,16 @@ wwi invarr(const wi& arr) {
   return ans;
 }
 
-int mex(wi arr) {
+int mex(wi arr, int s = 0) {
   arr.sort();
-  int ans = 0;
+  int ans = s;
   for (int x: arr) {
     if (x == ans) ans++;
   }
   return ans;
 }
 
-mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
+std::mt19937 rng((uint) chrono::steady_clock::now().time_since_epoch().count());
 
 vpii dirs4 = vpii{{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
 
