@@ -4,9 +4,8 @@ include(ExternalProject)
 
 set(CMAKE_CXX_STANDARD 23)
 add_executable(cp template.cpp)
-
-add_executable(internal_main main.cpp)
 add_executable(internal_testing testing/tests.cpp)
+#add_executable(internal_main main.cpp)
 
 target_compile_definitions(cp PUBLIC ENTRY=main LOCAL)
 
@@ -53,5 +52,6 @@ ExternalProject_Add(doctest
 add_dependencies(tests doctest)
 target_include_directories(tests PUBLIC ${DOCTEST_INCLUDE_DIR})
 target_include_directories(internal_testing PUBLIC ${DOCTEST_INCLUDE_DIR})
-
+if(CMAKE_BUILD_TYPE STREQUAL "Release")
  add_subdirectory(merger build/cmake/merger/)
+endif()

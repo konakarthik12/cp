@@ -2,6 +2,5 @@
 #include "segtree.cpp"
 #include "sparse.cpp"
 #include "dsu.cpp"
-#include "suffix.cpp"
 #include "prefix.cpp"
 #include "misc.cpp"

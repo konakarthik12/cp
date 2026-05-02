@@ -62,7 +62,7 @@ struct RecurSegtree {
     if cexp (easy_index) r--;
     return query(1, 0, n - 1, l, r);
   }
-  void assign(int idx, int v) {
+  void set(int idx, int v) {
     if cexp (easy_index) idx--;
 
     return assign(1, 0, n - 1, idx, v);
@@ -135,7 +135,11 @@ struct Segtree {
 
   Node query(int l, int r) {
     if cexp (easy_index) l--;
-    Node res = {};
+    dssert(l <= r);
+    if (l == r) return Node{};
+    // TODO: clean maybe;
+    Node res = t[l + n];
+    l++;
     for (l += n, r += n; l < r; l >>= 1, r >>= 1) {
       if (l & 1) res = merge(res, t[l++]);
       if (r & 1) res = merge(res, t[--r]);

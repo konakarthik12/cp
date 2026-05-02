@@ -1,10 +1,6 @@
 /opt/homebrew/opt/llvm/bin/clang++
 -std=c++23
+-Wall -Wextra -Wshadow
 -include-pch
 /opt/homebrew/opt/llvm/bin/../include/c++/v1/bits/stdc++.h.pch
 -O3
--Wall
--Wextra
--Wshadow
--Wno-sign-conversion
-

@@ -1,20 +1,11 @@
 /opt/homebrew/opt/llvm/bin/clang++
 -std=c++23
+-Wall -Wextra -Wshadow 
 -g 
--fsanitize=address 
 -fsanitize=undefined
 -fno-sanitize-recover=undefined,address
 -DLOCAL
--D_LIBCPP_ENABLE_ASSERTIONS
--D_GLIBCXX_DEBUG
+-D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_DEBUG
 -ggdb3
 -ldwarf -lz -lzstd -ldl
--lcpptrace
--I/usr/local/include
 -L/usr/local/lib
--Wall
--Wextra
--Wshadow
--Wno-sign-conversion
--include-pch
-/opt/homebrew/opt/llvm/bin/../include/c++/v1/bits/stdc++.h.pch.deb

@@ -1,30 +1,24 @@
 #pragma once
 #include "../base.cpp"
-template <typename Func>
-wwi build_sparse(wi arr, Func merge) {
-  int n = arr.sz();
-  int w = blen(n);
-  wwi table(w, n);
-  table[0] = arr;
-  for (int h = 1; h < w; h++) {
-    int hw = 1 << (h - 1);
-    for (int i = 1; i <= n; i++) {
-      table[h][i] = merge(table[h - 1][i], table[h - 1][i + hw]);
-    }
-  }
-}
 
-template <typename Node, bool easy_index = true>
+template <typename F>
+struct merge_traits {};
+template <typename R, typename A, typename B>
+struct merge_traits<std::function<R(A, B)>> {
+  using node_type = std::remove_cvref_t<R>;
+  using in_type = std::remove_cvref_t<A>;
+};
+
+template <bool easy_index, typename Node, typename In, typename MergeFunc>
 struct Sparse {
-  using Merge = std::function<const Node(const Node&, const Node&)>;
-  Merge merge;
+  MergeFunc merge;
   int n, w;
   vv<Node> table;
-  Sparse(Merge merge) : merge(merge) {
+  Sparse(MergeFunc merge) : merge(merge) {
   }
 
   template <typename Cont>
-  Sparse(Merge merge, Cont arr) : merge(merge) {
+  Sparse(MergeFunc merge, Cont arr) : merge(merge) {
     init(arr);
   }
 
@@ -33,7 +27,8 @@ struct Sparse {
     n = arr.sz(), w = blen(n);
     table = vv<Node>(w, vec<Node>(n));
     int cur = 0;
-    for (auto iter = arr.begin(); iter != arr.end(); iter++) table[0][cur++] = *iter;
+    for (auto iter = arr.begin(); iter != arr.end(); iter++)
+      table[0][cur++] = merge(*iter, *iter);  // lift In to Node via merge(In, In)
     for (int h = 1; h < w; h++) {
       int hw = 1 << (h - 1);
       for (int i = 0; i + hw < n; i++) {
@@ -57,10 +52,25 @@ struct Sparse {
   }
 };
 
-template <typename Node, bool easy_index = true>
-struct FastSparse : Sparse<Node, easy_index> {
-  using Sparse<Node>::Sparse;
-  using Sparse<Node>::table;
+template <typename Node, typename In = Node, typename MergeFunc = std::function<const Node(const Node&, const Node&)>>
+using SparseT = Sparse<true, Node, In, MergeFunc>;
+template <typename Node, typename In = Node, typename MergeFunc = std::function<const Node(const Node&, const Node&)>>
+using Sparse0 = Sparse<false, Node, In, MergeFunc>;
+
+template <typename R, typename A, typename B>
+Sparse(std::function<R(A, B)>)
+    -> Sparse<true, typename merge_traits<std::function<R(A, B)>>::node_type,
+              typename merge_traits<std::function<R(A, B)>>::in_type, std::function<R(A, B)>>;
+
+template <typename R, typename A, typename B, typename Cont>
+Sparse(std::function<R(A, B)>, Cont)
+    -> Sparse<true, typename merge_traits<std::function<R(A, B)>>::node_type,
+              typename merge_traits<std::function<R(A, B)>>::in_type, std::function<R(A, B)>>;
+
+template <bool easy_index, typename Node, typename In, typename MergeFunc>
+struct FastSparse : Sparse<easy_index, Node, In, MergeFunc> {
+  using Sparse<easy_index, Node, In, MergeFunc>::Sparse;
+  using Sparse<easy_index, Node, In, MergeFunc>::table;
   Node query(int l, int r) {
     if (r < l) return Node();
     if (easy_index) {
@@ -72,3 +82,39 @@ struct FastSparse : Sparse<Node, easy_index> {
     return this->merge(table[i][l], table[i][r - fw + 1]);
   }
 };
+// TODO: get cursor to clean this up
+
+template <typename Node, typename In = Node, typename MergeFunc = std::function<const Node(const Node&, const Node&)>>
+using FastSparseT = FastSparse<true, Node, In, MergeFunc>;
+template <typename Node, typename In = Node, typename MergeFunc = std::function<const Node(const Node&, const Node&)>>
+using FastSparse0 = FastSparse<false, Node, In, MergeFunc>;
+
+template <typename R, typename A, typename B>
+FastSparse(std::function<R(A, B)>)
+    -> FastSparse<true, typename merge_traits<std::function<R(A, B)>>::node_type,
+                  typename merge_traits<std::function<R(A, B)>>::in_type, std::function<R(A, B)>>;
+
+template <typename R, typename A, typename B, typename Cont>
+FastSparse(std::function<R(A, B)>, Cont)
+    -> FastSparse<true, typename merge_traits<std::function<R(A, B)>>::node_type,
+                  typename merge_traits<std::function<R(A, B)>>::in_type, std::function<R(A, B)>>;
+
+template <typename Merge, typename Cont>
+  requires HasIter<Cont> && requires(Merge m, typename Cont::value_type a, typename Cont::value_type b) {
+    { m(a, b) };
+  }
+FastSparse(Merge, Cont)
+    -> FastSparse<true,
+                  std::remove_cvref_t<
+                      std::invoke_result_t<Merge, const typename Cont::value_type&, const typename Cont::value_type&>>,
+                  typename Cont::value_type, Merge>;
+
+template <typename Merge, typename Cont>
+  requires HasIter<Cont> && requires(Merge m, typename Cont::value_type a, typename Cont::value_type b) {
+    { m(a, b) };
+  }
+Sparse(Merge, Cont)
+    -> Sparse<true,
+              std::remove_cvref_t<
+                  std::invoke_result_t<Merge, const typename Cont::value_type&, const typename Cont::value_type&>>,
+              typename Cont::value_type, Merge>;

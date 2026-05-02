@@ -145,10 +145,13 @@ struct Combo {
   vec<T> inv_facts;
   Combo(int max_n) {
     facts.pb(1);
-    inv_facts.pb(1);
     for (int i = 1; i <= max_n; i++) {
       facts.pb(facts.back() * i);
-      inv_facts.pb(1 / facts.back());
+    }
+    inv_facts.assign(max_n + 1);
+    inv_facts[max_n] = 1 / facts[max_n];
+    for (int i = max_n - 1; i >= 0; i--) {
+      inv_facts[i] = inv_facts[i + 1] * (i + 1);
     }
   }
   T fact(int x) {
@@ -159,7 +162,7 @@ struct Combo {
     return facts[x] * inv_facts[y - 1];
   }
   T inv_fact(int x) {
-    return facts[x];
+    return inv_facts[x];
   }
 
   T choose(ll n, ll k) {
@@ -177,7 +180,7 @@ struct Combo {
   }
 
   template <typename... Args>
-  requires (sizeof...(Args) > 1)
+    requires(sizeof...(Args) > 1)
   T choose(ll n, Args&&... args) {
     T ans(1);
     for (int a: {args...}) {
@@ -224,44 +227,46 @@ concept Number = is_integral_v<T>;
 
 struct Frac {
   ll p = 0, q = 1;
-  Frac() {
-    simplify();
-  }
   Frac(int p) : p(p), q(1) {
     simplify();
   }
   Frac(ll p = 0, ll q = 1) : p(p), q(q) {
     simplify();
   }
-  Frac simplify() const {
-    ll g = gcd(p, q);
-    return Frac(p / g, q / g);
-  }
   Frac& simplify() {
     ll g = gcd(p, q);
-    p /= g;
-    q /= g;
+    if (g != 0) {
+      p /= g;
+      q /= g;
+    }
     return *this;
   }
-  Frac operator+=(const Frac& other) {
-    int num = p * other.q + other.p * q;
-    int denom = q * other.q;
+
+  Frac simplified() const {
+    Frac r = *this;
+    return r.simplify();
+  }
+  Frac operator+=(const Frac& other) const {
+    ll num = p * other.q + other.p * q;
+    ll denom = q * other.q;
     return Frac(num, denom);
   }
-  Frac operator-=(const Frac& other) {
-    int num = p * other.q - other.p * q;
-    int denom = q * other.q;
+  Frac operator-=(const Frac& other) const {
+    ll num = p * other.q - other.p * q;
+    ll denom = q * other.q;
     return Frac(num, denom);
   }
 
   Frac operator*=(Frac const& other) {
     p *= other.p;
     q *= other.q;
+    simplify();
     return *this;
   }
   Frac operator/=(Frac const& other) {
     p *= other.q;
     q *= other.p;
+    simplify();
     return *this;
   }
 
@@ -286,12 +291,10 @@ struct Frac {
   }
 
   friend bool operator==(Frac const& a, Number auto const& b) {
-    Frac const& x = a.simplify();
-    return x.q == 1 && x.p == b;
+    return a.q == 1 && a.p == b;
   }
 
-  void debug() {
-    simplify();
+  void debug() const {
     if (q == 1) {
       ::debug(p);
     } else {

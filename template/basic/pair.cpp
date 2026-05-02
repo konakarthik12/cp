@@ -1,5 +1,6 @@
 #pragma once
 #include "../wrapper.hpp"
+#include "../concepts.cpp"
 
 template <typename T1, typename T2>
 struct pr {
@@ -55,4 +56,21 @@ bool operator>(const pr<T1, T2>& x, const pr<T1, T2>& y) {
 template <class T1, class T2>
 bool operator==(const pr<T1, T2>& x, const pr<T1, T2>& y) {
   return tie(x.f, x.s) == tie(y.f, y.s);
+}
+struct pr_fview_tag {};
+inline cexp pr_fview_tag fview{};
+
+template <typename R>
+  requires HasIter<R>
+auto operator|(R&& data, pr_fview_tag) {
+  return std::forward<R>(data) | views::transform([](auto& p) -> auto& { return p.f; });
+}
+
+struct pr_sview_tag {};
+inline cexp pr_sview_tag sview{};
+
+template <typename R>
+  requires HasIter<R>
+auto operator|(R&& data, pr_sview_tag) {
+  return std::forward<R>(data) | views::transform([](auto& p) -> auto& { return p.s; });
 }

@@ -1,0 +1,15 @@
+/opt/homebrew/opt/llvm/bin/clang++
+-std=c++23
+-Wall -Wextra -Wshadow 
+-g 
+-fsanitize=address 
+-fsanitize=undefined
+-fno-sanitize-recover=undefined,address
+-DLOCAL
+-D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_DEBUG
+-D_GLIBCXX_DEBUG
+-ggdb3
+-ldwarf -lz -lzstd -ldl
+-lcpptrace
+-I/usr/local/include
+-L/usr/local/lib

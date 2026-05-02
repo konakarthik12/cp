@@ -28,7 +28,6 @@ void debug(pair<T, V> const& p) {
   *dout << ')';
 }
 
-
 template <typename T, typename V>
 void debug(pr<T, V> const& p) {
   *dout << '(';
@@ -59,7 +58,7 @@ void debug(pqueue<T, V, U> p) {
   vec<T> v;
   while (!p.empty()) {
     v.pb(p.top());
-    p.pop();
+    p.rm();
   }
   debug(v);
 }

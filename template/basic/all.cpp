@@ -1,4 +1,6 @@
 #include "bool.cpp"
+#include "con.cpp"
+#include "list.cpp"
 #include "deq.cpp"
 #include "pair.cpp"
 #include "vec.cpp"
@@ -6,6 +8,9 @@
 #include "wec.cpp"
 #include "set.cpp"
 #include "mset.cpp"
+#include "map.cpp"
 #include "stack.cpp"
+#include "str.cpp"
 #include "bitset.cpp"
+#include "pqueue.cpp"
 

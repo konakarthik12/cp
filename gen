@@ -9,6 +9,7 @@ for((i = 1; ; ++i)); do
     build/gen $i > input_file || break
     build/main < input_file > myAnswer 2> /dev/null || break
     build/brute < input_file > correctAnswer 2> /dev/null || break
+    # python3 main.py < input_file > correctAnswer 2> /dev/null || break
     diff -Z myAnswer correctAnswer > /dev/null || break
     echo -e "\e[1APassed test: "  $i
 done

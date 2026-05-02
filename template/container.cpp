@@ -34,29 +34,26 @@ void fill(C& vec, T value) {
 template <typename T, typename NewT1>
 struct ReplaceFirstImpl {
   using type = T;
+  using new_type = NewT1;
 };
 
-// Handle templates with type parameter first, then template template parameter, then non-type parameters
-template <template <typename, template <class, class...> class, auto...> class Template, 
-          typename OldT1, template <class, class...> class TT, auto... Rest, typename NewT1>
+template <template <typename, template <class, class...> class, auto...> class Template, typename OldT1,
+          template <class, class...> class TT, auto... Rest, typename NewT1>
 struct ReplaceFirstImpl<Template<OldT1, TT, Rest...>, NewT1> {
   using type = Template<NewT1, TT, Rest...>;
 };
 
-// Handle templates with type parameter first, then non-type parameters (auto) - check this first
 template <template <typename, auto...> class Template, typename OldT1, auto... Rest, typename NewT1>
-  requires (sizeof...(Rest) > 0)
+  requires(sizeof...(Rest) > 0)
 struct ReplaceFirstImpl<Template<OldT1, Rest...>, NewT1> {
   using type = Template<NewT1, Rest...>;
 };
 
-// Handle templates with type parameter first, then any other type parameters
 template <template <typename, typename...> class Template, typename OldT1, typename... Rest, typename NewT1>
 struct ReplaceFirstImpl<Template<OldT1, Rest...>, NewT1> {
   using type = Template<NewT1, Rest...>;
 };
 
-// Main ReplaceFirst - strips cv qualifiers first, then delegates
 template <typename T, typename NewT1>
 struct ReplaceFirst {
   using type = typename ReplaceFirstImpl<std::remove_cv_t<T>, NewT1>::type;
@@ -66,7 +63,7 @@ template <typename T, typename NewT1>
 using replace_first = typename ReplaceFirst<T, NewT1>::type;
 
 template <typename T>
-void reserve(T& v, size_t s) {
+void reserve(T& v, int s) {
   cexp bool HasReserve = requires {
     { v.reserve(s) };
   };

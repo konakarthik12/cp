@@ -6,6 +6,7 @@
 #include "deb.cpp"
 #include "keyboard.cpp"
 int test_cases = -1;
+int test_case;
 template <typename Res>
 void handle_print(optional<Res>&& res) {
   if (res) {
@@ -67,16 +68,13 @@ template <typename Func, typename... Args>
   }
 void handle_solve(Func func) {
   read(test_cases);
-  for (int i = 1; i <= test_cases; i++) {
-    call_print(func, i);
-    // #ifdef LOCAL
-    // if (i != test_cases) wait_for_spacebar();
-    // #endif
+  for (test_case = 1; test_case <= test_cases; test_case++) {
+    call_print(func, test_case);
   }
 }
 
 void init_main() {
-  cin.tie(0)->sync_with_stdio(0);
+  cin.tie(0)->sync_with_stdio(false);
 #ifdef LOCAL
   cin.exceptions(ios_base::failbit);
 #endif
