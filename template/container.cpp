@@ -56,11 +56,11 @@ struct ReplaceFirstImpl<Template<OldT1, Rest...>, NewT1> {
 
 template <typename T, typename NewT1>
 struct ReplaceFirst {
-  using type = typename ReplaceFirstImpl<std::remove_cv_t<T>, NewT1>::type;
+  using type = ReplaceFirstImpl<std::remove_cv_t<T>, NewT1>::type;
 };
 
 template <typename T, typename NewT1>
-using replace_first = typename ReplaceFirst<T, NewT1>::type;
+using replace_first = ReplaceFirst<T, NewT1>::type;
 
 template <typename T>
 void reserve(T& v, int s) {
@@ -119,7 +119,7 @@ auto pref_arr(Cont& v, Op op) {
 
 template <typename T = void, typename Cont>
 auto pref_arr(const Cont& v) {
-  using W = conditional_t<is_void_v<T>, expand_ll<typename Cont::value_type>, T>;
+  using W = conditional_t<is_void_v<T>, sum_v<typename Cont::value_type>, T>;
   return pref_arr(v, std::plus<W>{});
 }
 

@@ -1,15 +1,9 @@
 #pragma once
 #include "entry.h"
-
 #define all(x) std::begin(x), std::end(x)
 #define rall(x) rbegin(x), rend(x)
 
 #define cexp constexpr
-
-// template <typename T>
-// cexp auto sz(const T& container) -> int {
-//   return std::size(container);
-// }
 
 constexpr int blen(unsigned long long x) {
   if (x == 0) return 1;
@@ -49,5 +43,3 @@ struct sum_type<bool> {
 
 template <typename T>
 using sum_v = typename sum_type<T>::type;
-
-

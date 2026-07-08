@@ -1,6 +1,19 @@
 #pragma once
 #include "scaffold.cpp"
 
+template <int offset>
+struct str_raw;
+
+template <typename T>
+struct IsStrRaw : std::false_type {};
+
+template <int offset>
+struct IsStrRaw<str_raw<offset>> : std::true_type {};
+
+template <typename T>
+concept StringLike = same_as<remove_cv_t<remove_reference_t<T>>, std::string> ||
+                     IsStrRaw<remove_cv_t<remove_reference_t<T>>>::value;
+
 template <typename T>
 concept HasValueType = requires { typename T::value_type; };
 template <typename T>
@@ -41,7 +54,7 @@ template <typename T1>
 concept Readable2D = requires(istream& is, const T1&) {
   { Readable<typename remove_reference_t<T1>::value_type::value_type> };
   // not strings
-  requires !same_as<typename remove_reference_t<T1>::value_type, std::string>;
+  requires !StringLike<typename remove_reference_t<T1>::value_type>;
 };
 
 

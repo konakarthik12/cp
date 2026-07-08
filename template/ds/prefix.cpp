@@ -41,4 +41,4 @@ struct PreSum {
 };
 template <HasValueType Container>
 PreSum(const Container&)
-    -> PreSum<expand_ll<typename Container::value_type>, get_presum_offset_v<remove_cv_t<Container>>>;
+    -> PreSum<sum_v<typename Container::value_type>, get_presum_offset_v<remove_cv_t<Container>>>;

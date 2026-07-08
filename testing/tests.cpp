@@ -47,6 +47,9 @@ TEST_SUITE("testing modint") {
 TEST_CASE("testing combinatorics") {
   Combo<Frac> combo(12);
   CHECK(combo.fact(3) == Frac(6));
+  CHECK(Frac(1, 3) < Frac(1, 2));
+  CHECK(Frac(-1, 2) < Frac(1, 3));
+  CHECK_FALSE(Frac(2, 3) < Frac(4, 6));
   CHECK(combo.choose(12, 5) == 792);
   CHECK(combo.choose(20, 4) == 4845);
   CHECK(combo.choose(8, 8, 1) == 0);
@@ -119,7 +122,7 @@ TEST_SUITE("containers") {
   }
 
   TEST_CASE("prefix") {
-    static_assert(same_as<decltype(pref_arr(bools)), vll>);
+    static_assert(same_as<decltype(pref_arr(bools)), vi>);
     CHECK(prefix_arr(bools) == vll{0, 0, 0, 1, 2});
     CHECK(prefix_arr(ints) == vll{0, bigl, bigl * 2, bigl * 3, bigl * 4});
     CHECK(prefix_arr(longs) == vll{0, 1, 3, 6, 10, 15});
@@ -173,6 +176,20 @@ TEST_SUITE("containers") {
     CHECK(ps_wi.query(1, 3) == 6);   // 1 + 2 + 3
     CHECK(ps_wi.query(2, 5) == 14);  // 2 + 3 + 4 + 5
     CHECK(ps_wi.prefix(4) == 10);    // 1 + 2 + 3 + 4
+
+    vb flags = {true, false, true, true};
+    PreSum ps_vb(flags);
+    static_assert(std::same_as<decltype(ps_vb), PreSum<int, 0>>);
+    CHECK(ps_vb.query(0, 3) == 3);
+    CHECK(ps_vb.query(1, 2) == 1);
+    CHECK(ps_vb.prefix(2) == 2);
+
+    wb flags2 = {true, false, true, true};
+    PreSum ps_wb(flags2);
+    static_assert(std::same_as<decltype(ps_wb), PreSum<int, 1>>);
+    CHECK(ps_wb.query(1, 4) == 3);
+    CHECK(ps_wb.query(2, 3) == 1);
+    CHECK(ps_wb.prefix(3) == 2);
   }
 }
 
@@ -204,7 +221,7 @@ TEST_SUITE("input") {
       9 10 11 12
     )"_cin_set;
     int n, m;
-    str_raw s;
+    str_raw<1> s;
 
     read(n, m, s);
 
@@ -233,7 +250,7 @@ TEST_SUITE("input") {
       hello
     )"_cin_set;
     wc s1;
-    str_raw s2;
+    str_raw<1> s2;
     read(s1, 7, s2);
 
     CHECK(s1 == wc{'a', 'b', 'c', 'd', 'e', 'f', 'g'});
@@ -322,7 +339,7 @@ TEST_CASE("testing_output") {
   println(x);
   println(arr);
   println(arr[3], arr1[3]);
-  str_raw output = GetCapturedStdout();
+  str_raw<1> output = GetCapturedStdout();
   CHECK(output == "5\n1 2 3 4 5\n4 3\n");
 }
 
@@ -433,7 +450,7 @@ TEST_SUITE("container hierarchy") {
     CHECK(v.sum() == 6);
     v.sort();
     CHECK(v.is_sorted());
-    v.reverse();
+    v.flip();
     CHECK(v == vi{3, 2, 1});
   }
 
@@ -499,9 +516,9 @@ TEST_SUITE("container hierarchy") {
 
   TEST_CASE("mset inherits from set") {
     mset<int> ms;
-    ms.insert(1);
-    ms.insert(1);
-    ms.insert(2);
+    ms.ps(1);
+    ms.ps(1);
+    ms.ps(2);
     CHECK(ms.sz() == 3);
     CHECK(ms.has(1));
     CHECK(ms.erase_one(1));

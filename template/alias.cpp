@@ -6,8 +6,6 @@
 
 using ll = long long;
 using lll = __int128;
-template <typename T>
-using expand_ll = std::common_type_t<ll, T>;
 using ld = long double;
 using uint = unsigned int;
 using ull = unsigned long long;
@@ -47,6 +45,7 @@ GENERATE_SINGLE(s, str_raw<1>)
 
 #define GENERATE_AB(LEFT, RIGHT_A, RIGHT_B)         \
   using m##LEFT = map<RIGHT_A, RIGHT_B>;            \
+  using um##LEFT = umap<RIGHT_A, RIGHT_B>;          \
   using p##LEFT = pr<RIGHT_A, RIGHT_B>;             \
   using vp##LEFT = vec<pr<RIGHT_A, RIGHT_B>>;       \
   using wp##LEFT = wec<pr<RIGHT_A, RIGHT_B>>;       \

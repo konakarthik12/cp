@@ -29,26 +29,26 @@ double to_rad(double degrees) {
 }
 
 template <typename T>
-expand_ll<T> asum(T a) {
+sum_v<T> asum(T a) {
   if cexp (same_as<T, ll>) dssert(a >= 0);
-  return (expand_ll<T>) (a + 1) * a / 2;
+  return (sum_v<T>) (a + 1) * a / 2;
 }
 template <typename T>
-expand_ll<T> asum(T a, T b) {
-  if cexp (same_as<expand_ll<T>, ll>) {
+sum_v<T> asum(T a, T b) {
+  if cexp (same_as<sum_v<T>, ll>) {
     if (b < a) return 0;
     dssert(b >= a);
   }
-  return (expand_ll<T>) (b + a) * (b - a + 1) / 2;
+  return (sum_v<T>) (b + a) * (b - a + 1) / 2;
 }
 template <typename T>
-expand_ll<T> asum(T a, T b, T c) {
+sum_v<T> asum(T a, T b, T c) {
   if cexp (is_integral_v<T>) {
     if (b < a) return 0;
     dssert(a >= 0 && b >= a && c >= 1);
   }
-  expand_ll<T> n = (b - a) / c + 1;
-  expand_ll<T> sum = (expand_ll<T>) (n * (2 * a + (n - 1) * c)) / 2;
+  sum_v<T> n = (b - a) / c + 1;
+  sum_v<T> sum = (sum_v<T>) (n * (2 * a + (n - 1) * c)) / 2;
   return sum;
 }
 vb sieve_raw(int max_n) {
@@ -71,6 +71,17 @@ wi sieve(int max_n) {
     if (is_prime[i]) primes.pb(i);
   }
   return primes;
+}
+vi phisieve(int n) {
+  vi phi(n + 1);
+  for (int i = 0; i <= n; i++) phi[i] = i;
+
+  for (int i = 2; i <= n; i++) {
+    if (phi[i] == i) {
+      for (int j = i; j <= n; j += i) phi[j] -= phi[j] / i;
+    }
+  }
+  return phi;
 }
 vi linsieve(int n) {
   vi lp(n + 1);
@@ -239,6 +250,10 @@ struct Frac {
       p /= g;
       q /= g;
     }
+    if (q < 0) {
+      p *= -1;
+      q *= -1;
+    }
     return *this;
   }
 
@@ -292,6 +307,12 @@ struct Frac {
 
   friend bool operator==(Frac const& a, Number auto const& b) {
     return a.q == 1 && a.p == b;
+  }
+  friend bool operator<(Frac const& a, Frac const& b) {
+    return (__int128) a.p * b.q < (__int128) b.p * a.q;
+  }
+  Frac inverse() const {
+    return Frac{q, p};
   }
 
   void debug() const {

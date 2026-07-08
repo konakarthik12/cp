@@ -206,7 +206,6 @@ struct ModUll : public ModIntBase<ModUll, ull> {
 
   // Division is disabled
   ModUll& operator/=(const ModUll& b) = delete;
-  friend ModUll operator/(ModUll a, ModUll const b) = delete;
 
   explicit operator ull() const {
     return value;
