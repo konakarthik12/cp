@@ -19,12 +19,11 @@ struct RecurSegtree {
   void build(Cont& a) {
     n = a.sz();
     t.assign(4 * n);
-    build(a, 1, 1, a.sz());
+    build(a, 1, 0 + easy_index, (a.sz() - 1) + easy_index);
   }
 
   template <typename Cont>
   void build(Cont& a, int v, int tl, int tr) {
-
     if (tl == tr) {
       t[v] = Node(a[tl]);
     } else {
@@ -35,7 +34,7 @@ struct RecurSegtree {
     }
   }
 
-  void assign(int v, int tl, int tr, int pos, int val) {
+  void assign(int v, int tl, int tr, int pos, Node val) {
     if (tl == tr) {
       t[v] = Node(val);
     } else {
@@ -62,7 +61,7 @@ struct RecurSegtree {
     if cexp (easy_index) r--;
     return query(1, 0, n - 1, l, r);
   }
-  void set(int idx, int v) {
+  void set(int idx, Node v) {
     if cexp (easy_index) idx--;
 
     return assign(1, 0, n - 1, idx, v);
@@ -118,7 +117,7 @@ struct Segtree {
   void build(Cont& a) {
     init(a.sz());
     int i = n;
-    for (int x: a) t[i++] = x;
+    for (Node x: a) t[i++] = x;
     build();
   }
 

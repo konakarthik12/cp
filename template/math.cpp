@@ -213,6 +213,7 @@ struct Combo {
   }
 
   T sum(ll s, ll n, bool allow_zero = true) {
+    if (n == 0 && s == 0) return 1;
     if (n <= 0 || s < 0) return 0;
     if (allow_zero) {
       return choose(s + n - 1, n - 1);

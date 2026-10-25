@@ -136,6 +136,15 @@ struct list : Con<T, C, offset> {
   void rsort(Proj proj, Comp comp = {}) {
     std::ranges::sort(this->v, comp, proj);
   }
+  template <typename Comp = less<T>>
+    requires SortPredicate<T, Comp>
+  void psort(int n, Comp comp = {}) {
+    std::partial_sort(this->v.begin(), this->v.begin() + n, this->v.end(), comp);
+  }
+  void prsort(int n) {
+
+    psort(n, greater());
+  }
 
   void flip() {
     std::reverse(this->v.begin(), this->v.end());
@@ -236,8 +245,6 @@ struct list : Con<T, C, offset> {
     std::ranges::transform(this->v, std::back_inserter(result.v), std::forward<F>(f));
     return result;
   }
-
-
 
   template <typename F>
     requires std::invocable<F, const T&>

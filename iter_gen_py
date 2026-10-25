@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+set -e
+set -o pipefail
+
+flags_file="compile_flags_prod.txt"
+start_seed=1
+if [[ "${1:-}" == "deb" ]]; then
+  flags_file="compile_flags_deb.txt"
+  shift
+fi
+if [[ $# -ge 1 ]]; then
+  start_seed="$1"
+fi
+
+mkdir -p build
+tail -n +2 < "$flags_file" | xargs /opt/homebrew/opt/llvm/bin/clang++ template.cpp -DENTRY=main -o build/main || exit
+
+cleanup() {
+  rm -f build/pipe1 build/pipe2
+}
+trap cleanup EXIT
+
+echo "Running tests with gen.py..."
+echo ""
+
+for ((i = start_seed; ; ++i)); do
+  cleanup
+  mkfifo build/pipe1 build/pipe2
+
+  build/main < build/pipe2 | tee pipe1_output.txt > build/pipe1 &
+  main_pid=$!
+
+  set +e
+  .venv/bin/python gen.py "$i" < build/pipe1 | tee pipe2_output.txt > build/pipe2
+  judge_status=${PIPESTATUS[0]}
+  wait "$main_pid"
+  main_status=$?
+  set -e
+
+  if [[ $judge_status -ne 0 || $main_status -ne 0 ]]; then
+    break
+  fi
+
+  echo "Passed test: $i"
+done
+
+echo "WA on the following seed:"
+echo "$i"

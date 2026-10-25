@@ -144,7 +144,7 @@ int readInt() {
   return x;
 }
 
-template <class T, class Comp = less<T>()>
+template <class T, class Comp = less<T>>
 void read_cnt(map<T, int, Comp>& m, int n) {
   m.clear();
   for (int i = 0; i < n; i++) {

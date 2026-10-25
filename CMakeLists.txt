@@ -52,6 +52,4 @@ ExternalProject_Add(doctest
 add_dependencies(tests doctest)
 target_include_directories(tests PUBLIC ${DOCTEST_INCLUDE_DIR})
 target_include_directories(internal_testing PUBLIC ${DOCTEST_INCLUDE_DIR})
-if(CMAKE_BUILD_TYPE STREQUAL "Release")
- add_subdirectory(merger build/cmake/merger/)
-endif()
+add_subdirectory(merger build/cmake/merger/)

@@ -56,7 +56,7 @@ struct pqueue {
     return v.top();
   }
 
-  void push(const T& x) {
+  void ps(const T& x) {
     v.push(x);
   }
 

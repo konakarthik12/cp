@@ -9,6 +9,9 @@ void debug(Container v);
 template <typename T, typename V>
 void debug(pr<T, V> const& p);
 
+template <typename... Ts>
+void debug(const tuple<Ts...>& t);
+
 template <const unsigned long N>
 void debug(typename bitset<N>::reference v) {
   *dout << (bool) v;

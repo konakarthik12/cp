@@ -46,6 +46,15 @@ struct DSU {
     b = find(b);
     return a == b;
   }
+  wi unique() {
+    wi arr;
+    for (int i = 1; i <= p.sz(); i++) {
+      if (p[i] == i) {
+        arr.pb(i);
+      }
+    }
+    return arr;
+  }
 
   wwi groups() {
     map<int, wi> groups_map;

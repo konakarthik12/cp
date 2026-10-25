@@ -8,13 +8,17 @@
 int test_cases = -1;
 int test_case;
 template <typename Res>
-void handle_print(optional<Res>&& res) {
+void handle_print(optional<Res>& res) {
   if (res) {
     println("YES");
     println(*res);
   } else {
     println("NO");
   }
+}
+template <typename Res>
+void handle_print(optional<Res>&& res) {
+  handle_print(res);
 }
 template <typename Res>
 void handle_print(Res&& res) {

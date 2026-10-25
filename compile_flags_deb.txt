@@ -2,10 +2,14 @@
 -std=c++23
 -Wall -Wextra -Wshadow 
 -g 
+-D_GLIBCXX_DEBUG
 -fsanitize=undefined
 -fno-sanitize-recover=undefined,address
 -DLOCAL
 -D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_DEBUG
 -ggdb3
 -ldwarf -lz -lzstd -ldl
+
+-lcpptrace
+-I/usr/local/include
 -L/usr/local/lib

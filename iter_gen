@@ -1,28 +1,43 @@
 #!/usr/bin/env bash
 set -e
 set -o pipefail
-tail -n +2 < compile_flags_deb.txt | xargs /opt/homebrew/opt/llvm/bin/clang++ template.cpp -DENTRY=main -o build/main || exit
-tail -n +2 < compile_flags_deb.txt | xargs /opt/homebrew/opt/llvm/bin/clang++ template.cpp -DENTRY=gen -o build/gen || exit
+
+flags_file="compile_flags_prod.txt"
+if [[ "${1:-}" == "deb" ]]; then
+  flags_file="compile_flags_deb.txt"
+  shift
+fi
+
+mkdir -p build
+tail -n +2 < "$flags_file" | xargs /opt/homebrew/opt/llvm/bin/clang++ template.cpp -DENTRY=main -o build/main || exit
+tail -n +2 < "$flags_file" | xargs /opt/homebrew/opt/llvm/bin/clang++ template.cpp -DENTRY=gen -o build/gen || exit
+
+cleanup() {
+  rm -f build/pipe1 build/pipe2
+}
+trap cleanup EXIT
 
 echo "Running tests..."
 echo ""
 
 for ((i=1; ; ++i)); do
-  echo "huh"
-  rm -f build/pipe1 build/pipe2
+  cleanup
   mkfifo build/pipe1 build/pipe2
 
-  # Optional: reduce buffering to avoid stalls
-  # stdbuf -oL build/main < build/pipe2 | tee pipe1_output.txt > build/pipe1 &
-  # echo "huh1"
   build/main < build/pipe2 | tee pipe1_output.txt > build/pipe1 &
-  # echo "huh2"
-  # If gen exits non-zero, break
-  build/gen "$i" < build/pipe1 | tee pipe2_output.txt > build/pipe2 || break
-  # echo "huh3"
+  main_pid=$!
 
-  # Move cursor up one line, overwrite with "Passed test: i"
-  # echo -e "\e[1APassed test: $i"
+  set +e
+  build/gen "$i" < build/pipe1 | tee pipe2_output.txt > build/pipe2
+  gen_status=${PIPESTATUS[0]}
+  wait "$main_pid"
+  main_status=$?
+  set -e
+
+  if [[ $gen_status -ne 0 || $main_status -ne 0 ]]; then
+    break
+  fi
+
   echo "Passed test: $i"
 done
 
