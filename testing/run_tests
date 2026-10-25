@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 cd "$(dirname "$0")" && cd .. || exit
 
-tail -n +2 < compile_flags_deb.txt | xargs /opt/homebrew/opt/llvm/bin/clang++ template.cpp -o build/tests -DENTRY=testing/tests -iquote "/Users/konak/Projects/cp/debug/doctest/src/doctest/doctest" || exit
+tail -n +2 < compile_flags_deb.txt | xargs /opt/homebrew/opt/llvm/bin/clang++ template.cpp -o build/tests -DENTRY=testing/tests -iquote "/usr/local/include/doctest" || exit
 
 build/tests < testing/test_input.txt

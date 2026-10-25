@@ -296,11 +296,11 @@ TEST_SUITE("containers") {
     CHECK(pq.sz() == 0);
     CHECK(!pq);
 
-    pq.push(3);
-    pq.push(1);
-    pq.push(4);
-    pq.push(1);
-    pq.push(5);
+    pq.ps(3);
+    pq.ps(1);
+    pq.ps(4);
+    pq.ps(1);
+    pq.ps(5);
 
     CHECK(!pq.empty());
     CHECK(pq.sz() == 5);

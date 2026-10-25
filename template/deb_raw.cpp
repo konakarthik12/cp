@@ -65,14 +65,14 @@ void logger(int line, bool nest, string vars, Args&&... values) {
   *dout << "\033[0m\n";
 }
 #ifndef NO_MAIN
-// #include <cpptrace/cpptrace.hpp>
+#include <cpptrace/cpptrace.hpp>
 void dssert(bool res, string msg = "") {
   if (res) return;
   if (msg.size() > 0) {
     cerr << msg << "\n";
   }
-  // cpptrace::generate_trace().print();
-  exit(0);
+  cpptrace::generate_trace().print();
+  exit(-1);
   // std::cout << std::stacktrace::current();
 }
 #endif
